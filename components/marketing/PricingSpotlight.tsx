@@ -9,6 +9,11 @@ import {
   DEFAULT_STANDARD_PRICE_CENTS,
   VOLUME_PRICING_SUMMARY,
 } from "@/lib/pricing/resolve-price";
+import {
+  pricingGroupSizeSummary,
+  resolveMinPlayers,
+  standardPricingDescription,
+} from "@/lib/site/groupSizeCopy";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 
 const DEFAULT_FEATURES = [
@@ -27,7 +32,7 @@ type PricingSpotlightProps = {
 export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
   const priceCents =
     pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
-  const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
+  const minPlayers = resolveMinPlayers(pricing?.minimumPlayers, settings.minimumPlayers);
   const duration =
     pricing?.durationLabel ??
     (settings.typicalDurationHours ? `${settings.typicalDurationHours} hours` : "2–3 hours");
@@ -35,8 +40,7 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
   const features =
     pricing?.features && pricing.features.length > 0 ? pricing.features : DEFAULT_FEATURES;
   const description =
-    pricing?.description ??
-    `$29.95 per person with a ${minPlayers}-player minimum. ${VOLUME_PRICING_SUMMARY}`;
+    pricing?.description ?? standardPricingDescription(minPlayers);
 
   return (
     <section id="pricing" className="bg-cream section-y">
@@ -66,7 +70,7 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
               <span className="text-charcoal/60">/ person</span>
             </p>
             <p className="mt-2 text-sm text-charcoal/65">
-              Minimum {minPlayers} players · {duration}
+              {pricingGroupSizeSummary(minPlayers, duration)}
             </p>
             <p className="mt-1 text-sm font-medium text-charcoal/80">{VOLUME_PRICING_SUMMARY}</p>
             <p className="mt-4 text-sm leading-relaxed text-charcoal/70">{description}</p>

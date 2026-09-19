@@ -31,7 +31,7 @@ export async function getSiteSettings() {
         defaultPricePerPersonCents: 2995,
         volumePricePerPersonCents: 2500,
         volumeMinPlayers: 10,
-        minimumPlayers: 4,
+        minimumPlayers: 1,
         typicalDurationHours: "2–3",
         hero: {
           headline: "Explore. Discover. Compete. Create Memories.",
@@ -43,7 +43,7 @@ export async function getSiteSettings() {
       },
       pricing: {
         pricePerPersonCents: 2995,
-        minimumPlayers: 4,
+        minimumPlayers: 1,
         durationLabel: "2–3 hours",
         features: [],
       },

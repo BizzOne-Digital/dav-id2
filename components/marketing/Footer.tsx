@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/Input";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { cn } from "@/lib/utils";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
+import { footerGroupSizeLine, resolveMinPlayers } from "@/lib/site/groupSizeCopy";
 
 const EXPLORE_LINKS = [
   { href: "/hunts", label: "Our Hunts" },
@@ -83,7 +84,7 @@ export function Footer({ settings, pricing }: FooterProps) {
   const footerText =
     settings.footerText ??
     "Locally crafted scavenger adventures across Music City. Groups, teams, and celebrations welcome.";
-  const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
+  const minPlayers = resolveMinPlayers(pricing?.minimumPlayers, settings.minimumPlayers);
   const social = (settings as MarketingSettings & { socialLinks?: SocialLinks }).socialLinks;
 
   async function onNewsletterSubmit(e: React.FormEvent) {
@@ -139,7 +140,7 @@ export function Footer({ settings, pricing }: FooterProps) {
                 Your next Nashville story starts here
               </p>
               <p className="mt-1 text-sm text-cream/65">
-                Clues, challenges, and bragging rights—minimum {minPlayers} players.
+                {footerGroupSizeLine(minPlayers)}
               </p>
             </div>
           </div>

@@ -76,7 +76,7 @@ export function Header({ settings }: HeaderProps) {
       className={cn(
         "safe-top z-50 w-full min-w-0 transition-colors duration-300",
         overlay
-          ? "absolute top-0 left-0 right-0 border-b border-white/5 bg-gradient-to-b from-black/55 to-transparent"
+          ? "absolute top-0 left-0 right-0 border-b border-white/10 bg-gradient-to-b from-black/35 to-transparent"
           : "sticky top-0 border-b border-cream/10 bg-charcoal/95 backdrop-blur-md supports-[backdrop-filter]:bg-charcoal/80"
       )}
     >

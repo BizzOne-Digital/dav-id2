@@ -18,6 +18,10 @@ import { formatCurrency } from "@/lib/utils";
 import { resolvePublicImageUrl } from "@/lib/uploads/constants";
 import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
 import { BRAND_COPY } from "@/lib/site/brandCopy";
+import {
+  heroGroupSizeLabel,
+  resolveMinPlayers,
+} from "@/lib/site/groupSizeCopy";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 
 type HeroProps = {
@@ -130,7 +134,7 @@ export function Hero({ settings, pricing }: HeroProps) {
   const heroBgUnoptimized = heroBg.startsWith("/api/uploads/");
 
   const priceCents = pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
-  const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
+  const minPlayers = resolveMinPlayers(pricing?.minimumPlayers, settings.minimumPlayers);
   const duration = pricing?.durationLabel ?? `${settings.typicalDurationHours ?? "2–3"} hours`;
 
   return (
@@ -141,12 +145,12 @@ export function Hero({ settings, pricing }: HeroProps) {
         fill
         priority
         unoptimized={heroBgUnoptimized}
-        className="object-cover object-center"
+        className="object-cover object-center brightness-[1.1] contrast-[1.03] saturate-[1.05]"
         sizes="100vw"
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/25" aria-hidden />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/90 via-transparent to-black/40" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/50 via-black/28 to-black/12" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/55 via-transparent to-black/22" aria-hidden />
 
       <HeroRouteOverlay animate={!reduceMotion} />
 
@@ -203,7 +207,7 @@ export function Hero({ settings, pricing }: HeroProps) {
                   <Users className="size-5 text-white" aria-hidden />
                 </span>
                 <span className="font-[family-name:var(--font-bebas)] text-lg leading-tight text-white sm:text-xl">
-                  Minimum {minPlayers} Players
+                  {heroGroupSizeLabel(minPlayers)}
                 </span>
               </li>
               <li className="flex items-center gap-3">

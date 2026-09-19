@@ -36,7 +36,7 @@ const SiteSettingsSchema = new Schema(
     defaultPricePerPersonCents: { type: Number, default: 2995 },
     volumePricePerPersonCents: { type: Number, default: 2500 },
     volumeMinPlayers: { type: Number, default: 10 },
-    minimumPlayers: { type: Number, default: 4 },
+    minimumPlayers: { type: Number, default: 1 },
     typicalDurationHours: { type: String, default: "2–3" },
     seo: {
       defaultTitle: String,

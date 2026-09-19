@@ -40,7 +40,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
       _id: String(h._id),
       slug: h.slug,
       title: h.title,
-      minimumPlayers: h.minimumPlayers ?? 4,
+      minimumPlayers: h.minimumPlayers ?? 1,
       pricePerPersonCents: h.pricePerPersonCents ?? defaultPrice,
       pricingPlanId: h.pricingPlanId ? String(h.pricingPlanId) : undefined,
     }));

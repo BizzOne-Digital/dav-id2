@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -9,6 +9,12 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { formatCurrency } from "@/lib/utils";
 import { resolvePricePerPersonCents, VOLUME_PRICING_SUMMARY } from "@/lib/pricing/resolve-price";
+import {
+  bookingPlayerBounds,
+  DEFAULT_MIN_PLAYERS,
+  SINGLE_COUPLE_GROUP_LABEL,
+  SINGLE_COUPLE_GROUP_TYPE,
+} from "@/lib/site/groupSizeCopy";
 import { cn } from "@/lib/utils";
 
 export type HuntOption = {
@@ -23,11 +29,11 @@ const STEPS = ["details", "team", "preferences", "review"] as const;
 type Step = (typeof STEPS)[number];
 
 const GROUP_TYPES = [
+  { value: SINGLE_COUPLE_GROUP_TYPE, label: SINGLE_COUPLE_GROUP_LABEL },
   { value: "friends", label: "Friends" },
   { value: "family", label: "Family" },
   { value: "bachelorette", label: "Bachelorette / Bachelor" },
   { value: "corporate", label: "Corporate" },
-  { value: "couples", label: "Couples" },
   { value: "tourists", label: "Visitors / Tourists" },
 ];
 
@@ -54,10 +60,10 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const [huntSlug, setHuntSlug] = useState(defaultSlug);
-  const [groupType, setGroupType] = useState("friends");
+  const [groupType, setGroupType] = useState(SINGLE_COUPLE_GROUP_TYPE);
   const [scheduledDate, setScheduledDate] = useState("");
   const [startWindow, setStartWindow] = useState("afternoon");
-  const [playerCount, setPlayerCount] = useState(hunts[0]?.minimumPlayers ?? 4);
+  const [playerCount, setPlayerCount] = useState(2);
 
   const [teamName, setTeamName] = useState("");
   const [captainName, setCaptainName] = useState("");
@@ -75,6 +81,17 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
     () => hunts.find((h) => h.slug === huntSlug) ?? hunts[0],
     [hunts, huntSlug]
   );
+
+  const playerBounds = useMemo(
+    () => bookingPlayerBounds(groupType, hunt?.minimumPlayers ?? DEFAULT_MIN_PLAYERS),
+    [groupType, hunt?.minimumPlayers]
+  );
+
+  useEffect(() => {
+    setPlayerCount((count) =>
+      Math.min(playerBounds.max, Math.max(playerBounds.min, count))
+    );
+  }, [playerBounds.min, playerBounds.max]);
 
   const pricePerPerson = useMemo(
     () =>
@@ -265,10 +282,22 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               <label className="mb-2 block text-sm text-cream/80">Players</label>
               <Input
                 type="number"
-                min={hunt?.minimumPlayers ?? 4}
+                min={playerBounds.min}
+                max={playerBounds.max}
                 value={playerCount}
-                onChange={(e) => setPlayerCount(Number(e.target.value) || 4)}
+                onChange={(e) => {
+                  const next = Number(e.target.value);
+                  if (!Number.isFinite(next)) return;
+                  setPlayerCount(
+                    Math.min(playerBounds.max, Math.max(playerBounds.min, next))
+                  );
+                }}
               />
+              {groupType === SINGLE_COUPLE_GROUP_TYPE && (
+                <p className="mt-1 text-xs text-cream/55">
+                  One ticket covers 1 or 2 players at the same per-person rate.
+                </p>
+              )}
             </div>
             <p className="text-sm text-cream/60">
               {formatCurrency(pricePerPerson)} per person × {playerCount} players ={" "}

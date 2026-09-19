@@ -3,6 +3,7 @@ import { resolve } from "path";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/connect";
 import { DEFAULT_IN_GAME_OFFERS } from "@/lib/site/inGameOffers";
+import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
 import {
   SiteSettings,
   PricingPlan,
@@ -273,7 +274,7 @@ async function upsertPricingPlan() {
       volumePricePerPersonCents: 2500,
       volumeMinPlayers: 10,
       currency: "usd",
-      minimumPlayers: 4,
+      minimumPlayers: 1,
       durationLabel: "2–3 hours",
       features: [
         "Custom route through downtown Nashville",
@@ -285,8 +286,7 @@ async function upsertPricingPlan() {
       isDefault: true,
       active: true,
       priceType: "per_person",
-      description:
-        "$29.95 per person (4 player minimum). Groups of 10 or more—including corporate—pay $25 per player.",
+      description: standardPricingDescription(1),
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
@@ -313,7 +313,7 @@ async function upsertSiteSettings(pricingPlanId: string) {
       defaultPricePerPersonCents: 2995,
       volumePricePerPersonCents: 2500,
       volumeMinPlayers: 10,
-      minimumPlayers: 4,
+      minimumPlayers: 1,
       typicalDurationHours: "2–3",
       newsletterHeading: "Get hunt tips & Nashville insider clues",
       footerText: "© Nashville Scavenger Hunt. All rights reserved.",
@@ -454,7 +454,7 @@ async function seedHunts(pricingPlanId: string) {
         fullDescription: hunt.shortDescription,
         priceType: "per_person",
         pricePerPersonCents: 2995,
-        minimumPlayers: 4,
+        minimumPlayers: 1,
         duration: "2–3 hours",
         alcoholFreeAvailable: true,
         includedRewards: ["Leaderboard ranking", "Digital certificate"],
@@ -521,7 +521,7 @@ async function seedFaqs() {
     },
     {
       question: "How many players do we need?",
-      answer: "We require a minimum of 4 players; larger groups split into teams.",
+      answer: "Book as a single or couple on one ticket (1–2 players), or bring a larger crew—groups of 10+ split into teams and get our volume rate.",
       order: 4,
     },
   ];

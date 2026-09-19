@@ -22,7 +22,7 @@ const DEFAULT_FAQ_ITEMS: MarketingFaqItem[] = [
   {
     question: "What's the minimum group size?",
     answer:
-      "Standard hunts start at four players. Smaller groups can still book—contact us for options tailored to your crew.",
+      "Book as a single or couple on one ticket (1–2 players), or bring friends and family—no four-player minimum.",
   },
   {
     question: "Is this weather-dependent?",

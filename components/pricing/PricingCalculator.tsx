@@ -12,6 +12,7 @@ import {
   VOLUME_PRICING_SUMMARY,
   DEFAULT_VOLUME_MIN_PLAYERS,
 } from "@/lib/pricing/resolve-price";
+import { DEFAULT_MIN_PLAYERS } from "@/lib/site/groupSizeCopy";
 
 export type PricingPlanOption = {
   id: string;
@@ -33,11 +34,11 @@ type PricingCalculatorProps = {
 export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorProps) {
   const initialId = defaultPlanId ?? plans[0]?.id ?? "";
   const [planId, setPlanId] = useState(initialId);
-  const [players, setPlayers] = useState(plans[0]?.minimumPlayers ?? 4);
+  const [players, setPlayers] = useState(plans[0]?.minimumPlayers ?? DEFAULT_MIN_PLAYERS);
 
   const plan = useMemo(() => plans.find((p) => p.id === planId) ?? plans[0], [plans, planId]);
 
-  const min = plan?.minimumPlayers ?? 4;
+  const min = plan?.minimumPlayers ?? DEFAULT_MIN_PLAYERS;
   const max = plan?.maximumPlayers ?? 50;
   const clampedPlayers = Math.max(min, Math.min(max, players));
 
@@ -83,7 +84,9 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
             onChange={(e) => setPlayers(Number(e.target.value) || min)}
           />
           <p className="mt-2 text-xs text-cream/50">
-            Minimum {min} players
+            {min <= 1
+              ? "Singles & couples: 1–2 on one ticket"
+              : `Minimum ${min} players`}
             {plan?.durationLabel ? ` · ${plan.durationLabel}` : ""}
           </p>
         </div>

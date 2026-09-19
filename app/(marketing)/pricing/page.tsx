@@ -9,10 +9,11 @@ import { PricingPlan, type IPricingPlan } from "@/lib/models/PricingPlan";
 import { buildPageMetadata } from "@/lib/site/buildMetadata";
 import { formatCurrency } from "@/lib/utils";
 import { PAGE_HERO_IMAGES } from "@/lib/site/marketingImages";
+import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Pricing",
-  description: "Transparent per-person pricing for Nashville scavenger hunts. Minimum group sizes and features included.",
+  description: "Transparent per-person pricing for Nashville scavenger hunts. Singles, couples, and groups welcome.",
   path: "/pricing",
 });
 
@@ -55,7 +56,7 @@ export default async function PricingPage() {
               <Card>
                 <CardTitle>Standard hunt</CardTitle>
                 <CardDescription className="mt-2">
-                  $29.95 per person · 4 player minimum · 10+ players $25/person
+                  {standardPricingDescription(1)}
                 </CardDescription>
               </Card>
             ) : (
@@ -90,7 +91,7 @@ export default async function PricingPage() {
                       pricePerPersonCents: 2995,
                       volumePricePerPersonCents: 2500,
                       volumeMinPlayers: 10,
-                      minimumPlayers: 4,
+                      minimumPlayers: 1,
                       durationLabel: "2–3 hours",
                     },
                   ]
