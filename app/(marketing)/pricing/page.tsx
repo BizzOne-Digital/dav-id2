@@ -30,6 +30,8 @@ export default async function PricingPage() {
     id: String(p._id),
     name: p.name,
     pricePerPersonCents: p.pricePerPersonCents,
+    volumePricePerPersonCents: p.volumePricePerPersonCents ?? undefined,
+    volumeMinPlayers: p.volumeMinPlayers ?? undefined,
     minimumPlayers: p.minimumPlayers,
     maximumPlayers: p.maximumPlayers ?? undefined,
     durationLabel: p.durationLabel,
@@ -52,7 +54,9 @@ export default async function PricingPage() {
             {plans.length === 0 ? (
               <Card>
                 <CardTitle>Standard hunt</CardTitle>
-                <CardDescription className="mt-2">$50 per person · 4 player minimum · 2–3 hours</CardDescription>
+                <CardDescription className="mt-2">
+                  $29.95 per person · 4 player minimum · 10+ players $25/person
+                </CardDescription>
               </Card>
             ) : (
               plans.map((plan) => (
@@ -83,7 +87,9 @@ export default async function PricingPage() {
                     {
                       id: "default",
                       name: "Standard Hunt",
-                      pricePerPersonCents: 5000,
+                      pricePerPersonCents: 2995,
+                      volumePricePerPersonCents: 2500,
+                      volumeMinPlayers: 10,
                       minimumPlayers: 4,
                       durationLabel: "2–3 hours",
                     },

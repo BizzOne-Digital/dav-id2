@@ -45,6 +45,10 @@ export const MARKETING_IMAGES = {
     src: "/images/certificate-celebration.jpg",
     alt: "Completion certificate and polaroids with Nashville skyline at night",
   },
+  promoFlyer: {
+    src: "/images/nashville-promo-flyer.png",
+    alt: "Nashville Scavenger Hunt promo — Music City challenge, $29.95 per person, book your adventure",
+  },
 } as const;
 
 export type MarketingImageKey = keyof typeof MARKETING_IMAGES;

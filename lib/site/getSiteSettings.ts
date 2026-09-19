@@ -28,7 +28,9 @@ export async function getSiteSettings() {
         tagline: "Explore. Discover. Compete. Create Memories.",
         phone: "615-571-9900",
         email: "howigetemail@gmail.com",
-        defaultPricePerPersonCents: 5000,
+        defaultPricePerPersonCents: 2995,
+        volumePricePerPersonCents: 2500,
+        volumeMinPlayers: 10,
         minimumPlayers: 4,
         typicalDurationHours: "2–3",
         hero: {
@@ -40,7 +42,7 @@ export async function getSiteSettings() {
         },
       },
       pricing: {
-        pricePerPersonCents: 5000,
+        pricePerPersonCents: 2995,
         minimumPlayers: 4,
         durationLabel: "2–3 hours",
         features: [],

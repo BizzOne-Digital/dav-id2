@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { formatCurrency } from "@/lib/utils";
+import { resolvePricePerPersonCents, VOLUME_PRICING_SUMMARY } from "@/lib/pricing/resolve-price";
 import { cn } from "@/lib/utils";
 
 export type HuntOption = {
@@ -75,7 +76,17 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
     [hunts, huntSlug]
   );
 
-  const estimatedTotal = (hunt?.pricePerPersonCents ?? 5000) * playerCount;
+  const pricePerPerson = useMemo(
+    () =>
+      resolvePricePerPersonCents({
+        playerCount,
+        groupType,
+        basePriceCents: hunt?.pricePerPersonCents,
+      }),
+    [playerCount, groupType, hunt?.pricePerPersonCents]
+  );
+
+  const estimatedTotal = pricePerPerson * playerCount;
 
   const stepIndex = STEPS.indexOf(step);
 
@@ -260,8 +271,10 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               />
             </div>
             <p className="text-sm text-cream/60">
-              Estimated total: <span className="font-semibold text-gold">{formatCurrency(estimatedTotal)}</span>
+              {formatCurrency(pricePerPerson)} per person × {playerCount} players ={" "}
+              <span className="font-semibold text-gold">{formatCurrency(estimatedTotal)}</span>
             </p>
+            <p className="text-xs text-cream/50">{VOLUME_PRICING_SUMMARY}</p>
           </div>
         )}
 
@@ -344,7 +357,9 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             <h2 className="text-xl font-semibold text-cream">Review & pay</h2>
             <p><strong className="text-cream">Hunt:</strong> {hunt?.title}</p>
             <p><strong className="text-cream">Date:</strong> {scheduledDate} ({startWindow})</p>
+            <p><strong className="text-cream">Group:</strong> {GROUP_TYPES.find((g) => g.value === groupType)?.label ?? groupType}</p>
             <p><strong className="text-cream">Players:</strong> {playerCount}</p>
+            <p><strong className="text-cream">Rate:</strong> {formatCurrency(pricePerPerson)} / person</p>
             <p><strong className="text-cream">Team:</strong> {teamName || "—"}</p>
             <p><strong className="text-cream">Captain:</strong> {captainName} · {captainEmail}</p>
             <p className="text-2xl font-bold text-gold">Total: {formatCurrency(estimatedTotal)}</p>

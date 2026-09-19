@@ -157,7 +157,7 @@ export function Footer({ settings, pricing }: FooterProps) {
         <div className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Brand column */}
           <div className="lg:col-span-5">
-            <BrandLogo logoUrl={settings.logoUrl} className="mb-6" />
+            <BrandLogo logoUrl={settings.logoUrl} variant="footer" homeHero className="mb-4 sm:mb-6" />
             <p className="font-[family-name:var(--font-caveat)] text-xl text-gold/90">{tagline}</p>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-cream/70">{footerText}</p>
 

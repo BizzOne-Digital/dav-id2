@@ -33,7 +33,9 @@ const SiteSettingsSchema = new Schema(
       backgroundImage: String,
     },
     pricingPlanId: { type: Schema.Types.ObjectId, ref: "PricingPlan" },
-    defaultPricePerPersonCents: { type: Number, default: 5000 },
+    defaultPricePerPersonCents: { type: Number, default: 2995 },
+    volumePricePerPersonCents: { type: Number, default: 2500 },
+    volumeMinPlayers: { type: Number, default: 10 },
     minimumPlayers: { type: Number, default: 4 },
     typicalDurationHours: { type: String, default: "2–3" },
     seo: {

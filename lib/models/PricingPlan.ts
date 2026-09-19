@@ -5,6 +5,8 @@ const PricingPlanSchema = new Schema(
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     pricePerPersonCents: { type: Number, required: true },
+    volumePricePerPersonCents: { type: Number, default: 2500 },
+    volumeMinPlayers: { type: Number, default: 10 },
     currency: { type: String, default: "usd" },
     minimumPlayers: { type: Number, default: 4 },
     maximumPlayers: { type: Number },

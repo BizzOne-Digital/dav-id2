@@ -12,6 +12,8 @@ import { TestimonialCarousel } from "@/components/marketing/TestimonialCarousel"
 import { FaqPreview } from "@/components/marketing/FaqPreview";
 import { ReadySetHunt } from "@/components/marketing/ReadySetHunt";
 import { NashvilleGalleryStrip } from "@/components/marketing/NashvilleGalleryStrip";
+import { PromoFlyerSection } from "@/components/marketing/PromoFlyerSection";
+import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { getSiteSettings, getHomepageData } from "@/lib/site/getSiteSettings";
 import { buildPageMetadata, settingsToDefaultDescription } from "@/lib/site/buildMetadata";
@@ -62,6 +64,13 @@ export default async function HomePage() {
     <PageTransition>
       <Hero settings={marketingSettings} pricing={marketingPricing} />
       <NashvilleGalleryStrip />
+      <PromoFlyerSection
+        pricePerPersonCents={
+          marketingPricing?.pricePerPersonCents ??
+          marketingSettings.defaultPricePerPersonCents ??
+          DEFAULT_STANDARD_PRICE_CENTS
+        }
+      />
       <AdventureSnapshot />
       <HowItWorksJourney />
       <ExperienceCards />

@@ -68,7 +68,7 @@ Copy `.env.example` to `.env.local`:
 4. Connect → copy the connection string into `MONGODB_URI`.
 5. Run `npm run seed` once per environment.
 
-Seed creates: site settings, **$50/person / 4 minimum** pricing plan, hunts, ~15 Nashville locations, challenges (including a **preview-safe riddle**), FAQs, sample testimonials, demo leaderboard, gift card product, and an **admin account** from env vars.
+Seed creates: site settings, **$29.95/person** ( **$25/person for groups of 10+**, corporate included), hunts, ~15 Nashville locations, challenges (including a **preview-safe riddle**), FAQs, sample testimonials, demo leaderboard, gift card product, and an **admin account** from env vars.
 
 ## Stripe webhook setup
 

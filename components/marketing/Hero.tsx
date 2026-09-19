@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { resolvePublicImageUrl } from "@/lib/uploads/constants";
+import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
+import { BRAND_COPY } from "@/lib/site/brandCopy";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 
 type HeroProps = {
@@ -127,7 +129,7 @@ export function Hero({ settings, pricing }: HeroProps) {
     : "/images/hero-nashville.jpg";
   const heroBgUnoptimized = heroBg.startsWith("/api/uploads/");
 
-  const priceCents = pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? 5000;
+  const priceCents = pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
   const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
   const duration = pricing?.durationLabel ?? `${settings.typicalDurationHours ?? "2–3"} hours`;
 
@@ -148,7 +150,7 @@ export function Hero({ settings, pricing }: HeroProps) {
 
       <HeroRouteOverlay animate={!reduceMotion} />
 
-      <div className="relative site-x mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center pb-20 pt-[calc(4.25rem+var(--safe-top))] sm:pb-24 sm:pt-[calc(5rem+var(--safe-top))] lg:pb-20 lg:pt-[calc(5.5rem+var(--safe-top))]">
+      <div className="relative site-x mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center pb-20 pt-[calc(6.75rem+var(--safe-top))] sm:pb-24 sm:pt-[calc(7.75rem+var(--safe-top))] lg:pb-20 lg:pt-[calc(9.5rem+var(--safe-top))]">
         <div className="grid flex-1 items-center gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
@@ -158,12 +160,16 @@ export function Hero({ settings, pricing }: HeroProps) {
           >
             <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:text-sm">
               <Star className="size-4 fill-gold text-gold" aria-hidden />
-              The Ultimate Music City Adventure
+              {BRAND_COPY.challengeEyebrow}
             </p>
 
             <h1 className="hero-headline-distressed text-balance font-[family-name:var(--font-bebas)] text-[1.85rem] leading-[0.95] tracking-wide text-white min-[380px]:text-[2.25rem] sm:text-5xl md:text-6xl lg:text-[5.25rem]">
               {headline}
             </h1>
+
+            <p className="mt-3 font-[family-name:var(--font-bebas)] text-lg tracking-wide text-gold/95 sm:text-xl">
+              {BRAND_COPY.actionLine}
+            </p>
 
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">{subheadline}</p>
 

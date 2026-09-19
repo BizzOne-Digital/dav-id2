@@ -80,8 +80,20 @@ export function Header({ settings }: HeaderProps) {
           : "sticky top-0 border-b border-cream/10 bg-charcoal/95 backdrop-blur-md supports-[backdrop-filter]:bg-charcoal/80"
       )}
     >
-      <div className="site-x mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-2 sm:h-[4.5rem] lg:gap-4">
-        <BrandLogo logoUrl={settings.logoUrl} compact className="max-w-[58vw] sm:max-w-none" />
+      <div
+        className={cn(
+          "site-x mx-auto flex max-w-[1400px] items-center justify-between gap-2 py-2 lg:gap-4",
+          isHome
+            ? "min-h-[6.5rem] sm:min-h-[7.5rem] lg:min-h-[9.5rem] sm:py-3"
+            : "min-h-[5.25rem] sm:min-h-[6.25rem] lg:min-h-[7.25rem] sm:py-2.5"
+        )}
+      >
+        <BrandLogo
+          logoUrl={settings.logoUrl}
+          variant="header"
+          homeHero={isHome}
+          className={isHome ? "max-w-[min(72vw,28rem)] sm:max-w-none" : "max-w-[min(62vw,21rem)] sm:max-w-none"}
+        />
 
         <nav className="hidden flex-1 items-center justify-center gap-6 lg:flex xl:gap-8" aria-label="Main">
           {NAV_LINKS.map((link) => (
@@ -117,7 +129,10 @@ export function Header({ settings }: HeaderProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 top-16 z-40 overflow-y-auto bg-charcoal/98 backdrop-blur-lg safe-bottom sm:top-[4.5rem] lg:hidden"
+            className={cn(
+              "fixed inset-0 z-40 overflow-y-auto bg-charcoal/98 backdrop-blur-lg safe-bottom lg:hidden",
+              isHome ? "top-[6.5rem] sm:top-[7.5rem]" : "top-[5.25rem] sm:top-[6.25rem]"
+            )}
           >
             <motion.nav
               initial={{ y: 20, opacity: 0 }}

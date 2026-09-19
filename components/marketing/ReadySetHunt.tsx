@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
+import { BRAND_COPY } from "@/lib/site/brandCopy";
 
 export function ReadySetHunt() {
   const reduceMotion = useReducedMotion();
@@ -37,13 +38,10 @@ export function ReadySetHunt() {
           <h2 className="mt-4 font-[family-name:var(--font-bebas)] text-3xl tracking-wide text-cream sm:mt-6 sm:text-4xl md:text-5xl lg:text-6xl">
             Ready. Set. Hunt.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-cream/80">
-            Grab your crew, pick a date, and let Nashville surprise you. Your leaderboard moment is
-            one booking away.
-          </p>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-cream/80">{BRAND_COPY.tagline}</p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button href="/booking" variant="primary" magnetic className="gap-2 hero-cta-primary !text-charcoal">
-              Book your hunt
+              {BRAND_COPY.bookCta}
               <ArrowRight className="size-4" aria-hidden />
             </Button>
             <Button href="/#challenge-preview" variant="secondary">

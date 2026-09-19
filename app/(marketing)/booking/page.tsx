@@ -28,7 +28,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
     pricingPlanId?: string;
   }> = [];
 
-  let defaultPrice = 5000;
+  let defaultPrice = 2995;
 
   try {
     await connectDB();

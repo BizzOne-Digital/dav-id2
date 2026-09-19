@@ -7,6 +7,11 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import {
+  resolvePricePerPersonCents,
+  VOLUME_PRICING_SUMMARY,
+  DEFAULT_VOLUME_MIN_PLAYERS,
+} from "@/lib/pricing/resolve-price";
 
 export type PricingPlanOption = {
   id: string;
@@ -16,6 +21,8 @@ export type PricingPlanOption = {
   maximumPlayers?: number;
   durationLabel?: string;
   features?: string[];
+  volumePricePerPersonCents?: number;
+  volumeMinPlayers?: number;
 };
 
 type PricingCalculatorProps = {
@@ -32,8 +39,17 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
 
   const min = plan?.minimumPlayers ?? 4;
   const max = plan?.maximumPlayers ?? 50;
-  const priceCents = plan?.pricePerPersonCents ?? 5000;
-  const totalCents = priceCents * Math.max(min, Math.min(max, players));
+  const clampedPlayers = Math.max(min, Math.min(max, players));
+
+  const priceCents = resolvePricePerPersonCents({
+    playerCount: clampedPlayers,
+    basePriceCents: plan?.pricePerPersonCents,
+    volumePriceCents: plan?.volumePricePerPersonCents,
+    volumeMinPlayers: plan?.volumeMinPlayers,
+  });
+
+  const totalCents = priceCents * clampedPlayers;
+  const volumeMin = plan?.volumeMinPlayers ?? DEFAULT_VOLUME_MIN_PLAYERS;
 
   return (
     <Card className="border-gold/20 bg-charcoal">
@@ -67,17 +83,22 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
             onChange={(e) => setPlayers(Number(e.target.value) || min)}
           />
           <p className="mt-2 text-xs text-cream/50">
-            Minimum {min} players{plan?.durationLabel ? ` · ${plan.durationLabel}` : ""}
+            Minimum {min} players
+            {plan?.durationLabel ? ` · ${plan.durationLabel}` : ""}
           </p>
         </div>
       </div>
 
       <div className="mt-8 rounded-xl border border-cream/10 bg-charcoal/60 p-6">
+        {clampedPlayers >= volumeMin && (
+          <p className="mb-2 text-sm font-medium text-gold">Volume rate applied ({volumeMin}+ players)</p>
+        )}
         <p className="text-sm text-cream/70">
-          {formatCurrency(priceCents)} per person × {Math.max(min, Math.min(max, players))} players
+          {formatCurrency(priceCents)} per person × {clampedPlayers} players
         </p>
         <p className="mt-2 text-3xl font-bold text-gold">{formatCurrency(totalCents)}</p>
-        <p className="mt-2 text-xs text-cream/50">Taxes and add-ons may apply at checkout.</p>
+        <p className="mt-3 text-xs leading-relaxed text-cream/50">{VOLUME_PRICING_SUMMARY}</p>
+        <p className="mt-1 text-xs text-cream/50">Taxes and add-ons may apply at checkout.</p>
         <Button href="/booking" variant="primary" className="mt-6 w-full sm:w-auto">
           Book your hunt
         </Button>

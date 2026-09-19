@@ -5,6 +5,10 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency } from "@/lib/utils";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
+import {
+  DEFAULT_STANDARD_PRICE_CENTS,
+  VOLUME_PRICING_SUMMARY,
+} from "@/lib/pricing/resolve-price";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 
 const DEFAULT_FEATURES = [
@@ -22,7 +26,7 @@ type PricingSpotlightProps = {
 
 export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
   const priceCents =
-    pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? 5000;
+    pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
   const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
   const duration =
     pricing?.durationLabel ??
@@ -32,7 +36,7 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
     pricing?.features && pricing.features.length > 0 ? pricing.features : DEFAULT_FEATURES;
   const description =
     pricing?.description ??
-    "Per-person pricing scales with your group. Taxes and add-ons shown at checkout.";
+    `$29.95 per person with a ${minPlayers}-player minimum. ${VOLUME_PRICING_SUMMARY}`;
 
   return (
     <section id="pricing" className="bg-cream section-y">
@@ -64,6 +68,7 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
             <p className="mt-2 text-sm text-charcoal/65">
               Minimum {minPlayers} players · {duration}
             </p>
+            <p className="mt-1 text-sm font-medium text-charcoal/80">{VOLUME_PRICING_SUMMARY}</p>
             <p className="mt-4 text-sm leading-relaxed text-charcoal/70">{description}</p>
 
             <ul className="mt-8 space-y-3">

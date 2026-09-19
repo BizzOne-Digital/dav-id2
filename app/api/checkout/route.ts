@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/db/connect";
 import { Booking, Hunt, PricingPlan } from "@/lib/models";
 import { createCheckoutSession } from "@/lib/payments/stripe";
 import { fulfillOrder } from "@/lib/payments/fulfill-order";
+import { resolvePricePerPersonCents } from "@/lib/pricing/resolve-price";
 
 const bodySchema = z.object({
   bookingId: z.string().min(1),
@@ -29,11 +30,23 @@ export async function POST(request: Request) {
     }
 
     const hunt = await Hunt.findById(booking.huntId).lean();
-    let pricePerPersonCents = hunt?.pricePerPersonCents ?? 5000;
+    let basePriceCents = hunt?.pricePerPersonCents;
+    let volumePriceCents: number | undefined;
+    let volumeMinPlayers: number | undefined;
     if (hunt?.pricingPlanId) {
       const plan = await PricingPlan.findById(hunt.pricingPlanId).lean();
-      if (plan?.pricePerPersonCents) pricePerPersonCents = plan.pricePerPersonCents;
+      if (plan?.pricePerPersonCents) basePriceCents = plan.pricePerPersonCents;
+      if (plan?.volumePricePerPersonCents != null) volumePriceCents = plan.volumePricePerPersonCents;
+      if (plan?.volumeMinPlayers != null) volumeMinPlayers = plan.volumeMinPlayers;
     }
+
+    const pricePerPersonCents = resolvePricePerPersonCents({
+      playerCount: booking.playerCount,
+      groupType: booking.groupType,
+      basePriceCents,
+      volumePriceCents,
+      volumeMinPlayers,
+    });
 
     const amountCents = pricePerPersonCents * booking.playerCount;
     const origin = process.env.NEXT_PUBLIC_APP_URL ?? new URL(request.url).origin;
@@ -42,9 +55,9 @@ export async function POST(request: Request) {
 
     const lineItems = [
       {
-        label: `${hunt?.title ?? "Scavenger Hunt"} (${booking.playerCount} players)`,
-        quantity: 1,
-        unitAmountCents: amountCents,
+        label: `${hunt?.title ?? "Scavenger Hunt"} (${booking.playerCount} players @ $${(pricePerPersonCents / 100).toFixed(2)}/pp)`,
+        quantity: booking.playerCount,
+        unitAmountCents: pricePerPersonCents,
       },
     ];
 
