@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/connect";
+import { DEFAULT_IN_GAME_OFFERS } from "@/lib/site/inGameOffers";
 import {
   SiteSettings,
   PricingPlan,
@@ -321,6 +322,7 @@ async function upsertSiteSettings(pricingPlanId: string) {
         { label: "Avg. rating", value: "4.9/5", isSample: true },
         { label: "Downtown stops", value: "15+", isSample: true },
       ],
+      inGameOffers: DEFAULT_IN_GAME_OFFERS,
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );

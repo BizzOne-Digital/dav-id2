@@ -17,9 +17,9 @@ type BrandLogoProps = {
 
 const sizeByVariant = {
   header:
-    "relative block h-[4.75rem] w-[min(62vw,12.5rem)] sm:h-[5.5rem] sm:w-[15rem] md:h-24 md:w-[18rem] lg:h-28 lg:w-[21rem]",
+    "relative block h-14 w-[min(52vw,10.5rem)] sm:h-16 sm:w-[12rem] md:h-[4.25rem] md:w-[14rem] lg:h-20 lg:w-[16rem]",
   headerHome:
-    "relative block h-[5.75rem] w-[min(72vw,15rem)] sm:h-[7rem] sm:w-[18rem] md:h-32 md:w-[22rem] lg:h-36 lg:w-[26rem] xl:h-[9.5rem] xl:w-[28rem]",
+    "relative block h-16 w-[min(58vw,11.5rem)] sm:h-[4.25rem] sm:w-[13.5rem] md:h-20 md:w-[16rem] lg:h-[5.25rem] lg:w-[19rem]",
   footer:
     "relative block h-32 w-[min(100%,20rem)] sm:h-40 sm:w-[24rem] md:h-44 md:w-[28rem] lg:h-48 lg:w-[30rem]",
 } as const;

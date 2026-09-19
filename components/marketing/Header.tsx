@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home", match: "exact" as const },
   { href: "/about", label: "About" },
   { href: "/hunts", label: "Hunts" },
-  { href: "/#how-it-works", label: "How It Works" },
+  { href: "/how-it-works", label: "How It Works" },
   { href: "/pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
@@ -30,7 +30,7 @@ function NavLink({ href, label, active, onClick }: { href: string; label: string
       href={href}
       onClick={onClick}
       className={cn(
-        "relative text-[13px] font-medium tracking-wide text-white/90 transition-colors hover:text-gold sm:text-sm",
+        "relative text-[12px] font-medium tracking-wide text-white/90 transition-colors hover:text-gold whitespace-nowrap lg:text-[13px] xl:text-sm",
         active && "text-white"
       )}
     >
@@ -82,26 +82,27 @@ export function Header({ settings }: HeaderProps) {
     >
       <div
         className={cn(
-          "site-x mx-auto flex max-w-[1400px] items-center justify-between gap-2 py-2 lg:gap-4",
-          isHome
-            ? "min-h-[6.5rem] sm:min-h-[7.5rem] lg:min-h-[9.5rem] sm:py-3"
-            : "min-h-[5.25rem] sm:min-h-[6.25rem] lg:min-h-[7.25rem] sm:py-2.5"
+          "site-x mx-auto grid max-w-[1400px] grid-cols-[1fr_auto] items-center gap-3 py-3 sm:py-3.5 lg:grid-cols-[minmax(0,auto)_1fr_auto] lg:gap-4 xl:gap-6",
+          isHome && "lg:py-4"
         )}
       >
         <BrandLogo
           logoUrl={settings.logoUrl}
           variant="header"
           homeHero={isHome}
-          className={isHome ? "max-w-[min(72vw,28rem)] sm:max-w-none" : "max-w-[min(62vw,21rem)] sm:max-w-none"}
+          className="justify-self-start"
         />
 
-        <nav className="hidden flex-1 items-center justify-center gap-6 lg:flex xl:gap-8" aria-label="Main">
+        <nav
+          className="hidden min-w-0 items-center justify-center gap-3 lg:flex xl:gap-5"
+          aria-label="Main"
+        >
           {NAV_LINKS.map((link) => (
             <NavLink key={link.href} href={link.href} label={link.label} active={isActive(link)} />
           ))}
         </nav>
 
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="hidden shrink-0 items-center gap-3 lg:flex lg:justify-self-end xl:gap-4">
           <Link
             href={session ? "/dashboard" : "/login"}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-white/90 transition-colors hover:text-gold"
@@ -114,7 +115,7 @@ export function Header({ settings }: HeaderProps) {
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-lg p-2 text-white lg:hidden"
+          className="inline-flex items-center justify-center justify-self-end rounded-lg p-2 text-white lg:hidden"
           aria-expanded={open}
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((v) => !v)}
@@ -131,7 +132,7 @@ export function Header({ settings }: HeaderProps) {
             exit={{ opacity: 0 }}
             className={cn(
               "fixed inset-0 z-40 overflow-y-auto bg-charcoal/98 backdrop-blur-lg safe-bottom lg:hidden",
-              isHome ? "top-[6.5rem] sm:top-[7.5rem]" : "top-[5.25rem] sm:top-[6.25rem]"
+              "top-[4.75rem] sm:top-[5rem]"
             )}
           >
             <motion.nav

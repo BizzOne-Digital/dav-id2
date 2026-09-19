@@ -46,6 +46,31 @@ const SiteSettingsSchema = new Schema(
     stats: [{ label: String, value: String, isSample: { type: Boolean, default: true } }],
     newsletterHeading: String,
     footerText: String,
+    inGameOffers: {
+      heading: String,
+      subtitle: String,
+      discounts: {
+        title: String,
+        description: String,
+        note: String,
+        published: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: true },
+      },
+      coupons: {
+        title: String,
+        description: String,
+        note: String,
+        published: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: true },
+      },
+      prizes: {
+        title: String,
+        description: String,
+        note: String,
+        published: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: true },
+      },
+    },
   },
   { timestamps: true }
 );

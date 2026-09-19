@@ -22,6 +22,22 @@ const heroPatchSchema = z.object({
   backgroundImage: z.string().max(2048).optional().or(z.literal("")),
 });
 
+const offerSlotSchema = z.object({
+  title: z.string().max(200).optional(),
+  description: z.string().max(800).optional(),
+  note: z.string().max(400).optional(),
+  published: z.boolean().optional(),
+  comingSoon: z.boolean().optional(),
+});
+
+const inGameOffersPatchSchema = z.object({
+  heading: z.string().max(200).optional(),
+  subtitle: z.string().max(800).optional(),
+  discounts: offerSlotSchema.optional(),
+  coupons: offerSlotSchema.optional(),
+  prizes: offerSlotSchema.optional(),
+});
+
 const patchSchema = z.object({
   businessName: z.string().max(200).optional(),
   tagline: z.string().max(300).optional(),
@@ -35,6 +51,7 @@ const patchSchema = z.object({
   minimumPlayers: z.number().int().min(1).optional(),
   defaultPricePerPersonCents: z.number().int().min(0).optional(),
   hero: heroPatchSchema.optional(),
+  inGameOffers: inGameOffersPatchSchema.optional(),
 });
 
 export async function PATCH(request: Request) {
@@ -52,12 +69,26 @@ export async function PATCH(request: Request) {
 
   await connectDB();
 
-  const { hero, ...rest } = parsed.data;
+  const { hero, inGameOffers, ...rest } = parsed.data;
   const $set: Record<string, unknown> = { ...rest };
   if (hero) {
     for (const [key, value] of Object.entries(hero)) {
       if (value !== undefined) {
         $set[`hero.${key}`] = value;
+      }
+    }
+  }
+  if (inGameOffers) {
+    for (const [key, value] of Object.entries(inGameOffers)) {
+      if (value === undefined) continue;
+      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+        for (const [subKey, subVal] of Object.entries(value)) {
+          if (subVal !== undefined) {
+            $set[`inGameOffers.${key}.${subKey}`] = subVal;
+          }
+        }
+      } else {
+        $set[`inGameOffers.${key}`] = value;
       }
     }
   }

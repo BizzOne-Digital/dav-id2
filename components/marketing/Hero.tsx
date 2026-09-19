@@ -150,13 +150,13 @@ export function Hero({ settings, pricing }: HeroProps) {
 
       <HeroRouteOverlay animate={!reduceMotion} />
 
-      <div className="relative site-x mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center pb-20 pt-[calc(6.75rem+var(--safe-top))] sm:pb-24 sm:pt-[calc(7.75rem+var(--safe-top))] lg:pb-20 lg:pt-[calc(9.5rem+var(--safe-top))]">
+      <div className="relative site-x mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center pb-20 pt-[calc(8.25rem+var(--safe-top))] sm:pb-24 sm:pt-[calc(9.5rem+var(--safe-top))] md:pt-[calc(10.5rem+var(--safe-top))] lg:pb-20 lg:pt-[calc(11rem+var(--safe-top))]">
         <div className="grid flex-1 items-center gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="max-w-2xl"
+            className="max-w-2xl pt-4 sm:pt-6 md:pt-8 lg:pt-2"
           >
             <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:text-sm">
               <Star className="size-4 fill-gold text-gold" aria-hidden />
