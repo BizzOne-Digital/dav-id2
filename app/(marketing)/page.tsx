@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/marketing/Hero";
+import { PromoFlyerSection } from "@/components/marketing/PromoFlyerSection";
 import { AdventureSnapshot } from "@/components/marketing/AdventureSnapshot";
 import { HowItWorksJourney } from "@/components/marketing/HowItWorksJourney";
 import { ExperienceCards } from "@/components/marketing/ExperienceCards";
@@ -67,6 +68,7 @@ export default async function HomePage() {
   return (
     <PageTransition>
       <Hero settings={marketingSettings} pricing={marketingPricing} />
+      <PromoFlyerSection pricePerPersonCents={marketingPricing?.pricePerPersonCents ?? marketingSettings.defaultPricePerPersonCents} />
       <NashvilleGalleryStrip />
       <InGameOffersSection offers={inGameOffers} />
       <AdventureSnapshot />
