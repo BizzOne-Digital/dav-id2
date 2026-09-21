@@ -136,7 +136,7 @@ export function Hero({ settings, pricing }: HeroProps) {
   const duration = pricing?.durationLabel ?? `${settings.typicalDurationHours ?? "2–3"} hours`;
 
   return (
-    <section className="relative min-h-[100dvh] overflow-hidden">
+    <section className="relative min-h-[85dvh] overflow-hidden sm:min-h-[88dvh] lg:min-h-[90dvh]">
       <Image
         src={heroBg}
         alt=""
@@ -158,15 +158,15 @@ export function Hero({ settings, pricing }: HeroProps) {
 
       <HeroRouteOverlay animate={!reduceMotion} />
 
-      <div className="relative site-x mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center pb-20 pt-[calc(8.25rem+var(--safe-top))] sm:pb-24 sm:pt-[calc(9.5rem+var(--safe-top))] md:pt-[calc(10.5rem+var(--safe-top))] lg:pb-20 lg:pt-[calc(11rem+var(--safe-top))]">
-        <div className="grid flex-1 items-start gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:items-center">
+      <div className="relative site-x mx-auto max-w-[1400px] pb-14 pt-[calc(2.875rem+var(--safe-top))] sm:pb-16 sm:pt-[calc(3rem+var(--safe-top))] lg:pb-14">
+        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="mx-auto w-full max-w-2xl lg:mx-0"
+            className="mx-auto w-full max-w-2xl lg:mx-0 lg:pt-0"
           >
-            <p className="mb-3 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-4 sm:text-sm lg:justify-start">
+            <p className="mb-1.5 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-2 sm:text-sm lg:justify-start">
               <Star className="size-4 fill-gold text-gold" aria-hidden />
               The Ultimate Music City Adventure
             </p>
@@ -175,7 +175,7 @@ export function Hero({ settings, pricing }: HeroProps) {
               <BrandLogo logoUrl={settings.logoUrl} variant="hero" className="lg:ml-0" />
             </div>
 
-            <p className="mt-5 max-w-xl text-center text-sm leading-relaxed text-white/85 sm:mt-6 sm:text-base md:text-lg lg:text-left">
+            <p className="mt-4 max-w-xl text-center text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg lg:text-left">
               {subheadline}
             </p>
 
@@ -226,7 +226,7 @@ export function Hero({ settings, pricing }: HeroProps) {
             </ul>
           </motion.div>
 
-          <div className="relative mt-2 flex flex-col items-center sm:mt-4 lg:mt-0 lg:items-end">
+          <div className="relative mt-2 flex flex-col items-center sm:mt-4 lg:mt-12 lg:items-end xl:mt-16">
             <div className="flex justify-center gap-1.5 sm:gap-2 lg:justify-end lg:gap-3">
               <PolaroidCard title="Solve Clues" icon={Search} rotate="-6deg" delay={0.55} />
               <PolaroidCard title="Earn Points" icon={Trophy} rotate="4deg" delay={0.65} />
