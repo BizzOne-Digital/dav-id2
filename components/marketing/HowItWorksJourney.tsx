@@ -26,23 +26,45 @@ const STEPS = [
   { icon: Flag, title: "Celebrate", body: "Crown a winner, share photos, and keep exploring Music City." },
 ];
 
-export function HowItWorksJourney() {
+export function HowItWorksJourney({
+  showHeading = true,
+  spacing = "default",
+}: {
+  showHeading?: boolean;
+  spacing?: "default" | "tight";
+}) {
   const reduceMotion = useReducedMotion();
+  const isTight = spacing === "tight";
 
   return (
-    <section id="how-it-works" className="relative bg-charcoal section-y">
+    <section
+      id="how-it-works"
+      className={
+        isTight
+          ? "relative border-t border-cream/10 bg-charcoal py-8 sm:py-10"
+          : "relative bg-charcoal section-y"
+      }
+    >
       <div className="pointer-events-none absolute inset-0 opacity-[0.07]" aria-hidden>
         <Image src={ALL_MARKETING_IMAGES[3].src} alt="" fill className="object-cover" />
       </div>
 
       <div className="site-x relative mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="How it works"
-          title="From booking to victory lap"
-          subtitle="Eight simple steps from your first click to your last clue on Broadway."
-        />
+        {showHeading && (
+          <SectionHeading
+            eyebrow="How it works"
+            title="From booking to victory lap"
+            subtitle="Eight simple steps from your first click to your last clue on Broadway."
+          />
+        )}
 
-        <ol className="mt-12 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 lg:grid-cols-2">
+        <ol
+          className={
+            showHeading
+              ? "mt-12 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 lg:grid-cols-2"
+              : "mt-2 grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2"
+          }
+        >
           {STEPS.map((step, i) => {
             const Icon = step.icon;
             const stepImage = ALL_MARKETING_IMAGES[i % ALL_MARKETING_IMAGES.length];

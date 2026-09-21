@@ -11,9 +11,17 @@ const GROUP_LINKS = [
   { type: "corporate", label: "Corporate" },
 ];
 
-export function TeamsAndGroupsSection() {
+export function TeamsAndGroupsSection({ spacing = "default" }: { spacing?: "default" | "tight" }) {
+  const isTight = spacing === "tight";
+
   return (
-    <section className="border-t border-cream/10 bg-charcoal section-y">
+    <section
+      className={
+        isTight
+          ? "border-t border-cream/10 bg-charcoal py-8 sm:py-10"
+          : "border-t border-cream/10 bg-charcoal section-y"
+      }
+    >
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
           eyebrow="Teams & groups"
