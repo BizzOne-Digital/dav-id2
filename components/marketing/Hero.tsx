@@ -158,7 +158,7 @@ export function Hero({ settings, pricing }: HeroProps) {
 
       <HeroRouteOverlay animate={!reduceMotion} />
 
-      <div className="relative site-x mx-auto max-w-[1400px] pb-14 pt-[calc(2.875rem+var(--safe-top))] sm:pb-16 sm:pt-[calc(3rem+var(--safe-top))] lg:pb-14">
+      <div className="relative site-x mx-auto max-w-[1400px] pb-14 pt-[calc(2.5rem+var(--safe-top))] sm:pb-16 sm:pt-[calc(2.625rem+var(--safe-top))] lg:pb-14">
         <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[minmax(0,0.92fr)_1.08fr] lg:gap-8 xl:gap-10">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
@@ -171,7 +171,7 @@ export function Hero({ settings, pricing }: HeroProps) {
               The Ultimate Music City Adventure
             </p>
 
-            <div className="flex justify-start pl-0 sm:-ml-1 lg:-ml-2">
+            <div className="flex justify-start -ml-1 sm:-ml-2 md:-ml-3 lg:-ml-5 xl:-ml-6">
               <BrandLogo logoUrl={settings.logoUrl} variant="hero" />
             </div>
 

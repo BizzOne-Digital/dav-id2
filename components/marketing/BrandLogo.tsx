@@ -31,7 +31,12 @@ export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoP
   return (
     <Link
       href="/"
-      className={cn(sizeByVariant[sizeKey], "shrink-0 transition-opacity hover:opacity-95", className)}
+      className={cn(
+        sizeByVariant[sizeKey],
+        "shrink-0 bg-transparent transition-opacity hover:opacity-95",
+        variant === "hero" && "isolate",
+        className
+      )}
       aria-label="Nashville Scavenger Hunt — Home"
     >
       <Image
@@ -42,7 +47,7 @@ export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoP
         className={cn(
           "object-contain",
           variant === "hero"
-            ? "object-left object-contain brightness-[1.12] contrast-[1.06] saturate-[1.18] drop-shadow-[0_8px_40px_rgba(201,147,42,0.38)]"
+            ? "object-left mix-blend-lighten brightness-[1.15] contrast-[1.08] saturate-[1.2] drop-shadow-[0_0_28px_rgba(201,147,42,0.35)]"
             : variant === "footer"
               ? "object-left brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
               : "object-left brightness-[1.1] contrast-[1.05] saturate-[1.15] drop-shadow-[0_4px_24px_rgba(242,182,50,0.32)]"
