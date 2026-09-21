@@ -24,6 +24,7 @@ const SiteSettingsSchema = new Schema(
       instagram: String,
       tiktok: String,
       youtube: String,
+      twitter: String,
     },
     hero: {
       headline: String,

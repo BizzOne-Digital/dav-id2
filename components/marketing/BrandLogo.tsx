@@ -11,24 +11,20 @@ type BrandLogoProps = {
   className?: string;
   /** header = nav bar; footer = larger brand block */
   variant?: "header" | "footer";
-  /** Bigger + brighter treatment on the home page header */
-  homeHero?: boolean;
 };
 
 const sizeByVariant = {
   header:
-    "relative block h-14 w-[min(52vw,10.5rem)] sm:h-16 sm:w-[12rem] md:h-[4.25rem] md:w-[14rem] lg:h-20 lg:w-[16rem]",
-  headerHome:
-    "relative block h-16 w-[min(58vw,11.5rem)] sm:h-[4.25rem] sm:w-[13.5rem] md:h-20 md:w-[16rem] lg:h-[5.25rem] lg:w-[19rem]",
+    "relative block h-[4.25rem] w-[min(58vw,13rem)] sm:h-20 sm:w-[15rem] md:h-[5.25rem] md:w-[18rem] lg:h-24 lg:w-[21rem] xl:h-[6.25rem] xl:w-[23rem]",
   footer:
-    "relative block h-32 w-[min(100%,20rem)] sm:h-40 sm:w-[24rem] md:h-44 md:w-[28rem] lg:h-48 lg:w-[30rem]",
+    "relative block h-36 w-[min(100%,22rem)] sm:h-44 sm:w-[26rem] md:h-48 md:w-[30rem] lg:h-52 lg:w-[34rem] xl:h-56 xl:w-[36rem]",
 } as const;
 
-export function BrandLogo({ logoUrl, className, variant = "header", homeHero }: BrandLogoProps) {
+export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoProps) {
   const raw = logoUrl?.trim() ? logoUrl : SITE_LOGO_PATH;
   const src = raw.startsWith("/images/") || raw.startsWith("/api/uploads/") ? raw : resolvePublicImageUrl(raw);
   const unoptimized = src.startsWith("/api/uploads/");
-  const sizeKey = variant === "header" && homeHero ? "headerHome" : variant;
+  const sizeKey = variant === "footer" ? "footer" : "header";
 
   return (
     <Link
@@ -43,16 +39,14 @@ export function BrandLogo({ logoUrl, className, variant = "header", homeHero }: 
         priority={variant === "header"}
         className={cn(
           "object-contain object-left",
-          homeHero || variant === "footer"
+          variant === "footer"
             ? "brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
-            : "brightness-[1.08] saturate-[1.1] drop-shadow-[0_4px_20px_rgba(242,182,50,0.25)]"
+            : "brightness-[1.1] contrast-[1.05] saturate-[1.15] drop-shadow-[0_4px_24px_rgba(242,182,50,0.32)]"
         )}
         sizes={
-          homeHero
-            ? "(max-width:768px) 240px, 448px"
-            : variant === "footer"
-              ? "(max-width:768px) 320px, 480px"
-              : "(max-width:768px) 200px, 336px"
+          variant === "footer"
+            ? "(max-width:768px) 352px, 576px"
+            : "(max-width:768px) 240px, 368px"
         }
         unoptimized={unoptimized}
       />

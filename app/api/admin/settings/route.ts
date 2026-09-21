@@ -38,6 +38,14 @@ const inGameOffersPatchSchema = z.object({
   prizes: offerSlotSchema.optional(),
 });
 
+const socialLinksPatchSchema = z.object({
+  facebook: z.string().max(500).optional().or(z.literal("")),
+  instagram: z.string().max(500).optional().or(z.literal("")),
+  tiktok: z.string().max(500).optional().or(z.literal("")),
+  youtube: z.string().max(500).optional().or(z.literal("")),
+  twitter: z.string().max(500).optional().or(z.literal("")),
+});
+
 const patchSchema = z.object({
   businessName: z.string().max(200).optional(),
   tagline: z.string().max(300).optional(),
@@ -52,6 +60,7 @@ const patchSchema = z.object({
   defaultPricePerPersonCents: z.number().int().min(0).optional(),
   hero: heroPatchSchema.optional(),
   inGameOffers: inGameOffersPatchSchema.optional(),
+  socialLinks: socialLinksPatchSchema.optional(),
 });
 
 export async function PATCH(request: Request) {
@@ -69,7 +78,7 @@ export async function PATCH(request: Request) {
 
   await connectDB();
 
-  const { hero, inGameOffers, ...rest } = parsed.data;
+  const { hero, inGameOffers, socialLinks, ...rest } = parsed.data;
   const $set: Record<string, unknown> = { ...rest };
   if (hero) {
     for (const [key, value] of Object.entries(hero)) {
@@ -89,6 +98,14 @@ export async function PATCH(request: Request) {
         }
       } else {
         $set[`inGameOffers.${key}`] = value;
+      }
+    }
+  }
+
+  if (socialLinks) {
+    for (const [key, value] of Object.entries(socialLinks)) {
+      if (value !== undefined) {
+        $set[`socialLinks.${key}`] = value;
       }
     }
   }

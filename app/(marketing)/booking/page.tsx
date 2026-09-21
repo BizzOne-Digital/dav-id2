@@ -61,7 +61,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
       <PageHero
         eyebrow="Reservations"
         title="Book your hunt"
-        subtitle="Four quick steps—then checkout securely online."
+        subtitle="Four steps—pick your group size, name your team (or corporate squads), then checkout securely."
         backgroundImage={PAGE_HERO_IMAGES.booking}
       />
       <div className="site-x page-y">

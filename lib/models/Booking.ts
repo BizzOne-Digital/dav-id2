@@ -20,6 +20,17 @@ const BookingSchema = new Schema(
     captainEmail: String,
     captainPhone: String,
     teamColor: String,
+    playerRoster: [String],
+    squads: [
+      {
+        name: String,
+        color: {
+          type: String,
+          enum: ["BLUE", "GOLD", "GREEN", "PINK", "RED", "CYAN"],
+        },
+        playerCount: Number,
+      },
+    ],
     emergencyConsent: { type: Boolean, default: false },
     referralCode: String,
     promoCode: String,

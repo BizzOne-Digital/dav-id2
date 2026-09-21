@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { AnimatedClueText } from "@/components/game/AnimatedClueText";
 import { Card } from "@/components/ui/Card";
 
 export type GamePhase =
@@ -105,8 +106,17 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
         >
           {phase === "CLUE" && (
             <Card>
-              <h2 className="font-[family-name:var(--font-bebas)] text-2xl text-gold">{stop.locationName}</h2>
-              <p className="mt-3 text-cream/90 leading-relaxed">{stop.clue ?? stop.instructions}</p>
+              <motion.div
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+              >
+                <h2 className="font-[family-name:var(--font-bebas)] text-2xl text-gold">{stop.locationName}</h2>
+                <AnimatedClueText
+                  className="mt-3 text-cream/90 leading-relaxed"
+                  text={stop.clue ?? stop.instructions}
+                />
+              </motion.div>
               <Button className="mt-6 w-full" onClick={() => setPhase("TRAVEL")}>Got it — let&apos;s go</Button>
             </Card>
           )}

@@ -35,9 +35,13 @@ export default async function CertificatesPage() {
             <li key={cert._id.toString()}>
               <Card>
                 <CardHeader>
-                  <CardTitle>{cert.teamName ?? "Your team"}</CardTitle>
+                  <CardTitle>
+                    {cert.playerDisplayName ?? cert.teamName ?? "Your team"}
+                  </CardTitle>
                   <CardDescription>
+                    {cert.teamName && cert.playerDisplayName ? `${cert.teamName} · ` : ""}
                     {cert.rankTitle} · Score {cert.finalScore ?? 0}
+                    {cert.ticketIndex ? ` · Ticket ${cert.ticketIndex}` : ""}
                   </CardDescription>
                 </CardHeader>
                 <Link href={`/certificate/${cert.certificateId}`} className="text-sm text-gold hover:underline">

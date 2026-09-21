@@ -43,13 +43,13 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
     pricing?.description ?? standardPricingDescription(minPlayers);
 
   return (
-    <section id="pricing" className="bg-cream section-y">
+    <section id="pricing" className="section-surface-light section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
+          surface="light"
           eyebrow="Pricing"
           title="Simple, transparent rates"
           subtitle="What you see here comes straight from our live booking settings—no surprise fees at the door."
-          className="[&_h2]:text-charcoal [&_p]:text-charcoal/70"
         />
 
         <div className="mt-8 grid items-center gap-8 sm:mt-10 lg:grid-cols-2 lg:gap-10">

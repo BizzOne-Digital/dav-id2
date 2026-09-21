@@ -21,9 +21,13 @@ export default async function CertificatePage({ params }: PageProps) {
       <Card className="mt-8 border-gold/30">
         <CardHeader>
           <CardTitle className="font-[family-name:var(--font-bebas)] text-4xl text-gold">
-            {cert.teamName}
+            {cert.playerDisplayName ?? cert.teamName}
           </CardTitle>
-          <CardDescription className="text-lg">{cert.rankTitle}</CardDescription>
+          <CardDescription className="text-lg">
+            {cert.teamName && cert.playerDisplayName ? `${cert.teamName} · ` : ""}
+            {cert.rankTitle}
+            {cert.ticketIndex ? ` · Ticket ${cert.ticketIndex}` : ""}
+          </CardDescription>
         </CardHeader>
         <p className="text-3xl font-bold text-cream">{cert.finalScore ?? 0} points</p>
         <p className="mt-4 text-sm text-cream/50">ID {cert.certificateId}</p>

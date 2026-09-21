@@ -4,6 +4,14 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/connect";
 import { DEFAULT_IN_GAME_OFFERS } from "@/lib/site/inGameOffers";
 import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
+import { slugify } from "@/lib/utils";
+import {
+  loadGeocodeCache,
+  loadMasterLocationRows,
+  resolveCoordsForMasterRow,
+} from "@/lib/locations/loadMasterLocations";
+import { masterRowToLocationDoc } from "@/lib/locations/masterLocationTypes";
+import { computeMasterKpis } from "@/lib/locations/routeRandomizer";
 import {
   SiteSettings,
   PricingPlan,
@@ -42,168 +50,6 @@ function loadEnvFiles() {
 }
 
 loadEnvFiles();
-
-const LOCATIONS: Array<{
-  name: string;
-  slug: string;
-  category: "landmark" | "history" | "retail" | "food" | "scenic" | "music" | "partner";
-  description: string;
-  address: string;
-  lat: number;
-  lng: number;
-  tags: string[];
-}> = [
-  {
-    name: "Lower Broadway",
-    slug: "lower-broadway",
-    category: "music",
-    description: "Honky-tonk row and live music on every block.",
-    address: "Broadway, Nashville, TN 37203",
-    lat: 36.1607,
-    lng: -86.7781,
-    tags: ["music", "nightlife", "downtown"],
-  },
-  {
-    name: "Ryman Auditorium",
-    slug: "ryman-auditorium",
-    category: "music",
-    description: "The Mother Church of Country Music.",
-    address: "116 5th Ave N, Nashville, TN 37219",
-    lat: 36.1612,
-    lng: -86.7784,
-    tags: ["history", "music", "landmark"],
-  },
-  {
-    name: "Country Music Hall of Fame",
-    slug: "country-music-hall-of-fame",
-    category: "music",
-    description: "Museum celebrating country music legends.",
-    address: "222 Rep John Lewis Way S, Nashville, TN 37203",
-    lat: 36.1584,
-    lng: -86.7761,
-    tags: ["museum", "music"],
-  },
-  {
-    name: "Bridgestone Arena",
-    slug: "bridgestone-arena",
-    category: "landmark",
-    description: "Home of the Nashville Predators and major concerts.",
-    address: "501 Broadway, Nashville, TN 37203",
-    lat: 36.1592,
-    lng: -86.7785,
-    tags: ["sports", "events"],
-  },
-  {
-    name: "Johnny Cash Museum",
-    slug: "johnny-cash-museum",
-    category: "music",
-    description: "Artifacts and stories from the Man in Black.",
-    address: "119 3rd Ave S, Nashville, TN 37201",
-    lat: 36.1609,
-    lng: -86.7755,
-    tags: ["museum", "music"],
-  },
-  {
-    name: "Printer's Alley",
-    slug: "printers-alley",
-    category: "history",
-    description: "Historic alley of clubs and neon signs.",
-    address: "Printer's Alley, Nashville, TN 37219",
-    lat: 36.164,
-    lng: -86.7792,
-    tags: ["history", "nightlife"],
-  },
-  {
-    name: "Tennessee State Capitol",
-    slug: "tennessee-state-capitol",
-    category: "history",
-    description: "Greek Revival capitol overlooking downtown.",
-    address: "600 Dr MLK Jr Blvd, Nashville, TN 37243",
-    lat: 36.1658,
-    lng: -86.7841,
-    tags: ["government", "architecture"],
-  },
-  {
-    name: "Bicentennial Capitol Mall",
-    slug: "bicentennial-capitol-mall",
-    category: "scenic",
-    description: "Linear park with Tennessee timeline and views.",
-    address: "600 James Robertson Pkwy, Nashville, TN 37243",
-    lat: 36.172,
-    lng: -86.7875,
-    tags: ["park", "history"],
-  },
-  {
-    name: "Schermerhorn Symphony Center",
-    slug: "schermerhorn-symphony-center",
-    category: "music",
-    description: "Home of the Nashville Symphony.",
-    address: "One Symphony Pl, Nashville, TN 37201",
-    lat: 36.1633,
-    lng: -86.7769,
-    tags: ["classical", "architecture"],
-  },
-  {
-    name: "Frist Art Museum",
-    slug: "frist-art-museum",
-    category: "landmark",
-    description: "Art deco post office turned world-class museum.",
-    address: "919 Broadway, Nashville, TN 37203",
-    lat: 36.1576,
-    lng: -86.7839,
-    tags: ["art", "museum"],
-  },
-  {
-    name: "The Gulch",
-    slug: "the-gulch",
-    category: "retail",
-    description: "Trendy district with murals and boutiques.",
-    address: "The Gulch, Nashville, TN 37203",
-    lat: 36.1517,
-    lng: -86.7845,
-    tags: ["murals", "shopping"],
-  },
-  {
-    name: "Musicians Hall of Fame",
-    slug: "musicians-hall-of-fame",
-    category: "music",
-    description: "Session players and unsung heroes of recording.",
-    address: "401 Gay St, Nashville, TN 37219",
-    lat: 36.1674,
-    lng: -86.7788,
-    tags: ["museum", "music"],
-  },
-  {
-    name: "Nissan Stadium",
-    slug: "nissan-stadium",
-    category: "landmark",
-    description: "Titans football and skyline views across the river.",
-    address: "1 Titans Way, Nashville, TN 37213",
-    lat: 36.1665,
-    lng: -86.7713,
-    tags: ["sports", "river"],
-  },
-  {
-    name: "Pedestrian Bridge",
-    slug: "john-seigenthaler-pedestrian-bridge",
-    category: "scenic",
-    description: "Walk the bridge for postcard downtown views.",
-    address: "John Seigenthaler Pedestrian Bridge, Nashville, TN",
-    lat: 36.1619,
-    lng: -86.7699,
-    tags: ["views", "photo"],
-  },
-  {
-    name: "Assembly Food Hall",
-    slug: "assembly-food-hall",
-    category: "food",
-    description: "Multi-vendor food hall at Fifth + Broadway.",
-    address: "5055 Broadway Place, Nashville, TN 37203",
-    lat: 36.1598,
-    lng: -86.778,
-    tags: ["food", "family"],
-  },
-];
 
 const HUNTS = [
   {
@@ -320,7 +166,7 @@ async function upsertSiteSettings(pricingPlanId: string) {
       stats: [
         { label: "Teams hosted", value: "500+", isSample: true },
         { label: "Avg. rating", value: "4.9/5", isSample: true },
-        { label: "Downtown stops", value: "15+", isSample: true },
+        { label: "Downtown stops", value: "50", isSample: false },
       ],
       inGameOffers: DEFAULT_IN_GAME_OFFERS,
     },
@@ -329,6 +175,11 @@ async function upsertSiteSettings(pricingPlanId: string) {
 }
 
 async function seedLocations() {
+  const masterRows = loadMasterLocationRows();
+  const geocache = loadGeocodeCache();
+  const kpis = computeMasterKpis(masterRows);
+  console.log(`  Master KPIs: ${kpis.totalRecords} records, ${kpis.gameStops} game stops, ${kpis.highPriorityProspects} high priority`);
+
   const images = [
     "/images/ryman-guitar-case.jpg",
     "/images/broadway-neon.jpg",
@@ -342,22 +193,31 @@ async function seedLocations() {
     "/images/prizes-trophy.jpg",
   ];
   const map = new Map<string, string>();
-  for (let i = 0; i < LOCATIONS.length; i++) {
-    const loc = LOCATIONS[i];
+  const masterSlugs = new Set<string>();
+
+  for (let i = 0; i < masterRows.length; i++) {
+    const row = masterRows[i];
+    const slug = slugify(row.name);
+    masterSlugs.add(slug);
+    const coords = resolveCoordsForMasterRow(row, geocache);
+    const docFields = masterRowToLocationDoc(row, slug, coords);
     const doc = await Location.findOneAndUpdate(
-      { slug: loc.slug },
+      { slug },
       {
-        ...loc,
+        ...docFields,
         image: images[i % images.length],
-        zone: "downtown",
-        audienceTags: ["all"],
-        status: "active",
-        outdoor: true,
+        version: 2,
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
-    map.set(loc.slug, doc._id.toString());
+    map.set(slug, doc._id.toString());
   }
+
+  await Location.updateMany(
+    { slug: { $nin: [...masterSlugs] }, masterId: { $exists: false } },
+    { status: "suppressed" }
+  );
+
   return map;
 }
 
@@ -381,56 +241,52 @@ async function seedChallenges(locationIds: Map<string, string>) {
         isPreviewSafe: true,
         isSample: true,
         active: true,
+        verificationMethod: "hybrid",
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
   }
 
-  const challengeSeeds = [
-    {
-      slug: "lower-broadway",
-      type: "observation" as const,
-      title: "Honky Tonk Count",
-      instructions: "How many live music venues can you spot on this block?",
-      answer: "dozens",
-      acceptedVariants: ["many", "lots"],
-    },
-    {
-      slug: "country-music-hall-of-fame",
-      type: "trivia" as const,
-      title: "Hall of Fame Fact",
-      instructions: "Which instrument is featured on the museum's rotunda design?",
-      answer: "disc",
-      acceptedVariants: ["records", "vinyl"],
-    },
-    {
-      slug: "tennessee-state-capitol",
-      type: "text" as const,
-      title: "Capitol Architect",
-      instructions: "Name the architect who designed the Tennessee State Capitol.",
-      answer: "strickland",
-      acceptedVariants: ["william strickland", "William Strickland"],
-    },
-  ];
-
-  for (const c of challengeSeeds) {
-    const locationId = locationIds.get(c.slug);
+  const masterRows = loadMasterLocationRows();
+  for (const row of masterRows) {
+    if (!row.gameStopEligible || !row.sampleChallenge) continue;
+    const slug = slugify(row.name);
+    const locationId = locationIds.get(slug);
     if (!locationId) continue;
+    const title = `Sample: ${row.name}`;
+    const needsPhoto = /photo|selfie|video|pose|panorama/i.test(row.sampleChallenge);
     await Challenge.findOneAndUpdate(
-      { locationId, title: c.title },
+      { locationId, title },
       {
         locationId,
-        type: c.type,
-        title: c.title,
-        instructions: c.instructions,
-        answer: c.answer,
-        acceptedVariants: c.acceptedVariants,
+        type: needsPhoto ? "photo" : "observation",
+        title,
+        instructions: `${row.sampleChallenge} Complete from the exterior unless your route says otherwise. No purchase or alcohol required.`,
+        clue: row.sampleChallenge,
+        basePoints: row.priority === "high" ? 300 : 250,
+        difficulty: "moderate",
+        isSample: true,
         active: true,
-        basePoints: 250,
+        verificationMethod: needsPhoto ? "hybrid" : "answer",
+        audienceTags: parseAudienceTagsFromFit(row.audienceFit),
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
   }
+}
+
+function parseAudienceTagsFromFit(audienceFit: string): string[] {
+  const tags: string[] = [];
+  const lower = audienceFit.toLowerCase();
+  if (lower.includes("individuals: yes") || lower.includes("individuals: daytime") || lower.includes("individuals: exterior")) {
+    tags.push("individual");
+  }
+  if (lower.includes("friends/adult: yes")) tags.push("friends");
+  if (lower.includes("families: yes") || lower.includes("families: daytime") || lower.includes("families: exterior")) {
+    tags.push("family");
+  }
+  if (lower.includes("corporate: yes")) tags.push("corporate");
+  return tags;
 }
 
 async function seedHunts(pricingPlanId: string) {
@@ -467,6 +323,9 @@ async function seedHunts(pricingPlanId: string) {
 }
 
 async function seedRouteRecipes() {
+  const zoneNote =
+    "Zones A Broadway, B SoBro, C Civic/North, D Riverfront. No purchase or alcohol required to complete challenges.";
+
   await RouteRecipe.findOneAndUpdate(
     { name: "Family Downtown Mix", groupType: "family" },
     {
@@ -476,10 +335,12 @@ async function seedRouteRecipes() {
         { category: "scenic", count: 2 },
         { category: "history", count: 2 },
         { category: "food", count: 1 },
+        { category: "retail", count: 1 },
         { category: "landmark", count: 2 },
       ],
-      rules: { noAdultInteriors: true, maxWalkingMinutes: 90 },
+      rules: { noAdultInteriors: true, maxWalkingMinutes: 120 },
       active: true,
+      version: 2,
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
@@ -490,16 +351,56 @@ async function seedRouteRecipes() {
       name: "Friends Night Out",
       groupType: "friends",
       categories: [
-        { category: "music", count: 3 },
-        { category: "history", count: 2 },
-        { category: "retail", count: 1 },
-        { category: "food", count: 1 },
+        { category: "music", count: 4 },
+        { category: "food", count: 2 },
+        { category: "retail", count: 2 },
+        { category: "scenic", count: 2 },
       ],
-      rules: { noAdultInteriors: false, maxWalkingMinutes: 120 },
+      rules: { noAdultInteriors: false, maxWalkingMinutes: 150 },
       active: true,
+      version: 2,
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
+
+  await RouteRecipe.findOneAndUpdate(
+    { name: "Singles & Couples Discovery", groupType: "singles_couples" },
+    {
+      name: "Singles & Couples Discovery",
+      groupType: "singles_couples",
+      categories: [
+        { category: "landmark", count: 2 },
+        { category: "scenic", count: 2 },
+        { category: "retail", count: 2 },
+        { category: "history", count: 2 },
+      ],
+      rules: { noAdultInteriors: true, maxWalkingMinutes: 120 },
+      active: true,
+      version: 2,
+    },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+
+  await RouteRecipe.findOneAndUpdate(
+    { name: "Corporate Team Builder", groupType: "corporate" },
+    {
+      name: "Corporate Team Builder",
+      groupType: "corporate",
+      categories: [
+        { category: "landmark", count: 3 },
+        { category: "history", count: 2 },
+        { category: "food", count: 2 },
+        { category: "scenic", count: 2 },
+        { category: "retail", count: 2 },
+      ],
+      rules: { noAdultInteriors: false, maxWalkingMinutes: 180 },
+      active: true,
+      version: 2,
+    },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+
+  console.log(`  Route recipes: ${zoneNote}`);
 }
 
 async function seedFaqs() {
@@ -670,7 +571,7 @@ async function main() {
 
   console.log("Seed completed successfully.");
   console.log(`  Pricing plan: ${pricing.slug} ($${pricing.pricePerPersonCents / 100}/person, min ${pricing.minimumPlayers})`);
-  console.log(`  Locations: ${LOCATIONS.length}`);
+  console.log(`  Locations: ${loadMasterLocationRows().length} (master catalog)`);
   console.log(`  Hunts: ${HUNTS.length}`);
 }
 

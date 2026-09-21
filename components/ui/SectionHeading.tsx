@@ -6,6 +6,8 @@ type SectionHeadingProps = {
   title: string;
   subtitle?: string;
   align?: "left" | "center";
+  /** Use on parchment / light sections (charcoal type, subtle badge) */
+  surface?: "dark" | "light";
   className?: string;
 };
 
@@ -14,8 +16,11 @@ export function SectionHeading({
   title,
   subtitle,
   align = "center",
+  surface = "dark",
   className,
 }: SectionHeadingProps) {
+  const isLight = surface === "light";
+
   return (
     <div
       className={cn(
@@ -26,14 +31,26 @@ export function SectionHeading({
     >
       {eyebrow && (
         <div className={cn("mb-2", align === "center" && "flex justify-center")}>
-          <Badge>{eyebrow}</Badge>
+          <Badge variant={isLight ? "subtle" : "default"}>{eyebrow}</Badge>
         </div>
       )}
-      <h2 className="text-balance font-[family-name:var(--font-bebas)] text-2xl tracking-wide text-cream sm:text-3xl md:text-4xl lg:text-5xl">
+      <h2
+        className={cn(
+          "text-balance font-[family-name:var(--font-bebas)] text-2xl tracking-wide sm:text-3xl md:text-4xl lg:text-5xl",
+          isLight ? "text-charcoal" : "text-cream"
+        )}
+      >
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-2 text-pretty text-sm leading-relaxed text-cream/70 sm:mt-3 sm:text-base md:text-lg">{subtitle}</p>
+        <p
+          className={cn(
+            "mt-2 text-pretty text-sm leading-relaxed sm:mt-3 sm:text-base md:text-lg",
+            isLight ? "text-charcoal/70" : "text-cream/70"
+          )}
+        >
+          {subtitle}
+        </p>
       )}
     </div>
   );

@@ -54,13 +54,13 @@ const NEIGHBORHOODS = [
 
 export function ExploreNashville() {
   return (
-    <section id="explore" className="bg-cream section-y">
+    <section id="explore" className="section-surface-light section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
+          surface="light"
           eyebrow="Explore Nashville"
           title="Neighborhood signposts"
           subtitle="Promotional examples only—your assigned route appears after booking and game activation."
-          className="[&_h2]:text-charcoal [&_p]:text-charcoal/70"
         />
 
         <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">

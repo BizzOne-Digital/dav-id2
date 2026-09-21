@@ -49,6 +49,13 @@ export const MARKETING_IMAGES = {
     src: "/images/nashville-promo-flyer.png",
     alt: "Nashville Scavenger Hunt promo — Music City challenge, $29.95 per person, book your adventure",
   },
+  /** High-resolution homepage poster (client artwork) */
+  promoPoster: {
+    src: "/images/nashville-promo-poster.jpg",
+    alt: "Nashville Scavenger Hunt — The Ultimate Music City Challenge. Explore, solve, compete, win. Book your adventure.",
+    width: 648,
+    height: 1024,
+  },
 } as const;
 
 export type MarketingImageKey = keyof typeof MARKETING_IMAGES;

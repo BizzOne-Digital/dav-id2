@@ -74,13 +74,13 @@ export function AdventureSnapshot() {
   const activeItem = SNAPSHOTS.find((s) => s.id === active) ?? SNAPSHOTS[0];
 
   return (
-    <section className="bg-cream section-y">
+    <section className="section-surface-light section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
+          surface="light"
           eyebrow="The Adventure"
           title="Your hunt at a glance"
           subtitle="Seven pillars of a Nashville scavenger experience built for groups who want more than a walking tour."
-          className="[&_h2]:text-charcoal [&_p]:text-charcoal/70"
         />
 
         <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-10">
@@ -119,12 +119,13 @@ export function AdventureSnapshot() {
                 >
                   <Card
                     className={cn(
-                      "h-full border-charcoal/10 bg-white/80 p-4",
-                      isActive && "ring-2 ring-gold shadow-[0_8px_30px_rgba(242,182,50,0.25)]"
+                      "h-full border-charcoal/10 bg-white/90 p-4 shadow-sm",
+                      isActive &&
+                        "ring-2 ring-denim/35 shadow-[0_8px_28px_rgba(37,92,133,0.12)]"
                     )}
                   >
                     <Icon
-                      className={cn("size-7", isActive ? "text-orange" : "text-charcoal/50")}
+                      className={cn("size-7", isActive ? "text-denim" : "text-charcoal/45")}
                       aria-hidden
                     />
                     <h3 className="mt-2 font-semibold text-charcoal">{item.title}</h3>

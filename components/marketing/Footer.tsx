@@ -13,7 +13,7 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
-import { FacebookIcon, InstagramIcon } from "@/components/marketing/SocialIcons";
+import { FacebookIcon, InstagramIcon, TikTokIcon, YouTubeIcon, XIcon } from "@/components/marketing/SocialIcons";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
@@ -25,6 +25,8 @@ const EXPLORE_LINKS = [
   { href: "/hunts", label: "Our Hunts" },
   { href: "/pricing", label: "Pricing" },
   { href: "/shop", label: "Shop" },
+  { href: "/brochure", label: "Brochure" },
+  { href: "/book-qr", label: "Book QR" },
   { href: "/#how-it-works", label: "How It Works" },
   { href: "/leaderboard", label: "Leaderboard" },
 ];
@@ -53,6 +55,7 @@ type SocialLinks = {
   instagram?: string;
   tiktok?: string;
   youtube?: string;
+  twitter?: string;
 };
 
 function FooterLink({ href, label }: { href: string; label: string }) {
@@ -158,7 +161,7 @@ export function Footer({ settings, pricing }: FooterProps) {
         <div className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Brand column */}
           <div className="lg:col-span-5">
-            <BrandLogo logoUrl={settings.logoUrl} variant="footer" homeHero className="mb-4 sm:mb-6" />
+            <BrandLogo logoUrl={settings.logoUrl} variant="footer" className="mb-4 sm:mb-6" />
             <p className="font-[family-name:var(--font-caveat)] text-xl text-gold/90">{tagline}</p>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-cream/70">{footerText}</p>
 
@@ -204,8 +207,12 @@ export function Footer({ settings, pricing }: FooterProps) {
               </a>
             </div>
 
-            {(social?.instagram || social?.facebook) && (
-              <div className="mt-6 flex gap-3">
+            {(social?.instagram ||
+              social?.facebook ||
+              social?.tiktok ||
+              social?.youtube ||
+              social?.twitter) && (
+              <div className="mt-6 flex flex-wrap gap-3">
                 {social.instagram && (
                   <a
                     href={social.instagram}
@@ -226,6 +233,39 @@ export function Footer({ settings, pricing }: FooterProps) {
                     aria-label="Facebook"
                   >
                     <FacebookIcon />
+                  </a>
+                )}
+                {social.youtube && (
+                  <a
+                    href={social.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full border border-cream/15 p-2.5 text-cream/70 transition-colors hover:border-gold hover:text-gold"
+                    aria-label="YouTube"
+                  >
+                    <YouTubeIcon />
+                  </a>
+                )}
+                {social.tiktok && (
+                  <a
+                    href={social.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full border border-cream/15 p-2.5 text-cream/70 transition-colors hover:border-gold hover:text-gold"
+                    aria-label="TikTok"
+                  >
+                    <TikTokIcon />
+                  </a>
+                )}
+                {social.twitter && (
+                  <a
+                    href={social.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full border border-cream/15 p-2.5 text-cream/70 transition-colors hover:border-gold hover:text-gold"
+                    aria-label="X (Twitter)"
+                  >
+                    <XIcon />
                   </a>
                 )}
               </div>

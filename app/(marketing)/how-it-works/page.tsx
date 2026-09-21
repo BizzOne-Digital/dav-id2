@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { CmsPage } from "@/components/marketing/CmsPage";
 import { HowItWorksJourney } from "@/components/marketing/HowItWorksJourney";
+import { TeamsAndGroupsSection } from "@/components/marketing/TeamsAndGroupsSection";
 import { buildPageMetadata } from "@/lib/site/buildMetadata";
 import { getPageBySlug } from "@/lib/site/getPageContent";
 
@@ -23,6 +24,7 @@ export default async function HowItWorksPage() {
   return (
     <PageTransition>
       <CmsPage page={page} slug="how-it-works" />
+      <TeamsAndGroupsSection />
       <HowItWorksJourney />
     </PageTransition>
   );

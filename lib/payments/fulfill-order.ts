@@ -5,6 +5,7 @@ import {
   GameEntitlement,
   GameSession,
   Team,
+  TeamMember,
   User,
 } from "@/lib/models";
 import mongoose from "mongoose";
@@ -88,7 +89,11 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
   }
 
   let teamId: mongoose.Types.ObjectId | undefined = asObjectId(booking.teamId);
-  if (!teamId) {
+
+  const existingTeams = await Team.find({ bookingId: booking._id }).exec();
+  if (existingTeams.length > 0) {
+    teamId = asObjectId(existingTeams[0]._id);
+  } else if (!teamId) {
     let captainId: mongoose.Types.ObjectId | undefined =
       asObjectId(booking.userId) ??
       (input.userId ? new mongoose.Types.ObjectId(input.userId) : undefined);
@@ -104,24 +109,69 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
       throw new Error("Cannot create game session without a captain user");
     }
 
-    const teamNumber = (await Team.countDocuments()) + 1;
-    const displayId = `NSH-${String(teamNumber).padStart(4, "0")}`;
-    const team = await Team.create({
-      name: booking.teamName ?? "Hunt Team",
-      color: (booking.teamColor as "BLUE" | "GOLD" | "GREEN" | "PINK" | "RED" | "CYAN") ?? "GOLD",
-      number: teamNumber,
-      displayId,
-      captainId,
-      joinCode: generateJoinCode(),
-      playerCount: booking.playerCount,
-      bookingId: booking._id,
-    });
-    teamId = asObjectId(team._id);
-    if (!teamId) {
-      throw new Error("Failed to create team");
+    type SquadRow = { name: string; color: string; playerCount: number };
+    const squads: SquadRow[] =
+      booking.squads?.length && booking.squads.every((s) => s.name && s.playerCount)
+        ? booking.squads.map((s) => ({
+            name: s.name!,
+            color: s.color ?? "GOLD",
+            playerCount: s.playerCount!,
+          }))
+        : [
+            {
+              name: booking.teamName ?? "Hunt Team",
+              color: (booking.teamColor as string) ?? "GOLD",
+              playerCount: booking.playerCount,
+            },
+          ];
+
+    for (let i = 0; i < squads.length; i++) {
+      const squad = squads[i];
+      const teamNumber = (await Team.countDocuments()) + 1;
+      const displayId = `NSH-${String(teamNumber).padStart(4, "0")}`;
+      const team = await Team.create({
+        name: squad.name,
+        color: squad.color as "BLUE" | "GOLD" | "GREEN" | "PINK" | "RED" | "CYAN",
+        number: teamNumber,
+        displayId,
+        captainId,
+        joinCode: generateJoinCode(),
+        playerCount: squad.playerCount,
+        bookingId: booking._id,
+      });
+      const createdTeamId = asObjectId(team._id);
+      if (!createdTeamId) continue;
+
+      await GameSession.create({
+        sessionCode: generateSessionCode(),
+        teamId: createdTeamId,
+        bookingId: booking._id,
+        huntId: booking.huntId,
+        status: "lobby",
+        groupType: booking.groupType,
+      });
+
+      if (i === 0) {
+        teamId = createdTeamId;
+        booking.set("teamId", teamId);
+        entitlement.teamId = teamId;
+      }
+
+      if (booking.captainName && i === 0) {
+        await TeamMember.findOneAndUpdate(
+          { teamId: createdTeamId, role: "captain" },
+          {
+            teamId: createdTeamId,
+            userId: captainId,
+            displayName: booking.captainName,
+            role: "captain",
+            rulesAccepted: true,
+          },
+          { upsert: true, new: true }
+        );
+      }
     }
-    booking.set("teamId", teamId);
-    entitlement.teamId = teamId;
+
     await Promise.all([booking.save(), entitlement.save()]);
   }
 
@@ -129,8 +179,11 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
     throw new Error("Team is required to start a game session");
   }
 
-  let session = await GameSession.findOne({ bookingId: booking._id }).exec();
+  let session = await GameSession.findOne({ bookingId: booking._id, teamId }).exec();
   if (!session) {
+    session = await GameSession.findOne({ bookingId: booking._id }).exec();
+  }
+  if (!session && teamId) {
     session = await GameSession.create({
       sessionCode: generateSessionCode(),
       teamId,
@@ -144,6 +197,10 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
   if (booking.status !== "confirmed" && booking.status !== "completed") {
     booking.status = "confirmed";
     await booking.save();
+  }
+
+  if (!session) {
+    throw new Error("Game session could not be created for this booking");
   }
 
   const team = await Team.findById(teamId).lean();
