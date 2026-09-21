@@ -43,17 +43,16 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
     pricing?.description ?? standardPricingDescription(minPlayers);
 
   return (
-    <section id="pricing" className="section-surface-light section-y">
+    <section id="pricing" className="border-y border-cream/10 bg-[#12161e] section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
-          surface="light"
           eyebrow="Pricing"
           title="Simple, transparent rates"
           subtitle="What you see here comes straight from our live booking settings—no surprise fees at the door."
         />
 
         <div className="mt-8 grid items-center gap-8 sm:mt-10 lg:grid-cols-2 lg:gap-10">
-          <div className="relative min-h-[320px] overflow-hidden rounded-2xl border-4 border-charcoal shadow-[8px_8px_0_#101216]">
+          <div className="relative min-h-[320px] overflow-hidden rounded-2xl border border-gold/25 shadow-[0_12px_48px_rgba(0,0,0,0.45)]">
             <Image
               src={MARKETING_IMAGES.hotChicken.src}
               alt={MARKETING_IMAGES.hotChicken.alt}
@@ -63,21 +62,21 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
             />
           </div>
 
-          <Card className="border-charcoal/15 bg-white p-8 text-charcoal shadow-xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-orange">{planName}</p>
+          <Card className="border-cream/15 bg-charcoal/90 p-8 text-cream shadow-xl">
+            <p className="text-sm font-semibold uppercase tracking-wider text-gold">{planName}</p>
             <p className="mt-4 flex items-baseline gap-1">
-              <span className="text-5xl font-bold text-charcoal">{formatCurrency(priceCents)}</span>
-              <span className="text-charcoal/60">/ person</span>
+              <span className="text-5xl font-bold text-cream">{formatCurrency(priceCents)}</span>
+              <span className="text-cream/60">/ person</span>
             </p>
-            <p className="mt-2 text-sm text-charcoal/65">
+            <p className="mt-2 text-sm text-cream/70">
               {pricingGroupSizeSummary(minPlayers, duration)}
             </p>
-            <p className="mt-1 text-sm font-medium text-charcoal/80">{VOLUME_PRICING_SUMMARY}</p>
-            <p className="mt-4 text-sm leading-relaxed text-charcoal/70">{description}</p>
+            <p className="mt-1 text-sm font-medium text-cream/75">{VOLUME_PRICING_SUMMARY}</p>
+            <p className="mt-4 text-sm leading-relaxed text-cream/65">{description}</p>
 
             <ul className="mt-8 space-y-3">
               {features.map((feature) => (
-                <li key={feature} className="flex gap-2 text-sm">
+                <li key={feature} className="flex gap-2 text-sm text-cream/85">
                   <Check className="size-5 shrink-0 text-gold" aria-hidden />
                   {feature}
                 </li>
