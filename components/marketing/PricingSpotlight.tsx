@@ -5,10 +5,11 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency } from "@/lib/utils";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
+import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
 import {
-  DEFAULT_STANDARD_PRICE_CENTS,
-  VOLUME_PRICING_SUMMARY,
-} from "@/lib/pricing/resolve-price";
+  CORPORATE_PRICING_NOTE,
+  PRICING_SUBLINE,
+} from "@/lib/site/pricingCopy";
 import {
   pricingGroupSizeSummary,
   resolveMinPlayers,
@@ -71,7 +72,8 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
             <p className="mt-2 text-sm text-cream/70">
               {pricingGroupSizeSummary(minPlayers, duration)}
             </p>
-            <p className="mt-1 text-sm font-medium text-cream/75">{VOLUME_PRICING_SUMMARY}</p>
+            <p className="mt-2 text-sm leading-relaxed text-cream/65">{PRICING_SUBLINE}</p>
+            <p className="mt-3 text-xs leading-relaxed text-cream/50">{CORPORATE_PRICING_NOTE}</p>
             <p className="mt-4 text-sm leading-relaxed text-cream/65">{description}</p>
 
             <ul className="mt-8 space-y-3">

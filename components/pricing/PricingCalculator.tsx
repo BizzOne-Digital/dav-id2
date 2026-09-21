@@ -9,10 +9,10 @@ import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import {
   resolvePricePerPersonCents,
-  VOLUME_PRICING_SUMMARY,
   DEFAULT_VOLUME_MIN_PLAYERS,
 } from "@/lib/pricing/resolve-price";
 import { DEFAULT_MIN_PLAYERS } from "@/lib/site/groupSizeCopy";
+import { CORPORATE_PRICING_NOTE } from "@/lib/site/pricingCopy";
 
 export type PricingPlanOption = {
   id: string;
@@ -35,6 +35,7 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
   const initialId = defaultPlanId ?? plans[0]?.id ?? "";
   const [planId, setPlanId] = useState(initialId);
   const [players, setPlayers] = useState(plans[0]?.minimumPlayers ?? DEFAULT_MIN_PLAYERS);
+  const [groupType, setGroupType] = useState<"friends" | "corporate">("friends");
 
   const plan = useMemo(() => plans.find((p) => p.id === planId) ?? plans[0], [plans, planId]);
 
@@ -44,6 +45,7 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
 
   const priceCents = resolvePricePerPersonCents({
     playerCount: clampedPlayers,
+    groupType,
     basePriceCents: plan?.pricePerPersonCents,
     volumePriceCents: plan?.volumePricePerPersonCents,
     volumeMinPlayers: plan?.volumeMinPlayers,
@@ -51,6 +53,7 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
 
   const totalCents = priceCents * clampedPlayers;
   const volumeMin = plan?.volumeMinPlayers ?? DEFAULT_VOLUME_MIN_PLAYERS;
+  const volumeApplied = groupType === "corporate" && clampedPlayers >= volumeMin;
 
   return (
     <Card className="border-gold/20 bg-charcoal">
@@ -75,6 +78,17 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
           </div>
         )}
         <div>
+          <label className="mb-2 block text-sm font-medium text-cream/80">Booking type</label>
+          <Select
+            value={groupType}
+            options={[
+              { value: "friends", label: "Friends, family, visitors" },
+              { value: "corporate", label: "Corporate / team outing" },
+            ]}
+            onChange={(e) => setGroupType(e.target.value as "friends" | "corporate")}
+          />
+        </div>
+        <div>
           <label className="mb-2 block text-sm font-medium text-cream/80">Players</label>
           <Input
             type="number"
@@ -93,14 +107,16 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
       </div>
 
       <div className="mt-8 rounded-xl border border-cream/10 bg-charcoal/60 p-6">
-        {clampedPlayers >= volumeMin && (
-          <p className="mb-2 text-sm font-medium text-gold">Volume rate applied ({volumeMin}+ players)</p>
+        {volumeApplied && (
+          <p className="mb-2 text-sm font-medium text-gold">
+            Corporate volume rate ({volumeMin}+ players)
+          </p>
         )}
         <p className="text-sm text-cream/70">
           {formatCurrency(priceCents)} per person × {clampedPlayers} players
         </p>
         <p className="mt-2 text-3xl font-bold text-gold">{formatCurrency(totalCents)}</p>
-        <p className="mt-3 text-xs leading-relaxed text-cream/50">{VOLUME_PRICING_SUMMARY}</p>
+        <p className="mt-3 text-xs leading-relaxed text-cream/50">{CORPORATE_PRICING_NOTE}</p>
         <p className="mt-1 text-xs text-cream/50">Taxes and add-ons may apply at checkout.</p>
         <Button href="/booking" variant="primary" className="mt-6 w-full sm:w-auto">
           Book your hunt

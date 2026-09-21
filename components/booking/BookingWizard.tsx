@@ -8,13 +8,27 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { formatCurrency } from "@/lib/utils";
-import { resolvePricePerPersonCents, VOLUME_PRICING_SUMMARY } from "@/lib/pricing/resolve-price";
+import { resolvePricePerPersonCents } from "@/lib/pricing/resolve-price";
 import {
   bookingPlayerBounds,
   DEFAULT_MIN_PLAYERS,
   SINGLE_COUPLE_GROUP_LABEL,
   SINGLE_COUPLE_GROUP_TYPE,
 } from "@/lib/site/groupSizeCopy";
+import {
+  CORPORATE_PRICING_NOTE,
+  PRICING_HEADLINE,
+  PRICING_SUBLINE,
+  pricingTotalLine,
+} from "@/lib/site/pricingCopy";
+import {
+  competitionAllowsMultiSquads,
+  defaultPlayFormat,
+  playFormatAvailable,
+  playFormatLabel,
+  PLAY_FORMAT_OPTIONS,
+  type PlayFormat,
+} from "@/lib/site/playFormat";
 import {
   COMPETITION_RULES,
   rosterLabel,
@@ -25,7 +39,6 @@ import {
   buildDefaultSquads,
   defaultSingleSquadName,
   getGroupSetupGuide,
-  shouldOfferMultiSquads,
   validateSquads,
   type SquadPlan,
   type TeamColor,
@@ -93,6 +106,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const [accessibilityNotes, setAccessibilityNotes] = useState("");
   const [alcoholFree, setAlcoholFree] = useState(false);
   const [walkingPref, setWalkingPref] = useState("moderate");
+  const [playFormat, setPlayFormat] = useState<PlayFormat>("single_group");
 
   const [playerRoster, setPlayerRoster] = useState<string[]>(["", ""]);
 
@@ -136,23 +150,36 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   );
 
   const setupGuide = useMemo(() => getGroupSetupGuide(groupType), [groupType]);
-  const offerMultiSquads = useMemo(
-    () => shouldOfferMultiSquads(groupType, playerCount),
+  const showPlayFormatChoice = useMemo(
+    () => playFormatAvailable(groupType, playerCount),
     [groupType, playerCount]
+  );
+  const multiSquadsEnabled = useMemo(
+    () => competitionAllowsMultiSquads(playFormat, groupType, playerCount),
+    [playFormat, groupType, playerCount]
   );
 
   useEffect(() => {
-    if (groupType === "corporate" && playerCount >= 4) {
-      setUseSquads(true);
+    if (groupType === SINGLE_COUPLE_GROUP_TYPE) {
+      setPlayFormat("single_group");
+    } else {
+      setPlayFormat(defaultPlayFormat(groupType));
     }
-  }, [groupType, playerCount]);
+  }, [groupType]);
 
   useEffect(() => {
-    if (!offerMultiSquads && useSquads) {
+    if (playFormat === "single_group") {
+      setUseSquads(false);
+      setSquads([]);
+      return;
+    }
+    if (multiSquadsEnabled) {
+      setUseSquads(true);
+    } else {
       setUseSquads(false);
       setSquads([]);
     }
-  }, [offerMultiSquads, useSquads]);
+  }, [playFormat, multiSquadsEnabled]);
 
   useEffect(() => {
     if (!useSquads) return;
@@ -181,23 +208,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
     );
   }, [useSquads]);
 
-  function enableSquads() {
-    setUseSquads(true);
-    setSquads(
-      buildDefaultSquads(
-        playerCount,
-        suggestedTeams,
-        teamName.trim() || defaultSingleSquadName(groupType),
-        teamColor
-      )
-    );
-  }
-
-  function disableSquads() {
-    setUseSquads(false);
-    setSquads([]);
-  }
-
   const pricePerPerson = useMemo(
     () =>
       resolvePricePerPersonCents({
@@ -224,6 +234,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         scheduledDate: scheduledDate ? new Date(scheduledDate).toISOString() : undefined,
         startWindow,
         playerCount,
+        playFormat,
         playerRoster: playerRoster.map((n) => n.trim()).filter(Boolean),
         teamName: useSquads && squads[0] ? squads[0].name : teamName || undefined,
         captainName: captainName || undefined,
@@ -258,6 +269,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
       bookingId,
       huntSlug,
       groupType,
+      playFormat,
       scheduledDate,
       startWindow,
       playerCount,
@@ -426,11 +438,48 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 </p>
               )}
             </div>
-            <p className="text-sm text-cream/60">
-              {formatCurrency(pricePerPerson)} per person × {playerCount} players ={" "}
-              <span className="font-semibold text-gold">{formatCurrency(estimatedTotal)}</span>
-            </p>
-            <p className="text-xs text-cream/50">{VOLUME_PRICING_SUMMARY}</p>
+
+            {showPlayFormatChoice ? (
+              <div>
+                <p className="mb-2 block text-sm font-medium text-cream/90">How do you want to play?</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {PLAY_FORMAT_OPTIONS.map((option) => {
+                    const selected = playFormat === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setPlayFormat(option.value)}
+                        className={cn(
+                          "rounded-xl border p-4 text-left transition-colors",
+                          selected
+                            ? "border-gold bg-gold/10 ring-1 ring-gold/40"
+                            : "border-cream/15 bg-cream/5 hover:border-cream/25"
+                        )}
+                      >
+                        <p className="font-semibold text-cream">{option.title}</p>
+                        <p className="mt-1 text-xs text-cream/70">{option.summary}</p>
+                        <p className="mt-2 text-xs text-cream/55">{option.detail}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-cream/55">Singles & couples play as one group on a single join code.</p>
+            )}
+
+            <div className="rounded-xl border border-cream/10 bg-charcoal/40 p-4">
+              <p className="text-lg font-semibold text-gold">{PRICING_HEADLINE}</p>
+              <p className="mt-1 text-sm text-cream/65">{PRICING_SUBLINE}</p>
+              <p className="mt-3 text-sm text-cream/80">
+                {pricingTotalLine(pricePerPerson, playerCount)} ={" "}
+                <span className="font-semibold text-gold">{formatCurrency(estimatedTotal)}</span>
+              </p>
+              {groupType === "corporate" && (
+                <p className="mt-2 text-xs leading-relaxed text-cream/50">{CORPORATE_PRICING_NOTE}</p>
+              )}
+            </div>
             <div className="rounded-xl border border-gold/25 bg-gold/5 p-4 text-sm text-cream/85">
               <p className="font-semibold text-gold">{COMPETITION_RULES.headline}</p>
               <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-cream/75">
@@ -449,25 +498,15 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             <p className="text-sm text-cream/70">
               {playerCount} ticket{playerCount === 1 ? "" : "s"} purchased — one certificate per ticket at the finish line.
             </p>
-
-            {offerMultiSquads && (
-              <div className="rounded-lg border border-cream/10 bg-cream/5 p-4">
-                <p className="text-sm font-medium text-cream/90">
-                  {groupType === "corporate" ? "Corporate squads" : "Large group?"}
-                </p>
-                <p className="mt-1 text-xs text-cream/65">
-                  Split tickets into competing squads—each gets its own name, color, join code, and lobby.
-                </p>
-                <label className="mt-3 flex cursor-pointer items-center gap-3 text-sm text-cream/85">
-                  <input
-                    type="checkbox"
-                    checked={useSquads}
-                    onChange={(e) => (e.target.checked ? enableSquads() : disableSquads())}
-                  />
-                  Set up multiple squads ({suggestedTeams} suggested for {playerCount} tickets)
-                </label>
-              </div>
-            )}
+            <p className="text-sm text-cream/75">
+              <strong className="text-cream">Play format:</strong> {playFormatLabel(playFormat)}
+              {playFormat === "competition" && !multiSquadsEnabled && (
+                <span className="text-cream/65">
+                  {" "}
+                  — one squad on the city leaderboard; add players or choose corporate to split squads.
+                </span>
+              )}
+            </p>
 
             {useSquads ? (
               <SquadBuilder squads={squads} requiredTickets={playerCount} onChange={setSquads} />
@@ -505,9 +544,9 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               onChange={(e) => setCaptainPhone(e.target.value)}
             />
 
-            {!useSquads && suggestedTeams > 1 && (
+            {playFormat === "competition" && multiSquadsEnabled && (
               <p className="rounded-lg border border-cream/10 bg-cream/5 px-3 py-2 text-xs text-cream/75">
-                {COMPETITION_RULES.corporateNote} You can enable multiple squads above if departments should compete separately.
+                {suggestedTeams} squads suggested for {playerCount} tickets—adjust names, colors, and ticket split below.
               </p>
             )}
 
@@ -587,6 +626,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             <p><strong className="text-cream">Hunt:</strong> {hunt?.title}</p>
             <p><strong className="text-cream">Date:</strong> {scheduledDate} ({startWindow})</p>
             <p><strong className="text-cream">Group:</strong> {GROUP_TYPES.find((g) => g.value === groupType)?.label ?? groupType}</p>
+            <p><strong className="text-cream">Play format:</strong> {playFormatLabel(playFormat)}</p>
             <p><strong className="text-cream">Players:</strong> {playerCount}</p>
             <p><strong className="text-cream">Rate:</strong> {formatCurrency(pricePerPerson)} / person</p>
             <p><strong className="text-cream">Tickets:</strong> {playerCount} × {formatCurrency(pricePerPerson)}</p>

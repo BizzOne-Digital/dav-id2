@@ -10,7 +10,6 @@ type CmsPageProps = {
 };
 
 export function CmsPage({ page, slug }: CmsPageProps) {
-  const heroBg = slug ? PAGE_HERO_IMAGES[slug] : undefined;
   const inlineImage =
     slug === "about"
       ? MARKETING_IMAGES.porch
@@ -18,23 +17,34 @@ export function CmsPage({ page, slug }: CmsPageProps) {
         ? MARKETING_IMAGES.ryman
         : null;
 
+  const heroBg = inlineImage ? undefined : slug ? PAGE_HERO_IMAGES[slug] : undefined;
+
   return (
     <>
       <PageHero
         title={page.heroTitle}
         subtitle={page.heroSubtitle || undefined}
         backgroundImage={heroBg}
+        className={
+          inlineImage || heroBg
+            ? inlineImage
+              ? "border-b border-cream/10 py-5 sm:py-6"
+              : undefined
+            : "border-b border-cream/10 py-5 sm:py-6"
+        }
       />
-      <div className="site-x page-y mx-auto max-w-3xl">
-        {inlineImage && (
+      {inlineImage ? (
+        <div className="site-x mx-auto max-w-3xl pt-4 sm:pt-5">
           <MarketingPhoto
             src={inlineImage.src}
             alt={inlineImage.alt}
-            aspect="video"
-            className="mb-10"
+            aspect="wide"
+            className="mb-8 sm:mb-10"
             sizes="768px"
           />
-        )}
+        </div>
+      ) : null}
+      <div className="site-x mx-auto max-w-3xl pb-12 pt-4 sm:pb-14 sm:pt-6">
         <RichContent html={page.content} />
       </div>
     </>

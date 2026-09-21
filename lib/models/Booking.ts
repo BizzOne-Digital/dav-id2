@@ -31,6 +31,10 @@ const BookingSchema = new Schema(
         playerCount: Number,
       },
     ],
+    playFormat: {
+      type: String,
+      enum: ["single_group", "competition"],
+    },
     emergencyConsent: { type: Boolean, default: false },
     referralCode: String,
     promoCode: String,

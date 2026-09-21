@@ -17,7 +17,7 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { resolvePublicImageUrl } from "@/lib/uploads/constants";
 import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
-import { heroGroupSizeLabel, resolveMinPlayers } from "@/lib/site/groupSizeCopy";
+import { heroPlayFormatHeadline } from "@/lib/site/groupSizeCopy";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 
@@ -132,7 +132,7 @@ export function Hero({ settings, pricing }: HeroProps) {
 
   const priceCents =
     pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
-  const minPlayers = resolveMinPlayers(pricing?.minimumPlayers, settings.minimumPlayers);
+  const playFormatHeadline = heroPlayFormatHeadline();
   const duration = pricing?.durationLabel ?? `${settings.typicalDurationHours ?? "2–3"} hours`;
 
   return (
@@ -214,7 +214,9 @@ export function Hero({ settings, pricing }: HeroProps) {
                   <Users className="size-5 text-white" aria-hidden />
                 </span>
                 <span className="font-[family-name:var(--font-bebas)] text-lg leading-tight text-white sm:text-xl">
-                  {heroGroupSizeLabel(minPlayers)}
+                  <span className="text-gold">{playFormatHeadline.primary}</span>
+                  <br />
+                  <span className="text-sm text-white/80">{playFormatHeadline.secondary}</span>
                 </span>
               </li>
               <li className="flex items-center gap-3">

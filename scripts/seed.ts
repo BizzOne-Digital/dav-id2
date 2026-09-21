@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/connect";
 import { DEFAULT_IN_GAME_OFFERS } from "@/lib/site/inGameOffers";
 import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
+import { CATALOG_HUNTS, CATALOG_HUNT_COVER_PATHS } from "@/lib/site/huntCatalog";
 import { slugify } from "@/lib/utils";
 import {
   loadGeocodeCache,
@@ -50,65 +51,6 @@ function loadEnvFiles() {
 }
 
 loadEnvFiles();
-
-const HUNTS = [
-  {
-    title: "Broadway Beats Hunt",
-    slug: "broadway-beats",
-    shortDescription: "Live music legends and neon-lit clues downtown.",
-    featured: true,
-    difficulty: "moderate" as const,
-    groupTypes: ["friends", "bachelorette"],
-  },
-  {
-    title: "Music City History Trail",
-    slug: "music-city-history",
-    shortDescription: "Capitol stories, Printer's Alley secrets, and more.",
-    featured: true,
-    difficulty: "moderate" as const,
-    groupTypes: ["family", "corporate"],
-  },
-  {
-    title: "Family Friendly Downtown",
-    slug: "family-friendly-downtown",
-    shortDescription: "Kid-safe stops with puzzles everyone can solve.",
-    featured: false,
-    difficulty: "easy" as const,
-    groupTypes: ["family"],
-  },
-  {
-    title: "Date Night Discovery",
-    slug: "date-night-discovery",
-    shortDescription: "Romantic views and clever riddles for two.",
-    featured: false,
-    difficulty: "moderate" as const,
-    groupTypes: ["couples", "friends"],
-  },
-  {
-    title: "Corporate Team Builder",
-    slug: "corporate-team-builder",
-    shortDescription: "Competitive scoring built for office outings.",
-    featured: false,
-    difficulty: "challenging" as const,
-    groupTypes: ["corporate"],
-  },
-  {
-    title: "Gulch & Gallery Sprint",
-    slug: "gulch-gallery-sprint",
-    shortDescription: "Murals, art deco, and photo challenges.",
-    featured: false,
-    difficulty: "moderate" as const,
-    groupTypes: ["friends", "creatives"],
-  },
-  {
-    title: "Riverfront Views Challenge",
-    slug: "riverfront-views",
-    shortDescription: "Bridge panoramas and stadium skyline puzzles.",
-    featured: false,
-    difficulty: "easy" as const,
-    groupTypes: ["family", "tourists"],
-  },
-];
 
 async function upsertPricingPlan() {
   return PricingPlan.findOneAndUpdate(
@@ -290,23 +232,17 @@ function parseAudienceTagsFromFit(audienceFit: string): string[] {
 }
 
 async function seedHunts(pricingPlanId: string) {
-  const covers = [
-    "/images/broadway-neon.jpg",
-    "/images/ryman-guitar-case.jpg",
-    "/images/flatlay-game-board.jpg",
-    "/images/map-pin-downtown.jpg",
-    "/images/skyline-river-sunset.jpg",
-    "/images/qr-scan-challenge.jpg",
-    "/images/prizes-trophy.jpg",
-  ];
-  for (let i = 0; i < HUNTS.length; i++) {
-    const hunt = HUNTS[i];
+  for (let i = 0; i < CATALOG_HUNTS.length; i++) {
+    const hunt = CATALOG_HUNTS[i];
     await Hunt.findOneAndUpdate(
       { slug: hunt.slug },
       {
         ...hunt,
-        coverImage: covers[i % covers.length],
-        gallery: [covers[i % covers.length], covers[(i + 1) % covers.length]],
+        coverImage: CATALOG_HUNT_COVER_PATHS[i % CATALOG_HUNT_COVER_PATHS.length],
+        gallery: [
+          CATALOG_HUNT_COVER_PATHS[i % CATALOG_HUNT_COVER_PATHS.length],
+          CATALOG_HUNT_COVER_PATHS[(i + 1) % CATALOG_HUNT_COVER_PATHS.length],
+        ],
         fullDescription: hunt.shortDescription,
         priceType: "per_person",
         pricePerPersonCents: 2995,
@@ -572,7 +508,7 @@ async function main() {
   console.log("Seed completed successfully.");
   console.log(`  Pricing plan: ${pricing.slug} ($${pricing.pricePerPersonCents / 100}/person, min ${pricing.minimumPlayers})`);
   console.log(`  Locations: ${loadMasterLocationRows().length} (master catalog)`);
-  console.log(`  Hunts: ${HUNTS.length}`);
+  console.log(`  Hunts: ${CATALOG_HUNTS.length}`);
 }
 
 main()

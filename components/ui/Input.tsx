@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils";
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   error?: string;
+  variant?: "dark" | "light";
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, id, ...props }, ref) => {
+  ({ className, label, error, id, variant = "dark", ...props }, ref) => {
     const inputId = id ?? (label ? label.replace(/\s+/g, "-").toLowerCase() : undefined);
 
     return (
@@ -21,8 +22,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            "w-full rounded-xl border border-cream/20 bg-charcoal/60 px-4 py-3 text-cream placeholder:text-cream/40",
-            "transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30",
+            "w-full rounded-xl border px-4 py-3 transition-colors focus:outline-none focus:ring-2",
+            variant === "light"
+              ? "border-charcoal/20 bg-white text-charcoal placeholder:text-charcoal/45 focus:border-gold focus:ring-gold/30"
+              : "border-cream/20 bg-charcoal/60 text-cream placeholder:text-cream/40 focus:border-gold focus:ring-gold/30",
             error && "border-orange focus:border-orange focus:ring-orange/30",
             className
           )}

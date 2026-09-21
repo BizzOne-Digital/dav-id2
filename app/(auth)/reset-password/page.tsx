@@ -21,8 +21,8 @@ export default async function ResetPasswordPage({ searchParams }: PageProps) {
       {token ? (
         <form action="/api/auth/reset-password" method="post" className="space-y-4">
           <input type="hidden" name="token" value={token} />
-          <Input label="New password" type="password" name="password" required minLength={8} />
-          <Input label="Confirm password" type="password" name="confirm" required minLength={8} />
+          <Input variant="light" label="New password" type="password" name="password" required minLength={8} />
+          <Input variant="light" label="Confirm password" type="password" name="confirm" required minLength={8} />
           <Button type="submit" className="w-full">Update password</Button>
         </form>
       ) : (

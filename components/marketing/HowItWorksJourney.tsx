@@ -42,40 +42,33 @@ export function HowItWorksJourney() {
           subtitle="Eight simple steps from your first click to your last clue on Broadway."
         />
 
-        <ol className="relative mt-16 space-y-0">
-          <div
-            className="absolute left-[1.65rem] top-4 hidden h-[calc(100%-2rem)] w-0.5 bg-gradient-to-b from-gold via-orange to-gold/30 md:left-1/2 md:block md:-translate-x-1/2"
-            aria-hidden
-          />
+        <ol className="mt-12 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 lg:grid-cols-2">
           {STEPS.map((step, i) => {
             const Icon = step.icon;
-            const alignRight = i % 2 === 1;
             const stepImage = ALL_MARKETING_IMAGES[i % ALL_MARKETING_IMAGES.length];
             return (
               <motion.li
                 key={step.title}
-                className="relative grid grid-cols-1 gap-6 pb-12 md:grid-cols-2 md:items-center md:gap-12"
-                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                className="flex h-full flex-col rounded-2xl border border-cream/10 bg-charcoal/80 p-6 shadow-lg backdrop-blur-sm"
+                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: i * 0.05, duration: 0.45 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ delay: i * 0.04, duration: 0.4 }}
               >
-                <div className={alignRight ? "md:order-2 md:text-left" : "md:text-right"}>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gold">
-                    Step {i + 1}
-                  </span>
-                  <h3 className="mt-1 text-xl font-semibold text-cream">{step.title}</h3>
-                  <p className="mt-2 text-cream/70">{step.body}</p>
-                  <div className="relative mt-4 hidden h-28 overflow-hidden rounded-lg border border-cream/10 md:block">
-                    <Image src={stepImage.src} alt="" fill className="object-cover" sizes="320px" />
+                <div className="flex items-start gap-4">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-gold bg-charcoal text-gold shadow-[0_0_20px_rgba(242,182,50,0.15)]">
+                    <Icon className="size-5" aria-hidden />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-xs font-bold uppercase tracking-widest text-gold">
+                      Step {i + 1}
+                    </span>
+                    <h3 className="mt-1 text-lg font-semibold text-cream">{step.title}</h3>
                   </div>
                 </div>
-                <div
-                  className={`flex items-center gap-4 ${alignRight ? "md:order-1 md:justify-end" : "md:justify-start"}`}
-                >
-                  <div className="relative z-10 flex size-14 shrink-0 items-center justify-center rounded-full border-2 border-gold bg-charcoal text-gold shadow-[0_0_24px_rgba(242,182,50,0.2)]">
-                    <Icon className="size-6" aria-hidden />
-                  </div>
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-cream/70">{step.body}</p>
+                <div className="relative mt-5 h-28 overflow-hidden rounded-lg border border-cream/10">
+                  <Image src={stepImage.src} alt="" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
                 </div>
               </motion.li>
             );

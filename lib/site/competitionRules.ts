@@ -1,16 +1,16 @@
 /** Player & ticket rules shown in booking and FAQs */
 
 export const COMPETITION_RULES = {
-  headline: "How tickets & teams work",
+  headline: "How you play",
   bullets: [
-    "Every person who competes on the leaderboard needs their own paid ticket (per-person pricing at checkout).",
-    "Singles and couples can share one booking ticket option for 1–2 players; larger groups purchase one ticket per player.",
-    "Corporate and private events: each participant must hold an individual ticket—whether they play solo or on a named team.",
-    "Teams are identified by team name and color (and join code) so competitors can tell who is who downtown.",
-    "When you finish the hunt, each paid ticket receives its own completion certificate.",
+    "Every person who plays needs a ticket at $29.95 per person—solo, one group, or each competing squad.",
+    "Single group: one team name, one color, one join code—perfect for couples, families, and one crew.",
+    "Competition: split into squads that race on the leaderboard (great for friends or corporate departments).",
+    "Corporate: book headcount, choose competition, assign squad names/colors—or contact us for a facilitated event.",
+    "Each paid player earns their own completion certificate at the finish.",
   ],
   corporateNote:
-    "For corporate outings with multiple teams, book the total headcount (one ticket per person). Use distinct team names/colors for each squad—or contact us for a facilitated multi-team event.",
+    "Corporate bookings use competition format with optional multi-squad setup; volume pricing may apply at 10+ players.",
 } as const;
 
 export function suggestedTeamCount(playerCount: number, groupType: string): number {

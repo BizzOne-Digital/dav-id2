@@ -7,7 +7,9 @@ export const DEFAULT_VOLUME_PRICE_CENTS = 2500;
 export const DEFAULT_VOLUME_MIN_PLAYERS = 10;
 
 export const VOLUME_PRICING_SUMMARY =
-  "Groups of 10+ players (including corporate teams): $25.00 per person.";
+  "Corporate groups of 10+ players: $25.00 per person at checkout.";
+
+export const PUBLIC_PRICING_LINE = "$29.95 per person — every player, every group.";
 
 export type ResolvePriceInput = {
   playerCount: number;
@@ -18,16 +20,17 @@ export type ResolvePriceInput = {
 };
 
 /**
- * Resolves per-person price: 10+ players → volume rate ($25 default).
- * Corporate uses the same 10+ threshold as other group types.
+ * Resolves per-person price: standard rate for most bookings.
+ * Volume rate applies only to corporate group type at 10+ players.
  */
 export function resolvePricePerPersonCents(input: ResolvePriceInput): number {
   const base = input.basePriceCents ?? DEFAULT_STANDARD_PRICE_CENTS;
   const volumePrice = input.volumePriceCents ?? DEFAULT_VOLUME_PRICE_CENTS;
   const volumeMin = input.volumeMinPlayers ?? DEFAULT_VOLUME_MIN_PLAYERS;
   const count = Math.max(0, input.playerCount);
+  const isCorporate = input.groupType === "corporate";
 
-  if (count >= volumeMin) {
+  if (isCorporate && count >= volumeMin) {
     return volumePrice;
   }
   return base;

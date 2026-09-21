@@ -14,34 +14,27 @@ export function resolveMinPlayers(
   return pricingMin ?? settingsMin ?? fallback;
 }
 
-export function heroGroupSizeLabel(minPlayers: number): string {
-  if (minPlayers <= 1) {
-    return "Singles & Couples · 1 Ticket";
-  }
-  return `Minimum ${minPlayers} Players`;
+export function heroGroupSizeLabel(_minPlayers: number): string {
+  return "Single group · or competition";
 }
 
-export function pricingGroupSizeSummary(minPlayers: number, duration: string): string {
-  if (minPlayers <= 1) {
-    return `Singles & couples on one ticket · ${duration}`;
-  }
-  return `Minimum ${minPlayers} players · ${duration}`;
+export function heroPlayFormatHeadline(): { primary: string; secondary: string } {
+  return { primary: "Single group", secondary: "Or competition" };
 }
 
-export function footerGroupSizeLine(minPlayers: number): string {
-  if (minPlayers <= 1) {
-    return "Singles & couples welcome—same per-person rate, one ticket for 1–2 players.";
-  }
-  return `Clues, challenges, and bragging rights—minimum ${minPlayers} players.`;
+export function pricingGroupSizeSummary(_minPlayers: number, duration: string): string {
+  return `Per person · single group or competition · ${duration}`;
 }
 
-export function standardPricingDescription(minPlayers: number): string {
-  const volume =
-    "Groups of 10 or more—including corporate—pay $25 per player.";
-  if (minPlayers <= 1) {
-    return `$29.95 per person. Singles and couples book on one ticket (1–2 players). ${volume}`;
-  }
-  return `$29.95 per person with a ${minPlayers}-player minimum. ${volume}`;
+export function footerGroupSizeLine(_minPlayers: number): string {
+  return "$29.95 per person—book as a single group or competing squads; corporate welcome.";
+}
+
+export function standardPricingDescription(_minPlayers: number): string {
+  return (
+    "$29.95 per person for everyone who plays. Choose a single group or competition format when you book. " +
+    "Corporate outings can split into squads; groups of 10+ may qualify for corporate volume pricing at checkout."
+  );
 }
 
 export function bookingPlayerBounds(
