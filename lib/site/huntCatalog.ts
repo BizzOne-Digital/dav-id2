@@ -53,12 +53,13 @@ export const CATALOG_HUNTS: CatalogHunt[] = [
     groupTypes: ["couples", "friends"],
   },
   {
-    title: "Corporate Team Builder",
-    slug: "corporate-team-builder",
-    shortDescription: "Competitive scoring built for office outings.",
-    featured: false,
-    difficulty: "challenging",
-    groupTypes: ["corporate"],
+    title: "Bachelorette Downtown Bash",
+    slug: "bachelorette-downtown",
+    shortDescription:
+      "Broadway neon, photo challenges, and squad rivalry—Nashville’s #1 party-weekend hunt, built for the bride tribe.",
+    featured: true,
+    difficulty: "moderate",
+    groupTypes: ["bachelorette", "friends"],
   },
   {
     title: "Gulch & Gallery Sprint",
@@ -84,10 +85,17 @@ export type PublicHuntListing = CatalogHunt & {
   pricePerPersonCents: number;
 };
 
+export function coverImageForHunt(hunt: CatalogHunt, index: number): string {
+  if (hunt.slug === "bachelorette-downtown") {
+    return "/images/broadway-neon.jpg";
+  }
+  return CATALOG_HUNT_COVER_PATHS[index % CATALOG_HUNT_COVER_PATHS.length];
+}
+
 export function catalogHuntsForListing(): PublicHuntListing[] {
   return CATALOG_HUNTS.map((hunt, index) => ({
     ...hunt,
-    coverImage: CATALOG_HUNT_COVER_PATHS[index % CATALOG_HUNT_COVER_PATHS.length],
+    coverImage: coverImageForHunt(hunt, index),
     duration: "2–3 hours",
     pricePerPersonCents: 2995,
   }));
@@ -99,7 +107,7 @@ export function getCatalogHuntBySlug(slug: string): PublicHuntListing | null {
   const hunt = CATALOG_HUNTS[index];
   return {
     ...hunt,
-    coverImage: CATALOG_HUNT_COVER_PATHS[index % CATALOG_HUNT_COVER_PATHS.length],
+    coverImage: coverImageForHunt(hunt, index),
     duration: "2–3 hours",
     pricePerPersonCents: 2995,
   };

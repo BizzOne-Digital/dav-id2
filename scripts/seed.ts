@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/connect";
 import { DEFAULT_IN_GAME_OFFERS } from "@/lib/site/inGameOffers";
 import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
-import { CATALOG_HUNTS, CATALOG_HUNT_COVER_PATHS } from "@/lib/site/huntCatalog";
+import { CATALOG_HUNTS, CATALOG_HUNT_COVER_PATHS, coverImageForHunt } from "@/lib/site/huntCatalog";
 import { slugify } from "@/lib/utils";
 import {
   loadGeocodeCache,
@@ -234,15 +234,13 @@ function parseAudienceTagsFromFit(audienceFit: string): string[] {
 async function seedHunts(pricingPlanId: string) {
   for (let i = 0; i < CATALOG_HUNTS.length; i++) {
     const hunt = CATALOG_HUNTS[i];
+    const cover = coverImageForHunt(hunt, i);
     await Hunt.findOneAndUpdate(
       { slug: hunt.slug },
       {
         ...hunt,
-        coverImage: CATALOG_HUNT_COVER_PATHS[i % CATALOG_HUNT_COVER_PATHS.length],
-        gallery: [
-          CATALOG_HUNT_COVER_PATHS[i % CATALOG_HUNT_COVER_PATHS.length],
-          CATALOG_HUNT_COVER_PATHS[(i + 1) % CATALOG_HUNT_COVER_PATHS.length],
-        ],
+        coverImage: cover,
+        gallery: [cover, CATALOG_HUNT_COVER_PATHS[(i + 1) % CATALOG_HUNT_COVER_PATHS.length]],
         fullDescription: hunt.shortDescription,
         priceType: "per_person",
         pricePerPersonCents: 2995,
@@ -256,6 +254,12 @@ async function seedHunts(pricingPlanId: string) {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
   }
+
+  const catalogSlugs = CATALOG_HUNTS.map((h) => h.slug);
+  await Hunt.updateMany(
+    { slug: { $nin: catalogSlugs }, status: "published" },
+    { status: "archived" }
+  );
 }
 
 async function seedRouteRecipes() {
