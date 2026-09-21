@@ -19,7 +19,7 @@ const sizeByVariant = {
   footer:
     "relative block h-36 w-[min(100%,22rem)] sm:h-44 sm:w-[26rem] md:h-48 md:w-[30rem] lg:h-52 lg:w-[34rem] xl:h-56 xl:w-[36rem]",
   hero:
-    "relative mx-auto block h-[220px] w-[min(94vw,520px)] sm:h-[280px] sm:w-[min(92vw,560px)] md:h-[340px] md:w-[600px] lg:h-[400px] lg:w-[600px]",
+    "relative mr-auto block h-[220px] w-[min(88vw,480px)] sm:h-[260px] sm:w-[min(86vw,520px)] md:h-[320px] md:w-[540px] lg:h-[360px] lg:w-[540px] xl:h-[380px] xl:w-[560px]",
 } as const;
 
 export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoProps) {
@@ -42,7 +42,7 @@ export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoP
         className={cn(
           "object-contain",
           variant === "hero"
-            ? "object-center brightness-[1.12] contrast-[1.06] saturate-[1.18] drop-shadow-[0_8px_40px_rgba(201,147,42,0.38)]"
+            ? "object-left object-contain brightness-[1.12] contrast-[1.06] saturate-[1.18] drop-shadow-[0_8px_40px_rgba(201,147,42,0.38)]"
             : variant === "footer"
               ? "object-left brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
               : "object-left brightness-[1.1] contrast-[1.05] saturate-[1.15] drop-shadow-[0_4px_24px_rgba(242,182,50,0.32)]"

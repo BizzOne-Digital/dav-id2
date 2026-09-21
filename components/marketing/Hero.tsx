@@ -148,7 +148,7 @@ export function Hero({ settings, pricing }: HeroProps) {
       />
 
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/50 via-black/28 to-black/12"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/55 via-black/22 to-black/5"
         aria-hidden
       />
       <div
@@ -159,27 +159,27 @@ export function Hero({ settings, pricing }: HeroProps) {
       <HeroRouteOverlay animate={!reduceMotion} />
 
       <div className="relative site-x mx-auto max-w-[1400px] pb-14 pt-[calc(2.875rem+var(--safe-top))] sm:pb-16 sm:pt-[calc(3rem+var(--safe-top))] lg:pb-14">
-        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[minmax(0,0.92fr)_1.08fr] lg:gap-8 xl:gap-10">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="mx-auto w-full max-w-2xl lg:mx-0 lg:pt-0"
+            className="w-full max-w-xl lg:max-w-[520px]"
           >
-            <p className="mb-1.5 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-2 sm:text-sm lg:justify-start">
+            <p className="mb-1.5 flex items-center justify-start gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-2 sm:text-sm">
               <Star className="size-4 fill-gold text-gold" aria-hidden />
               The Ultimate Music City Adventure
             </p>
 
-            <div className="flex justify-center lg:justify-start">
-              <BrandLogo logoUrl={settings.logoUrl} variant="hero" className="lg:ml-0" />
+            <div className="flex justify-start pl-0 sm:-ml-1 lg:-ml-2">
+              <BrandLogo logoUrl={settings.logoUrl} variant="hero" />
             </div>
 
-            <p className="mt-4 max-w-xl text-center text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg lg:text-left">
+            <p className="mt-4 max-w-xl text-left text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">
               {subheadline}
             </p>
 
-            <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:items-center sm:justify-center sm:gap-3 lg:justify-start">
+            <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:items-center sm:justify-start sm:gap-3">
               <Link
                 href="/booking"
                 className="hero-cta-primary inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-bold uppercase tracking-wider text-charcoal sm:w-auto sm:px-6 sm:py-3.5"
@@ -196,7 +196,7 @@ export function Hero({ settings, pricing }: HeroProps) {
               </Link>
             </div>
 
-            <ul className="mt-6 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-8 sm:flex sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4 lg:justify-start">
+            <ul className="mt-6 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-8 sm:flex sm:flex-row sm:flex-wrap sm:justify-start sm:gap-4">
               <li className="flex items-center gap-3">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-crimson shadow-lg">
                   <MapPin className="size-5 text-white" aria-hidden />
