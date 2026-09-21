@@ -166,13 +166,15 @@ export function Hero({ settings, pricing }: HeroProps) {
             transition={{ duration: 0.7 }}
             className="w-full max-w-xl lg:max-w-[520px]"
           >
-            <p className="mb-1.5 flex items-center justify-start gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-2 sm:text-sm">
-              <Star className="size-4 fill-gold text-gold" aria-hidden />
-              The Ultimate Music City Adventure
-            </p>
+            <div className="translate-x-[0.25in] -translate-y-[0.125in]">
+              <p className="mb-1.5 flex items-center justify-start gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-2 sm:text-sm">
+                <Star className="size-4 fill-gold text-gold" aria-hidden />
+                The Ultimate Music City Adventure
+              </p>
 
-            <div className="flex justify-start -ml-1 sm:-ml-2 md:-ml-3 lg:-ml-5 xl:-ml-6">
-              <BrandLogo logoUrl={settings.logoUrl} variant="hero" />
+              <div className="flex justify-start">
+                <BrandLogo logoUrl={settings.logoUrl} variant="hero" />
+              </div>
             </div>
 
             <p className="mt-4 max-w-xl text-left text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">
