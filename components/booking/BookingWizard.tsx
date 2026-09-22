@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -79,6 +79,16 @@ type BookingWizardProps = {
   initialHuntSlug?: string;
 };
 
+function clampPlayerCount(count: number, bounds: { min: number; max: number }): number {
+  return Math.min(bounds.max, Math.max(bounds.min, count));
+}
+
+function resizePlayerRoster(prev: string[], count: number): string[] {
+  const next = [...prev];
+  while (next.length < count) next.push("");
+  return next.slice(0, count);
+}
+
 export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const defaultSlug = initialHuntSlug ?? hunts[0]?.slug ?? "";
   const [step, setStep] = useState<Step>("details");
@@ -99,7 +109,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const [captainPhone, setCaptainPhone] = useState("");
   const [teamColor, setTeamColor] = useState<TeamColor>("GOLD");
   const [emergencyConsent, setEmergencyConsent] = useState(false);
-  const [useSquads, setUseSquads] = useState(false);
   const [squads, setSquads] = useState<SquadPlan[]>([]);
 
   const [youngestAge, setYoungestAge] = useState<number | "">("");
@@ -120,29 +129,8 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
     [groupType, hunt?.minimumPlayers]
   );
 
-  useEffect(() => {
-    setPlayerCount((count) =>
-      Math.min(playerBounds.max, Math.max(playerBounds.min, count))
-    );
-  }, [playerBounds.min, playerBounds.max]);
-
-  useEffect(() => {
-    setPlayerRoster((prev) => {
-      const next = [...prev];
-      while (next.length < playerCount) next.push("");
-      return next.slice(0, playerCount);
-    });
-  }, [playerCount]);
-
-  useEffect(() => {
-    if (!captainName) return;
-    setPlayerRoster((prev) => {
-      if (prev[0] === captainName) return prev;
-      const next = [...prev];
-      next[0] = captainName;
-      return next;
-    });
-  }, [captainName]);
+  const resolvedPlayFormat: PlayFormat =
+    groupType === SINGLE_COUPLE_GROUP_TYPE ? "single_group" : playFormat;
 
   const suggestedTeams = useMemo(
     () => suggestedTeamCount(playerCount, groupType),
@@ -155,58 +143,98 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
     [groupType, playerCount]
   );
   const multiSquadsEnabled = useMemo(
-    () => competitionAllowsMultiSquads(playFormat, groupType, playerCount),
-    [playFormat, groupType, playerCount]
+    () => competitionAllowsMultiSquads(resolvedPlayFormat, groupType, playerCount),
+    [resolvedPlayFormat, groupType, playerCount]
   );
 
-  useEffect(() => {
-    if (groupType === SINGLE_COUPLE_GROUP_TYPE) {
-      setPlayFormat("single_group");
-    } else {
-      setPlayFormat(defaultPlayFormat(groupType));
-    }
-  }, [groupType]);
+  const useSquads = resolvedPlayFormat !== "single_group" && multiSquadsEnabled;
 
-  useEffect(() => {
-    if (playFormat === "single_group") {
-      setUseSquads(false);
+  const squadNameDefault = teamName.trim() || defaultSingleSquadName(groupType);
+
+  const effectiveSquads = useMemo(() => {
+    if (!useSquads) return [];
+    if (squads.length > 0) return squads;
+    return buildDefaultSquads(playerCount, suggestedTeams, squadNameDefault, teamColor);
+  }, [useSquads, squads, playerCount, suggestedTeams, squadNameDefault, teamColor]);
+
+  const huntMin = hunt?.minimumPlayers ?? DEFAULT_MIN_PLAYERS;
+
+  const onHuntSlugChange = useCallback(
+    (slug: string) => {
+      setHuntSlug(slug);
+      const selected = hunts.find((h) => h.slug === slug);
+      const bounds = bookingPlayerBounds(groupType, selected?.minimumPlayers ?? DEFAULT_MIN_PLAYERS);
+      setPlayerCount((c) => {
+        const next = clampPlayerCount(c, bounds);
+        setPlayerRoster((prev) => resizePlayerRoster(prev, next));
+        return next;
+      });
+    },
+    [hunts, groupType]
+  );
+
+  const onGroupTypeChange = useCallback(
+    (value: string) => {
+      setGroupType(value);
+      setPlayFormat(value === SINGLE_COUPLE_GROUP_TYPE ? "single_group" : defaultPlayFormat(value));
       setSquads([]);
-      return;
-    }
-    if (multiSquadsEnabled) {
-      setUseSquads(true);
-    } else {
-      setUseSquads(false);
-      setSquads([]);
-    }
-  }, [playFormat, multiSquadsEnabled]);
+      const bounds = bookingPlayerBounds(value, huntMin);
+      setPlayerCount((c) => {
+        const next = clampPlayerCount(c, bounds);
+        setPlayerRoster((prev) => resizePlayerRoster(prev, next));
+        return next;
+      });
+    },
+    [huntMin]
+  );
 
-  useEffect(() => {
-    if (!useSquads) return;
-    setSquads((prev) =>
-      buildDefaultSquads(
-        playerCount,
-        prev.length > 1 ? prev.length : suggestedTeams,
-        teamName.trim() || defaultSingleSquadName(groupType),
-        teamColor
-      )
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- rebalance tickets when headcount changes
-  }, [playerCount]);
-
-  useEffect(() => {
-    if (!useSquads) return;
-    setSquads((prev) =>
-      prev.length
-        ? prev
-        : buildDefaultSquads(
-            playerCount,
-            suggestedTeams,
+  const onPlayerCountChange = useCallback(
+    (raw: number) => {
+      if (!Number.isFinite(raw)) return;
+      const next = clampPlayerCount(raw, playerBounds);
+      setPlayerCount(next);
+      setPlayerRoster((prev) => resizePlayerRoster(prev, next));
+      const format =
+        groupType === SINGLE_COUPLE_GROUP_TYPE ? "single_group" : playFormat;
+      if (format === "single_group") return;
+      if (competitionAllowsMultiSquads(format, groupType, next)) {
+        setSquads((prev) =>
+          buildDefaultSquads(
+            next,
+            prev.length > 1 ? prev.length : suggestedTeamCount(next, groupType),
             teamName.trim() || defaultSingleSquadName(groupType),
             teamColor
           )
-    );
-  }, [useSquads]);
+        );
+      } else {
+        setSquads([]);
+      }
+    },
+    [playerBounds, groupType, playFormat, teamName, teamColor]
+  );
+
+  const onPlayFormatSelect = useCallback(
+    (format: PlayFormat) => {
+      setPlayFormat(format);
+      if (format === "single_group") {
+        setSquads([]);
+        return;
+      }
+      if (competitionAllowsMultiSquads(format, groupType, playerCount)) {
+        setSquads(
+          buildDefaultSquads(
+            playerCount,
+            suggestedTeamCount(playerCount, groupType),
+            teamName.trim() || defaultSingleSquadName(groupType),
+            teamColor
+          )
+        );
+      } else {
+        setSquads([]);
+      }
+    },
+    [groupType, playerCount, teamName, teamColor]
+  );
 
   const pricePerPerson = useMemo(
     () =>
@@ -234,14 +262,14 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         scheduledDate: scheduledDate ? new Date(scheduledDate).toISOString() : undefined,
         startWindow,
         playerCount,
-        playFormat,
+        playFormat: resolvedPlayFormat,
         playerRoster: playerRoster.map((n) => n.trim()).filter(Boolean),
-        teamName: useSquads && squads[0] ? squads[0].name : teamName || undefined,
+        teamName: useSquads && effectiveSquads[0] ? effectiveSquads[0].name : teamName || undefined,
         captainName: captainName || undefined,
         captainEmail: captainEmail || undefined,
         captainPhone: captainPhone || undefined,
-        teamColor: useSquads && squads[0] ? squads[0].color : teamColor,
-        squads: useSquads ? squads : undefined,
+        teamColor: useSquads && effectiveSquads[0] ? effectiveSquads[0].color : teamColor,
+        squads: useSquads ? effectiveSquads : undefined,
         emergencyConsent,
         youngestAge: youngestAge === "" ? undefined : youngestAge,
         accessibilityNotes: accessibilityNotes || undefined,
@@ -269,7 +297,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
       bookingId,
       huntSlug,
       groupType,
-      playFormat,
+      resolvedPlayFormat,
       scheduledDate,
       startWindow,
       playerCount,
@@ -279,7 +307,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
       captainPhone,
       teamColor,
       useSquads,
-      squads,
+      effectiveSquads,
       playerRoster,
       emergencyConsent,
       youngestAge,
@@ -297,7 +325,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         return;
       }
       if (useSquads) {
-        const squadErr = validateSquads(squads, playerCount);
+        const squadErr = validateSquads(effectiveSquads, playerCount);
         if (squadErr) {
           setError(squadErr);
           return;
@@ -387,7 +415,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               <Select
                 value={huntSlug}
                 options={hunts.map((h) => ({ value: h.slug, label: h.title }))}
-                onChange={(e) => setHuntSlug(e.target.value)}
+                onChange={(e) => onHuntSlugChange(e.target.value)}
               />
             </div>
             <div>
@@ -395,7 +423,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               <Select
                 value={groupType}
                 options={GROUP_TYPES}
-                onChange={(e) => setGroupType(e.target.value)}
+                onChange={(e) => onGroupTypeChange(e.target.value)}
               />
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
@@ -424,13 +452,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 min={playerBounds.min}
                 max={playerBounds.max}
                 value={playerCount}
-                onChange={(e) => {
-                  const next = Number(e.target.value);
-                  if (!Number.isFinite(next)) return;
-                  setPlayerCount(
-                    Math.min(playerBounds.max, Math.max(playerBounds.min, next))
-                  );
-                }}
+                onChange={(e) => onPlayerCountChange(Number(e.target.value))}
               />
               {groupType === SINGLE_COUPLE_GROUP_TYPE && (
                 <p className="mt-1 text-xs text-cream/55">
@@ -444,12 +466,12 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 <p className="mb-2 block text-sm font-medium text-cream/90">How do you want to play?</p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {PLAY_FORMAT_OPTIONS.map((option) => {
-                    const selected = playFormat === option.value;
+                    const selected = resolvedPlayFormat === option.value;
                     return (
                       <button
                         key={option.value}
                         type="button"
-                        onClick={() => setPlayFormat(option.value)}
+                        onClick={() => onPlayFormatSelect(option.value)}
                         className={cn(
                           "rounded-xl border p-4 text-left transition-colors",
                           selected
@@ -499,8 +521,8 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               {playerCount} ticket{playerCount === 1 ? "" : "s"} purchased — one certificate per ticket at the finish line.
             </p>
             <p className="text-sm text-cream/75">
-              <strong className="text-cream">Play format:</strong> {playFormatLabel(playFormat)}
-              {playFormat === "competition" && !multiSquadsEnabled && (
+              <strong className="text-cream">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}
+              {resolvedPlayFormat === "competition" && !multiSquadsEnabled && (
                 <span className="text-cream/65">
                   {" "}
                   — one squad on the city leaderboard; add players or choose corporate to split squads.
@@ -509,7 +531,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             </p>
 
             {useSquads ? (
-              <SquadBuilder squads={squads} requiredTickets={playerCount} onChange={setSquads} />
+              <SquadBuilder squads={effectiveSquads} requiredTickets={playerCount} onChange={setSquads} />
             ) : (
               <>
                 <Input
@@ -529,7 +551,20 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               </>
             )}
 
-            <Input placeholder="Captain name" value={captainName} onChange={(e) => setCaptainName(e.target.value)} />
+            <Input
+              placeholder="Captain name"
+              value={captainName}
+              onChange={(e) => {
+                const val = e.target.value;
+                setCaptainName(val);
+                setPlayerRoster((prev) => {
+                  if (prev[0] === val) return prev;
+                  const next = [...prev];
+                  next[0] = val;
+                  return next;
+                });
+              }}
+            />
             <Input
               type="email"
               placeholder="Captain email"
@@ -544,7 +579,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               onChange={(e) => setCaptainPhone(e.target.value)}
             />
 
-            {playFormat === "competition" && multiSquadsEnabled && (
+            {resolvedPlayFormat === "competition" && multiSquadsEnabled && (
               <p className="rounded-lg border border-cream/10 bg-cream/5 px-3 py-2 text-xs text-cream/75">
                 {suggestedTeams} squads suggested for {playerCount} tickets—adjust names, colors, and ticket split below.
               </p>
@@ -626,15 +661,15 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             <p><strong className="text-cream">Hunt:</strong> {hunt?.title}</p>
             <p><strong className="text-cream">Date:</strong> {scheduledDate} ({startWindow})</p>
             <p><strong className="text-cream">Group:</strong> {GROUP_TYPES.find((g) => g.value === groupType)?.label ?? groupType}</p>
-            <p><strong className="text-cream">Play format:</strong> {playFormatLabel(playFormat)}</p>
+            <p><strong className="text-cream">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}</p>
             <p><strong className="text-cream">Players:</strong> {playerCount}</p>
             <p><strong className="text-cream">Rate:</strong> {formatCurrency(pricePerPerson)} / person</p>
             <p><strong className="text-cream">Tickets:</strong> {playerCount} × {formatCurrency(pricePerPerson)}</p>
-            {useSquads && squads.length > 0 ? (
+            {useSquads && effectiveSquads.length > 0 ? (
               <div>
                 <p className="text-cream"><strong>Squads:</strong></p>
                 <ul className="mt-1 list-inside list-disc text-sm">
-                  {squads.map((s) => (
+                  {effectiveSquads.map((s) => (
                     <li key={`${s.name}-${s.color}`}>
                       {s.name} · {s.color} · {s.playerCount} ticket{s.playerCount === 1 ? "" : "s"}
                     </li>

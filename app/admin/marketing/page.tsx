@@ -1,22 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LAUNCH_CHECKLIST } from "@/lib/marketing/launchChecklist";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 
 const STORAGE_KEY = "nashville-launch-checklist-v1";
 
 export default function AdminMarketingPage() {
-  const [done, setDone] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
+  const [done, setDone] = useState<Record<string, boolean>>(() => {
+    if (typeof window === "undefined") return {};
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setDone(JSON.parse(raw) as Record<string, boolean>);
+      return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
     } catch {
-      /* ignore */
+      return {};
     }
-  }, []);
+  });
 
   function toggle(id: string) {
     setDone((prev) => {

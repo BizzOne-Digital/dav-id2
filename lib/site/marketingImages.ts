@@ -41,6 +41,10 @@ export const MARKETING_IMAGES = {
     src: "/images/prizes-trophy.jpg",
     alt: "Trophy and prizes with Nashville skyline at sunset",
   },
+  bachelorette: {
+    src: "/images/bachelorette-broadway-party.jpg",
+    alt: "Bachelorette group celebrating on Broadway in Nashville at night",
+  },
   certificate: {
     src: "/images/certificate-celebration.jpg",
     alt: "Completion certificate and polaroids with Nashville skyline at night",

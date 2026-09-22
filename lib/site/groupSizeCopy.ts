@@ -14,7 +14,8 @@ export function resolveMinPlayers(
   return pricingMin ?? settingsMin ?? fallback;
 }
 
-export function heroGroupSizeLabel(_minPlayers: number): string {
+export function heroGroupSizeLabel(_minPlayers?: number): string {
+  void _minPlayers;
   return "Single group · or competition";
 }
 
@@ -22,15 +23,18 @@ export function heroPlayFormatHeadline(): { primary: string; secondary: string }
   return { primary: "Single group", secondary: "Or competition" };
 }
 
-export function pricingGroupSizeSummary(_minPlayers: number, duration: string): string {
+export function pricingGroupSizeSummary(_minPlayers: number | undefined, duration: string): string {
+  void _minPlayers;
   return `Per person · single group or competition · ${duration}`;
 }
 
-export function footerGroupSizeLine(_minPlayers: number): string {
+export function footerGroupSizeLine(_minPlayers?: number): string {
+  void _minPlayers;
   return "$29.95 per person—book as a single group or competing squads; corporate welcome.";
 }
 
-export function standardPricingDescription(_minPlayers: number): string {
+export function standardPricingDescription(_minPlayers?: number): string {
+  void _minPlayers;
   return (
     "$29.95 per person for everyone who plays. Choose a single group or competition format when you book. " +
     "Corporate outings can split into squads; groups of 10+ may qualify for corporate volume pricing at checkout."

@@ -20,7 +20,8 @@ export function HuntSpotlightRow({ bachelorette, corporate }: HuntSpotlightRowPr
       <Card className="flex h-full min-h-[280px] flex-col items-center justify-center border-gold/30 bg-gradient-to-b from-gold/10 to-charcoal/80 px-6 py-10 text-center sm:min-h-[320px]">
         <BrandLogo
           variant="header"
-          className="!h-16 !w-[min(70vw,11rem)] sm:!h-20 sm:!w-[14rem] md:!mx-auto md:!h-[5.5rem] md:!w-[17rem]"
+          imageAlign="center"
+          className="mx-auto !h-16 !w-[min(70vw,11rem)] sm:!h-20 sm:!w-[14rem] md:!h-[5.5rem] md:!w-[17rem]"
         />
         <p className="mt-6 font-[family-name:var(--font-caveat)] text-3xl text-gold sm:text-4xl">
           Let&apos;s play today!!

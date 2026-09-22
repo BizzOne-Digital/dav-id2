@@ -11,6 +11,8 @@ type BrandLogoProps = {
   className?: string;
   /** header = nav bar; footer = larger; hero = homepage left (~600×400) */
   variant?: "header" | "footer" | "hero";
+  /** Center artwork inside the logo frame (e.g. spotlight column) */
+  imageAlign?: "left" | "center";
 };
 
 const sizeByVariant = {
@@ -22,7 +24,12 @@ const sizeByVariant = {
     "relative mr-auto block h-[220px] w-[min(88vw,480px)] sm:h-[260px] sm:w-[min(86vw,520px)] md:h-[320px] md:w-[540px] lg:h-[360px] lg:w-[540px] xl:h-[380px] xl:w-[560px]",
 } as const;
 
-export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoProps) {
+export function BrandLogo({
+  logoUrl,
+  className,
+  variant = "header",
+  imageAlign = "left",
+}: BrandLogoProps) {
   const raw = logoUrl?.trim() ? logoUrl : SITE_LOGO_PATH;
   const src = raw.startsWith("/images/") || raw.startsWith("/api/uploads/") ? raw : resolvePublicImageUrl(raw);
   const unoptimized = src.startsWith("/api/uploads/");
@@ -46,11 +53,12 @@ export function BrandLogo({ logoUrl, className, variant = "header" }: BrandLogoP
         priority={variant === "header" || variant === "hero"}
         className={cn(
           "object-contain",
+          imageAlign === "center" ? "object-center" : "object-left",
           variant === "hero"
-            ? "object-left mix-blend-lighten brightness-[1.15] contrast-[1.08] saturate-[1.2] drop-shadow-[0_0_28px_rgba(201,147,42,0.35)]"
+            ? "mix-blend-lighten brightness-[1.15] contrast-[1.08] saturate-[1.2] drop-shadow-[0_0_28px_rgba(201,147,42,0.35)]"
             : variant === "footer"
-              ? "object-left brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
-              : "object-left brightness-[1.1] contrast-[1.05] saturate-[1.15] drop-shadow-[0_4px_24px_rgba(242,182,50,0.32)]"
+              ? "brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
+              : "brightness-[1.1] contrast-[1.05] saturate-[1.15] drop-shadow-[0_4px_24px_rgba(242,182,50,0.32)]"
         )}
         sizes={
           variant === "hero"

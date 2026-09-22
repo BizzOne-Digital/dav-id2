@@ -24,11 +24,11 @@ export function HuntTypeCard({ hunt, priority }: HuntTypeCardProps) {
             alt={hunt.title}
             fill
             priority={priority}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover brightness-[1.1] contrast-[1.03] saturate-[1.05] transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             unoptimized={hunt.coverImage.startsWith("/api/uploads/")}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/15 to-transparent" />
           <div className="absolute bottom-3 left-3 flex items-center gap-2">
             <MapPin className="size-4 text-gold" aria-hidden />
             {hunt.featured && <Badge>Featured</Badge>}
