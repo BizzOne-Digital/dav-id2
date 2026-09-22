@@ -61,7 +61,7 @@ export function ExploreNashville() {
           subtitle="Promotional examples only—your assigned route appears after booking and game activation."
         />
 
-        <div className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {NEIGHBORHOODS.map((n) => (
             <motion.article
               key={n.name}
@@ -69,14 +69,14 @@ export function ExploreNashville() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ y: -3 }}
-              className="overflow-hidden rounded-xl border border-cream/15 bg-gradient-to-b from-[#161b24] to-charcoal shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] hover:border-gold/30 hover:shadow-[0_12px_44px_rgba(201,147,42,0.08)]"
+              className="min-w-0 overflow-hidden rounded-xl border border-cream/15 bg-gradient-to-b from-[#161b24] to-charcoal shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] hover:border-gold/30 hover:shadow-[0_12px_44px_rgba(201,147,42,0.08)]"
             >
-              <div className="relative h-44 w-full sm:h-48">
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
                 <Image
                   src={n.image.src}
                   alt={n.image.alt}
                   fill
-                  className="object-cover brightness-[1.08] contrast-[1.03]"
+                  className="object-cover object-center brightness-[1.08] contrast-[1.03]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/25 to-transparent" />
