@@ -18,11 +18,30 @@ import {
 } from "@/lib/models";
 import { generateRoute } from "@/lib/routing/route-generator";
 import { isAnswerCorrect } from "@/lib/game/answer";
+import {
+  isPlayWindowExpired,
+  PLAY_WINDOW_EXPIRED_MESSAGE,
+  resolvePlayExpiresAt,
+} from "@/lib/game/playWindow";
 import { calculatePoints, getNashvilleRank } from "@/lib/scoring/ranks";
 import { signCompletion, verifyCompletionSignature } from "@/lib/verification/completion";
 import { generateCompletionNumber, slugify } from "@/lib/utils";
 import crypto from "crypto";
 import { z } from "zod";
+
+async function loadPlayWindowExpiry(
+  session: { bookingId?: unknown; playExpiresAt?: Date | null },
+  bookingId?: unknown
+) {
+  const id = bookingId ?? session.bookingId;
+  const booking =
+    id && mongoose.Types.ObjectId.isValid(String(id))
+      ? await Booking.findById(id)
+          .select("playExpiresAt updatedAt createdAt status")
+          .lean()
+      : null;
+  return resolvePlayExpiresAt(session, booking);
+}
 
 export async function buildRouteManifestForSession(sessionId: string) {
   await connectDB();
@@ -32,6 +51,11 @@ export async function buildRouteManifestForSession(sessionId: string) {
 
   const session = await GameSession.findById(sessionId);
   if (!session) throw new Error("Session not found");
+
+  const playExpiresAt = await loadPlayWindowExpiry(session);
+  if (isPlayWindowExpired(playExpiresAt)) {
+    throw new Error(PLAY_WINDOW_EXPIRED_MESSAGE);
+  }
 
   const existing = await RouteManifest.findOne({ sessionId: session._id });
   if (existing) return existing;
@@ -135,6 +159,11 @@ export async function verifyAndSubmitChallenge(
   const session = await GameSession.findById(sessionId);
   if (!session || session.status !== "active") {
     return { success: false, error: "Session not active" };
+  }
+
+  const playExpiresAt = await loadPlayWindowExpiry(session);
+  if (isPlayWindowExpired(playExpiresAt)) {
+    return { success: false, error: PLAY_WINDOW_EXPIRED_MESSAGE };
   }
 
   const manifest = await RouteManifest.findOne({ sessionId: session._id });
@@ -457,6 +486,11 @@ export async function joinTeamByCode(input: z.infer<typeof joinSchema>) {
   const team = await Team.findOne({ joinCode: parsed.data.joinCode });
   if (!team) {
     return { success: false as const, error: "Invalid join code" };
+  }
+
+  const playExpiresAt = await loadPlayWindowExpiry({}, team.bookingId);
+  if (isPlayWindowExpired(playExpiresAt)) {
+    return { success: false as const, error: PLAY_WINDOW_EXPIRED_MESSAGE };
   }
 
   const memberCount = await TeamMember.countDocuments({ teamId: team._id });

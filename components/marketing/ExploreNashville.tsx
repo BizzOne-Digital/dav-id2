@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { cn } from "@/lib/utils";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
 
 const NEIGHBORHOODS = [
@@ -63,20 +62,23 @@ export function ExploreNashville() {
         />
 
         <div className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {NEIGHBORHOODS.map((n, i) => (
+          {NEIGHBORHOODS.map((n) => (
             <motion.article
               key={n.name}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ y: -3 }}
-              className={cn(
-                "overflow-hidden rounded-xl border border-cream/15 bg-gradient-to-b from-[#161b24] to-charcoal shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] hover:border-gold/30 hover:shadow-[0_12px_44px_rgba(201,147,42,0.08)]",
-                i === 0 && "sm:col-span-2 lg:col-span-2"
-              )}
+              className="overflow-hidden rounded-xl border border-cream/15 bg-gradient-to-b from-[#161b24] to-charcoal shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] hover:border-gold/30 hover:shadow-[0_12px_44px_rgba(201,147,42,0.08)]"
             >
-              <div className={cn("relative w-full", i === 0 ? "h-52 sm:h-56" : "h-44")}>
-                <Image src={n.image.src} alt={n.image.alt} fill className="object-cover" sizes="400px" />
+              <div className="relative h-44 w-full sm:h-48">
+                <Image
+                  src={n.image.src}
+                  alt={n.image.alt}
+                  fill
+                  className="object-cover brightness-[1.08] contrast-[1.03]"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/25 to-transparent" />
                 <MapPin className="absolute right-3 top-3 size-7 text-gold drop-shadow-md" aria-hidden />
               </div>

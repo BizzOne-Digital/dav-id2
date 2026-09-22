@@ -7,6 +7,11 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle2 } from "lucide-react";
 import { CopyJoinCodeButton } from "@/components/booking/CopyJoinCodeButton";
+import {
+  formatPlayDeadline,
+  HUNT_PLAY_WINDOW_HOURS,
+  resolvePlayExpiresAt,
+} from "@/lib/game/playWindow";
 
 export default async function BookingSuccessPage({
   searchParams,
@@ -45,6 +50,15 @@ export default async function BookingSuccessPage({
     sessions.map((s) => [String(s.teamId), s])
   );
   const primarySession = sessions[0];
+  const playExpiresAt = booking
+    ? resolvePlayExpiresAt(
+        {
+          playExpiresAt: (primarySession as { playExpiresAt?: Date } | undefined)?.playExpiresAt,
+        },
+        booking
+      )
+    : null;
+  const playDeadlineLabel = playExpiresAt ? formatPlayDeadline(playExpiresAt) : null;
 
   return (
     <PageTransition>
@@ -58,6 +72,13 @@ export default async function BookingSuccessPage({
             Your Nashville adventure is confirmed. Save your team details below
             {teams.length > 1 ? "—each squad has its own join code." : "."}
           </p>
+          {playDeadlineLabel && (
+            <p className="mx-auto mt-4 max-w-md rounded-lg border border-gold/25 bg-gold/5 px-4 py-3 text-sm text-cream/85">
+              Play window: {HUNT_PLAY_WINDOW_HOURS} hours from purchase (through{" "}
+              <strong className="text-gold">{playDeadlineLabel}</strong>). Join codes stop working after
+              that.
+            </p>
+          )}
         </div>
 
         <Card className="mt-10 space-y-4">
@@ -110,8 +131,12 @@ export default async function BookingSuccessPage({
 
           <ol className="list-decimal space-y-2 pl-5 text-sm text-cream/80">
             <li>Invite players with the join code or link from your dashboard.</li>
-            <li>Open the game lobby when your start window begins.</li>
-            <li>Captain starts the hunt — clues appear one stop at a time.</li>
+            <li>
+              Start and finish within {HUNT_PLAY_WINDOW_HOURS} hours of purchase
+              {playDeadlineLabel ? ` (by ${playDeadlineLabel})` : ""}.
+            </li>
+            <li>Open the game lobby when your group is ready—captain starts the hunt.</li>
+            <li>Clues appear one stop at a time on any phone browser.</li>
             {teams.length > 1 && (
               <li>Corporate groups: assign one captain per squad to start their lobby.</li>
             )}

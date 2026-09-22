@@ -66,6 +66,11 @@ export type MarketingImageKey = keyof typeof MARKETING_IMAGES;
 
 export const ALL_MARKETING_IMAGES = Object.values(MARKETING_IMAGES);
 
+/** Photo strip only — promo artwork is shown in PromoFlyerSection, not duplicated here */
+export const GALLERY_STRIP_IMAGES = ALL_MARKETING_IMAGES.filter(
+  (img) => img !== MARKETING_IMAGES.promoFlyer && img !== MARKETING_IMAGES.promoPoster
+);
+
 /** Cycle images for hunt cards when DB cover is empty */
 export const HUNT_CARD_IMAGES = [
   MARKETING_IMAGES.broadway,

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth/auth";
 import { joinTeamByCode } from "@/lib/actions/game";
+import { PLAY_WINDOW_EXPIRED_MESSAGE } from "@/lib/game/playWindow";
 
 const bodySchema = z.object({
   joinCode: z.string().min(4).max(12),
@@ -26,7 +27,8 @@ export async function POST(request: Request) {
     });
 
     if (!result.success) {
-      return NextResponse.json({ success: false, error: result.error }, { status: 404 });
+      const status = result.error === PLAY_WINDOW_EXPIRED_MESSAGE ? 403 : 404;
+      return NextResponse.json({ success: false, error: result.error }, { status });
     }
 
     return NextResponse.json(result);

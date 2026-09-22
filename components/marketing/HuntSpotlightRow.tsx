@@ -17,13 +17,13 @@ export function HuntSpotlightRow({ bachelorette, corporate }: HuntSpotlightRowPr
         <HuntTypeCard hunt={bachelorette} priority />
       </div>
 
-      <Card className="flex h-full min-h-[280px] flex-col items-center justify-center border-gold/30 bg-gradient-to-b from-gold/10 to-charcoal/80 px-6 py-10 text-center sm:min-h-[320px]">
+      <Card className="flex h-full min-h-[280px] flex-col items-center justify-start border-gold/30 bg-gradient-to-b from-gold/10 to-charcoal/80 px-6 pb-8 pt-5 text-center sm:min-h-[320px] sm:pt-6 sm:pb-9">
         <BrandLogo
           variant="header"
           imageAlign="center"
-          className="mx-auto !h-16 !w-[min(70vw,11rem)] sm:!h-20 sm:!w-[14rem] md:!h-[5.5rem] md:!w-[17rem]"
+          className="mx-auto !h-24 !w-[min(78vw,16.5rem)] sm:!h-[7.5rem] sm:!w-[21rem] md:!h-[8.25rem] md:!w-[25.5rem]"
         />
-        <p className="mt-6 font-[family-name:var(--font-caveat)] text-3xl text-gold sm:text-4xl">
+        <p className="mt-4 font-[family-name:var(--font-caveat)] text-3xl text-gold sm:mt-5 sm:text-4xl">
           Let&apos;s play today!!
         </p>
         <p className="mt-3 max-w-xs text-sm leading-relaxed text-cream/70">

@@ -45,6 +45,8 @@ const BookingSchema = new Schema(
     },
     bookingReference: { type: String, unique: true, sparse: true },
     teamId: { type: Schema.Types.ObjectId, ref: "Team" },
+    /** Join codes invalid after this time (72h from purchase by default). */
+    playExpiresAt: Date,
     idempotencyKey: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }

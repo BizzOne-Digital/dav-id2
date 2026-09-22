@@ -14,6 +14,7 @@ import {
   generateJoinCode,
   generateSessionCode,
 } from "@/lib/utils";
+import { computePlayExpiresAt } from "@/lib/game/playWindow";
 
 export type FulfillOrderInput = {
   bookingId: string;
@@ -49,6 +50,11 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
   const booking = await Booking.findById(input.bookingId);
   if (!booking) {
     throw new Error("Booking not found");
+  }
+
+  const playExpiresAt = booking.playExpiresAt ?? computePlayExpiresAt();
+  if (!booking.playExpiresAt) {
+    booking.playExpiresAt = playExpiresAt;
   }
 
   let order =
@@ -93,6 +99,13 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
   const existingTeams = await Team.find({ bookingId: booking._id }).exec();
   if (existingTeams.length > 0) {
     teamId = asObjectId(existingTeams[0]._id);
+    await GameSession.updateMany(
+      { bookingId: booking._id, playExpiresAt: { $exists: false } },
+      { $set: { playExpiresAt } }
+    );
+    if (booking.isModified("playExpiresAt")) {
+      await booking.save();
+    }
   } else if (!teamId) {
     let captainId: mongoose.Types.ObjectId | undefined =
       asObjectId(booking.userId) ??
@@ -149,6 +162,7 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
         huntId: booking.huntId,
         status: "lobby",
         groupType: booking.groupType,
+        playExpiresAt,
       });
 
       if (i === 0) {
@@ -191,6 +205,7 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
       huntId: booking.huntId,
       status: "lobby",
       groupType: booking.groupType,
+      playExpiresAt,
     });
   }
 

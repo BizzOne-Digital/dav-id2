@@ -4,6 +4,7 @@ export const COMPETITION_RULES = {
   headline: "How you play",
   bullets: [
     "Every person who plays needs a ticket at $29.95 per person—solo, one group, or each competing squad.",
+    "You have 72 hours from purchase to join, play, and finish—ideal for a weekend or long-weekend trip; then join codes expire.",
     "Single group: one team name, one color, one join code—perfect for couples, families, and one crew.",
     "Competition: split into squads that race on the leaderboard (great for friends or corporate departments).",
     "Corporate: book headcount, choose competition, assign squad names/colors—or contact us for a facilitated event.",

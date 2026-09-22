@@ -17,7 +17,7 @@ import { ALL_MARKETING_IMAGES } from "@/lib/site/marketingImages";
 
 const STEPS = [
   { icon: CalendarCheck, title: "Book online", body: "Pick your date, group size, and experience type in minutes." },
-  { icon: KeyRound, title: "Get your codes", body: "Receive team join codes and a quick-start guide by email." },
+  { icon: KeyRound, title: "Get your codes", body: "Receive team join codes by email—you have 72 hours from purchase to play and finish." },
   { icon: UsersRound, title: "Form teams", body: "Split into squads—or stay one big crew—and choose a team name." },
   { icon: Smartphone, title: "Open the hunt", body: "Use any phone browser; no app download required." },
   { icon: MapPinned, title: "Follow the route", body: "GPS-guided stops across downtown and signature neighborhoods." },
