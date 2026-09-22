@@ -1,11 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
-import { MapPin } from "lucide-react";
-import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { formatCurrency } from "@/lib/utils";
-import { resolvePublicImageUrl } from "@/lib/uploads/constants";
 import type { PublicHuntListing } from "@/lib/site/huntCatalog";
+import { HuntTypeCard } from "@/components/marketing/HuntTypeCard";
+
+export const HUNT_SPOTLIGHT_SLUGS = ["bachelorette-downtown", "corporate-team-builder"] as const;
 
 type HuntTypesGridProps = {
   hunts: PublicHuntListing[];
@@ -14,46 +10,18 @@ type HuntTypesGridProps = {
 export function HuntTypesGrid({ hunts }: HuntTypesGridProps) {
   return (
     <ul className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-      {hunts.map((hunt) => {
-        const displayCover = resolvePublicImageUrl(hunt.coverImage);
-        return (
-          <li key={hunt.slug}>
-            <Link href={`/hunts/${hunt.slug}`} className="group block h-full overflow-hidden rounded-xl">
-              <Card className="h-full overflow-hidden p-0 transition-colors group-hover:border-gold/40">
-                <div className="relative h-44 w-full sm:h-48">
-                  <Image
-                    src={displayCover}
-                    alt={hunt.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    unoptimized={hunt.coverImage.startsWith("/api/uploads/")}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent" />
-                  <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                    <MapPin className="size-4 text-gold" aria-hidden />
-                    {hunt.featured && <Badge>Featured</Badge>}
-                  </div>
-                </div>
-                <div className="p-5">
-                  <CardTitle>{hunt.title}</CardTitle>
-                  <CardDescription className="mt-2">{hunt.shortDescription}</CardDescription>
-                  <p className="mt-4 text-sm text-cream/60">
-                    <span className="capitalize">{hunt.difficulty}</span>
-                    {` · ${hunt.duration}`}
-                    {` · ${formatCurrency(hunt.pricePerPersonCents)}/person`}
-                  </p>
-                  {hunt.groupTypes.length > 0 && (
-                    <p className="mt-2 text-xs text-cream/50">
-                      Great for {hunt.groupTypes.join(", ")}
-                    </p>
-                  )}
-                </div>
-              </Card>
-            </Link>
-          </li>
-        );
-      })}
+      {hunts.map((hunt) => (
+        <li key={hunt.slug}>
+          <HuntTypeCard hunt={hunt} />
+        </li>
+      ))}
     </ul>
   );
+}
+
+export function pickSpotlightHunts(hunts: PublicHuntListing[]) {
+  const bachelorette = hunts.find((h) => h.slug === "bachelorette-downtown");
+  const corporate = hunts.find((h) => h.slug === "corporate-team-builder");
+  const rest = hunts.filter((h) => !HUNT_SPOTLIGHT_SLUGS.includes(h.slug as (typeof HUNT_SPOTLIGHT_SLUGS)[number]));
+  return { bachelorette, corporate, rest };
 }

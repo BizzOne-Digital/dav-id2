@@ -18,7 +18,9 @@ export function CmsPage({ page, slug }: CmsPageProps) {
         : null;
 
   const heroBg = inlineImage ? undefined : slug ? PAGE_HERO_IMAGES[slug] : undefined;
-  const compactHero = "border-b border-cream/10 py-5 sm:py-6 !min-h-0";
+  const textHeroSpacing =
+    slug === "about" ? "!py-3 sm:!py-4" : "!py-4 sm:!py-5";
+  const compactHero = `!min-h-0 ${textHeroSpacing}`;
 
   return (
     <>
@@ -30,22 +32,22 @@ export function CmsPage({ page, slug }: CmsPageProps) {
           inlineImage
             ? compactHero
             : heroBg
-              ? `${compactHero} sm:!min-h-[200px] lg:!min-h-[220px]`
+              ? `${compactHero} sm:!min-h-[160px] lg:!min-h-[180px]`
               : compactHero
         }
       />
       {inlineImage ? (
-        <div className="site-x mx-auto max-w-3xl pt-4 sm:pt-5">
+        <div className="site-x mx-auto max-w-3xl pt-2 sm:pt-3">
           <MarketingPhoto
             src={inlineImage.src}
             alt={inlineImage.alt}
             aspect="wide"
-            className="mb-8 sm:mb-10"
+            className="mb-5 sm:mb-6"
             sizes="768px"
           />
         </div>
       ) : null}
-      <div className="site-x mx-auto max-w-3xl pb-10 pt-2 sm:pb-12 sm:pt-3">
+      <div className="site-x mx-auto max-w-3xl pb-8 pt-1 sm:pb-10 sm:pt-2">
         <RichContent html={page.content} />
       </div>
     </>

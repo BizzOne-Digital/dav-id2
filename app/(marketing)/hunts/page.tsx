@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { PageHero } from "@/components/marketing/PageHero";
 import { MarketingPhoto } from "@/components/marketing/MarketingPhoto";
-import { HuntTypesGrid } from "@/components/marketing/HuntTypesGrid";
+import { HuntSpotlightRow } from "@/components/marketing/HuntSpotlightRow";
+import { HuntTypesGrid, pickSpotlightHunts } from "@/components/marketing/HuntTypesGrid";
 import { Button } from "@/components/ui/Button";
 import { buildPageMetadata } from "@/lib/site/buildMetadata";
 import { getPublicHuntListings } from "@/lib/site/getPublicHuntListings";
@@ -18,6 +19,7 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default async function HuntsPage() {
   const hunts = await getPublicHuntListings();
+  const { bachelorette, corporate, rest } = pickSpotlightHunts(hunts);
 
   return (
     <PageTransition>
@@ -44,7 +46,12 @@ export default async function HuntsPage() {
           Pick a signature route below—{PRICING_HEADLINE.toLowerCase()}. Same hunt engine, tuned for how your group
           plays.
         </p>
-        <HuntTypesGrid hunts={hunts} />
+
+        {bachelorette && corporate ? (
+          <HuntSpotlightRow bachelorette={bachelorette} corporate={corporate} />
+        ) : null}
+
+        <HuntTypesGrid hunts={rest} />
         <div className="mt-8 text-center sm:mt-10">
           <Button href="/booking" variant="primary" magnetic>
             Book your hunt

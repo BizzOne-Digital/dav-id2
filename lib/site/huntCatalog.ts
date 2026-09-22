@@ -56,7 +56,7 @@ export const CATALOG_HUNTS: CatalogHunt[] = [
     title: "Bachelorette Downtown Bash",
     slug: "bachelorette-downtown",
     shortDescription:
-      "Broadway neon, photo challenges, and squad rivalry—Nashville’s #1 party-weekend hunt, built for the bride tribe.",
+      "Broadway honky-tonks, bride-squad photo challenges, and friendly competition—downtown Nashville’s headline party hunt.",
     featured: true,
     difficulty: "moderate",
     groupTypes: ["bachelorette", "friends"],
@@ -77,6 +77,14 @@ export const CATALOG_HUNTS: CatalogHunt[] = [
     difficulty: "easy",
     groupTypes: ["family", "tourists"],
   },
+  {
+    title: "Corporate Events Downtown",
+    slug: "corporate-team-builder",
+    shortDescription: "Multi-squad competition, team-building routes, and volume-friendly booking for offices and offsites.",
+    featured: true,
+    difficulty: "challenging",
+    groupTypes: ["corporate"],
+  },
 ];
 
 export type PublicHuntListing = CatalogHunt & {
@@ -87,7 +95,16 @@ export type PublicHuntListing = CatalogHunt & {
 
 export function coverImageForHunt(hunt: CatalogHunt, index: number): string {
   if (hunt.slug === "bachelorette-downtown") {
+    return "/images/bachelorette-broadway-party.jpg";
+  }
+  if (hunt.slug === "date-night-discovery") {
     return "/images/broadway-neon.jpg";
+  }
+  if (hunt.slug === "riverfront-views") {
+    return "/images/map-pin-downtown.jpg";
+  }
+  if (hunt.slug === "corporate-team-builder") {
+    return "/images/flatlay-game-board.jpg";
   }
   return CATALOG_HUNT_COVER_PATHS[index % CATALOG_HUNT_COVER_PATHS.length];
 }
