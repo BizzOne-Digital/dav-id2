@@ -9,7 +9,7 @@ import { buildPageMetadata } from "@/lib/site/buildMetadata";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Virtual Brochure",
-  description: "Nashville Scavenger Hunt overview — pricing, teams, and how to book.",
+  description: "Music City Scavenger Hunt overview — pricing, teams, and how to book.",
   path: "/brochure",
 });
 

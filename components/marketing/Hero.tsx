@@ -122,7 +122,7 @@ export function Hero({ settings, pricing }: HeroProps) {
   const hero = settings.hero ?? {};
   const subheadline =
     hero.subheadline ??
-    "Turn downtown Nashville into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.";
+    "Turn downtown Music City into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.";
   const ctaPrimary = hero.ctaPrimary ?? "Book Your Hunt";
   const ctaSecondary = hero.ctaSecondary ?? "Preview a Challenge";
   const heroBg = hero.backgroundImage?.trim()

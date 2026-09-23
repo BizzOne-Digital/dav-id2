@@ -5,7 +5,7 @@ import { buildPageMetadata } from "@/lib/site/buildMetadata";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Book QR Code",
-  description: "Scan to book the Nashville scavenger hunt.",
+  description: "Scan to book the Music City scavenger hunt.",
   path: "/book-qr",
 });
 

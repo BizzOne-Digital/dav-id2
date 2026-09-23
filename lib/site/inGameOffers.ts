@@ -17,7 +17,7 @@ export type InGameOffersConfig = {
 export const DEFAULT_IN_GAME_OFFERS: InGameOffersConfig = {
   heading: "In-game rewards & partner perks",
   subtitle:
-    "During your hunt, teams unlock special placements for discounts, coupons, and prizes from Nashville partners. Details are added as partnerships go live.",
+    "During your hunt, teams unlock special placements for discounts, coupons, and prizes from Music City partners. Details are added as partnerships go live.",
   discounts: {
     title: "In-game discounts",
     description: "Save at Music City shops, restaurants, and attractions when you hit certain checkpoints.",

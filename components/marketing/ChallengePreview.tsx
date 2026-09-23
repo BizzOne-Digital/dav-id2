@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
 
 const SAMPLE_RIDDLE =
-  "Where steel strings echo and boots hit the floor, a famous strip shines—what two words name this Nashville core?";
+  "Where steel strings echo and boots hit the floor, a famous strip shines—what two words name this Music City core?";
 
 export function ChallengePreview() {
   const [answer, setAnswer] = useState("");

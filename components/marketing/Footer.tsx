@@ -78,12 +78,12 @@ export function Footer({ settings, pricing }: FooterProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
-  const businessName = settings.businessName ?? "Nashville Scavenger Hunt";
+  const businessName = settings.businessName ?? "Music City Scavenger Hunt";
   const tagline = settings.tagline ?? "Explore. Discover. Compete. Create Memories.";
   const phone = settings.phone ?? "615-571-9900";
   const contactEmail = settings.email ?? "howigetemail@gmail.com";
   const newsletterHeading =
-    settings.newsletterHeading ?? "Get hunt tips & Nashville insider clues";
+    settings.newsletterHeading ?? "Get hunt tips & Music City insider clues";
   const footerText =
     settings.footerText ??
     "Locally crafted scavenger adventures across Music City. Groups, teams, and celebrations welcome.";
@@ -140,7 +140,7 @@ export function Footer({ settings, pricing }: FooterProps) {
             </span>
             <div>
               <p className="font-[family-name:var(--font-bebas)] text-2xl tracking-wide text-cream sm:text-3xl">
-                Your next Nashville story starts here
+                Your next Music City story starts here
               </p>
               <p className="mt-1 text-sm text-cream/65">
                 {footerGroupSizeLine(minPlayers)}
@@ -341,7 +341,7 @@ export function Footer({ settings, pricing }: FooterProps) {
               )}
               <p className="mt-4 flex items-center gap-1.5 text-[11px] text-cream/45">
                 <MapPin className="size-3 shrink-0 text-crimson" aria-hidden />
-                Downtown Nashville & beyond
+                Downtown Music City & beyond
               </p>
             </div>
           </div>

@@ -31,6 +31,6 @@ export function settingsToDefaultDescription(settings: {
   return (
     settings.seo?.defaultDescription ??
     settings.tagline ??
-    "Turn downtown Nashville into your personal game board. Solve clues, compete, and earn your Music City certificate."
+    "Turn downtown Music City into your personal game board. Solve clues, compete, and earn your Music City certificate."
   );
 }

@@ -13,7 +13,7 @@ import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Pricing",
-  description: "Transparent per-person pricing for Nashville scavenger hunts. Singles, couples, and groups welcome.",
+  description: "Transparent per-person pricing for Music City scavenger hunts. Singles, couples, and groups welcome.",
   path: "/pricing",
 });
 

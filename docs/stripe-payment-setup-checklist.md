@@ -1,4 +1,4 @@
-# Nashville Scavenger Hunt — Payment setup checklist (Stripe)
+# Music City Scavenger Hunt — Payment setup checklist (Stripe)
 
 Use this with your developer to turn on **live** booking payments on NashvilleScavengerHunt.com.
 
@@ -21,11 +21,11 @@ In the Stripe Dashboard, complete **Settings → Business** and **Settings → P
 | Item | Notes |
 |------|--------|
 | Legal business name | As registered |
-| DBA / brand name | e.g. Nashville Scavenger Hunt |
+| DBA / brand name | e.g. Music City Scavenger Hunt |
 | EIN or SSN | For tax reporting (1099-K as applicable) |
 | Business address | |
 | Business phone / website | Use **https://nashvillescavengerhunt.com** (or your live domain) |
-| Business description | e.g. “Walking scavenger hunt experiences in downtown Nashville” |
+| Business description | e.g. “Walking scavenger hunt experiences in downtown Music City” |
 | **Bank account** | Checking account for **payouts** (routing + account number) |
 | Identity verification | Photo ID for owner/representative if Stripe requests it |
 
@@ -116,4 +116,4 @@ NEXT_PUBLIC_APP_URL=https://nashvillescavengerhunt.com
 
 Reply to your developer with **Part 2** filled in (especially test keys first). They will confirm when checkout is live.
 
-*Document version: March 2026 — Nashville Scavenger Hunt project*
+*Document version: March 2026 — Music City Scavenger Hunt project*

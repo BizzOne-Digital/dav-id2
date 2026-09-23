@@ -65,7 +65,7 @@ async function upsertPricingPlan() {
       minimumPlayers: 1,
       durationLabel: "2–3 hours",
       features: [
-        "Custom route through downtown Nashville",
+        "Custom route through downtown Music City",
         "Mobile-friendly clue platform",
         "Live leaderboard",
         "Completion certificate",
@@ -85,7 +85,7 @@ async function upsertSiteSettings(pricingPlanId: string) {
     { key: "default" },
     {
       key: "default",
-      businessName: "Nashville Scavenger Hunt",
+      businessName: "Music City Scavenger Hunt",
       tagline: "Explore. Discover. Compete. Create Memories.",
       phone: "615-571-9900",
       email: "howigetemail@gmail.com",
@@ -93,7 +93,7 @@ async function upsertSiteSettings(pricingPlanId: string) {
       hero: {
         headline: "Explore. Discover. Compete. Create Memories.",
         subheadline:
-          "Turn downtown Nashville into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.",
+          "Turn downtown Music City into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.",
         ctaPrimary: "Book Your Adventure",
         ctaSecondary: "Preview a Challenge",
       },
@@ -103,8 +103,8 @@ async function upsertSiteSettings(pricingPlanId: string) {
       volumeMinPlayers: 10,
       minimumPlayers: 1,
       typicalDurationHours: "2–3",
-      newsletterHeading: "Get hunt tips & Nashville insider clues",
-      footerText: "© Nashville Scavenger Hunt. All rights reserved.",
+      newsletterHeading: "Get hunt tips & Music City insider clues",
+      footerText: "© Music City Scavenger Hunt. All rights reserved.",
       stats: [
         { label: "Teams hosted", value: "500+", isSample: true },
         { label: "Avg. rating", value: "4.9/5", isSample: true },
@@ -174,9 +174,9 @@ async function seedChallenges(locationIds: Map<string, string>) {
         title: "Preview: Mother Church Riddle",
         instructions:
           "Read the clue and enter the one-word answer. This is a safe preview — no spoilers for paid hunts.",
-        clue: "They call this hall the Mother Church of Country Music. What city shares its name with a 1970 Robert Altman film?",
-        answer: "nashville",
-        acceptedVariants: ["Nashville", "NASHVILLE"],
+        clue: "They call this hall the Mother Church of Country Music. What two-word nickname is this town famous by?",
+        answer: "music city",
+        acceptedVariants: ["Music City", "MUSIC CITY", "musiccity"],
         hint: "It's the city you're standing in.",
         basePoints: 300,
         difficulty: "easy",
@@ -377,7 +377,7 @@ async function seedTestimonials() {
     {
       name: "Jamie L.",
       groupType: "bachelorette",
-      quote: "Best afternoon in Nashville — we laughed the whole way down Broadway!",
+      quote: "Best afternoon in Music City — we laughed the whole way down Broadway!",
       order: 1,
     },
     {
@@ -408,7 +408,7 @@ async function seedLeaderboard() {
     { teamName: "Honky Tonk Heroes", score: 4820, completedStops: 8, rank: 1 },
     { teamName: "Music City Mavericks", score: 4510, completedStops: 8, rank: 2 },
     { teamName: "Broadway Bandits", score: 4200, completedStops: 7, rank: 3 },
-    { teamName: "Nashville Navigators", score: 3980, completedStops: 7, rank: 4 },
+    { teamName: "Music City Navigators", score: 3980, completedStops: 7, rank: 4 },
     { teamName: "Ryman Runners", score: 3750, completedStops: 6, rank: 5 },
   ];
 
@@ -427,11 +427,11 @@ async function seedPages() {
     {
       slug: "about",
       title: "About Us",
-      seoTitle: "About Nashville Scavenger Hunt",
+      seoTitle: "About Music City Scavenger Hunt",
       heroTitle: "We turn Music City into your game board",
       heroSubtitle: "Locally written clues, fair routes, and unforgettable team moments.",
       content:
-        "<p>Nashville Scavenger Hunt designs downtown adventures for families, friends, and corporate teams.</p>",
+        "<p>Music City Scavenger Hunt designs downtown adventures for families, friends, and corporate teams.</p>",
     },
     { upsert: true, new: true }
   );
@@ -455,7 +455,7 @@ async function seedProducts() {
   await Product.findOneAndUpdate(
     { slug: "gift-card-100" },
     {
-      title: "Nashville Hunt Gift Card — $100",
+      title: "Music City Hunt Gift Card — $100",
       slug: "gift-card-100",
       description: "Redeem toward any public scavenger hunt booking.",
       productType: "gift_card",

@@ -13,7 +13,7 @@ import { PRICING_HEADLINE } from "@/lib/site/pricingCopy";
 export const metadata: Metadata = buildPageMetadata({
   title: "Scavenger Hunts",
   description:
-    "Browse downtown Nashville scavenger hunts for families, bachelorettes, corporate teams, and date nights.",
+    "Browse downtown Music City scavenger hunts for families, bachelorettes, corporate teams, and date nights.",
   path: "/hunts",
 });
 
@@ -25,7 +25,7 @@ export default async function HuntsPage() {
     <PageTransition>
       <PageHero
         eyebrow="Experiences"
-        title="Choose your Nashville hunt"
+        title="Choose your Music City hunt"
         subtitle="Every route is walkable, phone-friendly, and packed with Music City stories."
         className="border-b border-cream/10 py-5 sm:py-6"
       />

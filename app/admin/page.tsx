@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <h1 className="font-[family-name:var(--font-bebas)] text-4xl text-gold">Control center</h1>
-      <p className="text-cream/70">Operational snapshot for Nashville Scavenger Hunt.</p>
+      <p className="text-cream/70">Operational snapshot for Music City Scavenger Hunt.</p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
           <Card key={s.label}>

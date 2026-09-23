@@ -29,7 +29,7 @@ import type {
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteSettings();
   const s = settings as MarketingSettings & { seo?: { defaultTitle?: string } };
-  const title = s.seo?.defaultTitle ?? s.businessName ?? "Nashville Scavenger Hunt";
+  const title = s.seo?.defaultTitle ?? s.businessName ?? "Music City Scavenger Hunt";
   return buildPageMetadata({
     title,
     description: settingsToDefaultDescription(s),

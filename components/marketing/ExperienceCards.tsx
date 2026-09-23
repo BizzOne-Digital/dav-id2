@@ -25,14 +25,14 @@ const EXPERIENCES = [
     icon: Sparkles,
     title: "Bachelorette Parties",
     description:
-      "Broadway-ready clues, photo stops, and lighthearted competition for the bride tribe—no spreadsheets, just Nashville.",
+      "Broadway-ready clues, photo stops, and lighthearted competition for the bride tribe—no spreadsheets, just Music City.",
     href: "/booking?hunt=bachelorette-downtown",
     image: MARKETING_IMAGES.bachelorette,
   },
   {
     icon: Cake,
     title: "Celebrations",
-    description: "Bachelor parties, milestones, and any excuse to make Nashville your playground.",
+    description: "Bachelor parties, milestones, and any excuse to make Music City your playground.",
     href: "/booking?type=celebration",
     image: MARKETING_IMAGES.prizes,
   },
@@ -59,7 +59,7 @@ export function ExperienceCards() {
         <SectionHeading
           eyebrow="Experiences"
           title="Built for your kind of crew"
-          subtitle="Every hunt uses the same Nashville soul—tuned for how your group likes to play."
+          subtitle="Every hunt uses the same Music City soul—tuned for how your group likes to play."
         />
 
         <div className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">

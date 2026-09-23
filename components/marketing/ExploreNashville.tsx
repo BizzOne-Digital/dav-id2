@@ -32,7 +32,7 @@ const NEIGHBORHOODS = [
     image: MARKETING_IMAGES.skylineRiver,
   },
   {
-    name: "East Nashville",
+    name: "East Side",
     tagline: "Creative crossroads",
     detail: "Eclectic vibes and local favorites just across the river.",
     image: MARKETING_IMAGES.porch,
@@ -56,7 +56,7 @@ export function ExploreNashville() {
     <section id="explore" className="border-y border-cream/10 bg-charcoal section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
-          eyebrow="Explore Nashville"
+          eyebrow="Explore Music City"
           title="Neighborhood signposts"
           subtitle="Promotional examples only—your assigned route appears after booking and game activation."
         />

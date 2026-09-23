@@ -89,7 +89,7 @@ export default function SignupPage() {
             onChange={(e) => setMarketing(e.target.checked)}
             className="rounded border-cream/30"
           />
-          Send me hunt tips and Nashville deals
+          Send me hunt tips and Music City deals
         </label>
         {error && <p className="text-sm text-orange">{error}</p>}
         <Button type="submit" className="w-full" disabled={loading}>

@@ -27,7 +27,7 @@ const DEFAULT_FAQ_ITEMS: MarketingFaqItem[] = [
   {
     question: "Is this weather-dependent?",
     answer:
-      "Hunts run rain or shine unless conditions are unsafe. We'll help reschedule if Nashville throws a serious storm your way.",
+      "Hunts run rain or shine unless conditions are unsafe. We'll help reschedule if Music City throws a serious storm your way.",
   },
   {
     question: "Can we customize for corporate events?",

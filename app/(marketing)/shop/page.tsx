@@ -14,7 +14,7 @@ import { resolvePublicImageUrl } from "@/lib/uploads/constants";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Shop",
-  description: "Gift cards, vouchers, and hunt add-ons for Nashville Scavenger Hunt.",
+  description: "Gift cards, vouchers, and hunt add-ons for Music City Scavenger Hunt.",
   path: "/shop",
 });
 

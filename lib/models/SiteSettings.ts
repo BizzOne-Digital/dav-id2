@@ -3,7 +3,7 @@ import { Schema, model, models, type Model, type InferSchemaType } from "mongoos
 const SiteSettingsSchema = new Schema(
   {
     key: { type: String, required: true, unique: true, default: "default" },
-    businessName: { type: String, default: "Nashville Scavenger Hunt" },
+    businessName: { type: String, default: "Music City Scavenger Hunt" },
     tagline: { type: String, default: "Explore. Discover. Compete. Create Memories." },
     phone: { type: String, default: "615-571-9900" },
     email: { type: String, default: "howigetemail@gmail.com" },

@@ -69,7 +69,7 @@ export default async function BookingSuccessPage({
             You&apos;re booked!
           </h1>
           <p className="mt-3 text-cream/75">
-            Your Nashville adventure is confirmed. Save your team details below
+            Your Music City adventure is confirmed. Save your team details below
             {teams.length > 1 ? "—each squad has its own join code." : "."}
           </p>
           {playDeadlineLabel && (

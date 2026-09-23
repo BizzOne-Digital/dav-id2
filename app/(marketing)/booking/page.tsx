@@ -10,7 +10,7 @@ import { PAGE_HERO_IMAGES } from "@/lib/site/marketingImages";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Book Your Hunt",
-  description: "Reserve your Nashville scavenger hunt in minutes—pick a hunt, team size, and date.",
+  description: "Reserve your Music City scavenger hunt in minutes—pick a hunt, team size, and date.",
   path: "/booking",
 });
 

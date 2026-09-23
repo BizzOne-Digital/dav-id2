@@ -53,11 +53,11 @@ export function BrandLogo({
         variant === "hero" && "isolate",
         className
       )}
-      aria-label="Nashville Scavenger Hunt — Home"
+      aria-label="Music City Scavenger Hunt — Home"
     >
       <Image
         src={src}
-        alt="Nashville Scavenger Hunt"
+        alt="Music City Scavenger Hunt"
         fill
         priority={variant === "header" || variant === "hero" || variant === "spotlight"}
         className={cn(

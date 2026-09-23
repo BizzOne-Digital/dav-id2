@@ -9,7 +9,7 @@ export function NashvilleGalleryStrip() {
   const items = [...GALLERY_STRIP_IMAGES, ...GALLERY_STRIP_IMAGES];
 
   return (
-    <section className="overflow-hidden border-y border-cream/10 bg-charcoal py-4 sm:py-5" aria-label="Nashville hunt gallery">
+    <section className="overflow-hidden border-y border-cream/10 bg-charcoal py-4 sm:py-5" aria-label="Music City hunt gallery">
       <motion.div
         className="flex w-max gap-4 px-4"
         animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}

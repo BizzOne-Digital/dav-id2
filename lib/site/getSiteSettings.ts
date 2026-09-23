@@ -24,7 +24,7 @@ export async function getSiteSettings() {
   } catch {
     return {
       settings: {
-        businessName: "Nashville Scavenger Hunt",
+        businessName: "Music City Scavenger Hunt",
         tagline: "Explore. Discover. Compete. Create Memories.",
         phone: "615-571-9900",
         email: "howigetemail@gmail.com",
@@ -36,7 +36,7 @@ export async function getSiteSettings() {
         hero: {
           headline: "Explore. Discover. Compete. Create Memories.",
           subheadline:
-            "Turn downtown Nashville into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.",
+            "Turn downtown Music City into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.",
           ctaPrimary: "Book Your Hunt",
           ctaSecondary: "Preview a Challenge",
         },

@@ -56,7 +56,7 @@ export const CATALOG_HUNTS: CatalogHunt[] = [
     title: "Bachelorette Downtown Bash",
     slug: "bachelorette-downtown",
     shortDescription:
-      "Broadway honky-tonks, bride-squad photo challenges, and friendly competition—downtown Nashville’s headline party hunt.",
+      "Broadway honky-tonks, bride-squad photo challenges, and friendly competition—downtown Music City’s headline party hunt.",
     featured: true,
     difficulty: "moderate",
     groupTypes: ["bachelorette", "friends"],

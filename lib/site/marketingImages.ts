@@ -3,7 +3,7 @@
 export const MARKETING_IMAGES = {
   hero: {
     src: "/images/hero-nashville.jpg",
-    alt: "Nashville skyline at sunset with scavenger hunt route through downtown",
+    alt: "Music City skyline at sunset with scavenger hunt route through downtown",
   },
   ryman: {
     src: "/images/ryman-guitar-case.jpg",
@@ -15,48 +15,48 @@ export const MARKETING_IMAGES = {
   },
   skylineRiver: {
     src: "/images/skyline-river-sunset.jpg",
-    alt: "Nashville skyline and pedestrian bridge over the Cumberland River at sunset",
+    alt: "Music City skyline and pedestrian bridge over the Cumberland River at sunset",
   },
   mapPin: {
     src: "/images/map-pin-downtown.jpg",
-    alt: "Giant map pin on a Nashville street at golden hour",
+    alt: "Giant map pin on a Music City street at golden hour",
   },
   porch: {
     src: "/images/porch-adventure.jpg",
-    alt: "Map and compass on a porch overlooking the Nashville skyline",
+    alt: "Map and compass on a porch overlooking the Music City skyline",
   },
   hotChicken: {
     src: "/images/hot-chicken-hunt.jpg",
-    alt: "Nashville hot chicken and scavenger hunt envelope with city views",
+    alt: "Music City hot chicken and scavenger hunt envelope with city views",
   },
   qrScan: {
     src: "/images/qr-scan-challenge.jpg",
-    alt: "Player scanning a partner QR code on a brick wall in Nashville",
+    alt: "Player scanning a partner QR code on a brick wall in Music City",
   },
   flatlay: {
     src: "/images/flatlay-game-board.jpg",
-    alt: "Scavenger hunt map, compass, and phone with Nashville route",
+    alt: "Scavenger hunt map, compass, and phone with Music City route",
   },
   prizes: {
     src: "/images/prizes-trophy.jpg",
-    alt: "Trophy and prizes with Nashville skyline at sunset",
+    alt: "Trophy and prizes with Music City skyline at sunset",
   },
   bachelorette: {
     src: "/images/bachelorette-broadway-party.jpg",
-    alt: "Bachelorette group celebrating on Broadway in Nashville at night",
+    alt: "Bachelorette group celebrating on Broadway in Music City at night",
   },
   certificate: {
     src: "/images/certificate-celebration.jpg",
-    alt: "Completion certificate and polaroids with Nashville skyline at night",
+    alt: "Completion certificate and polaroids with Music City skyline at night",
   },
   promoFlyer: {
     src: "/images/nashville-promo-flyer.png",
-    alt: "Nashville Scavenger Hunt promo — Music City challenge, $29.95 per person, book your adventure",
+    alt: "Music City Scavenger Hunt promo — Music City challenge, $29.95 per person, book your adventure",
   },
   /** High-resolution homepage poster (client artwork) */
   promoPoster: {
     src: "/images/nashville-promo-poster.jpg",
-    alt: "Nashville Scavenger Hunt — The Ultimate Music City Challenge. Explore, solve, compete, win. Book your adventure.",
+    alt: "Music City Scavenger Hunt — The Ultimate Music City Challenge. Explore, solve, compete, win. Book your adventure.",
     width: 648,
     height: 1024,
   },

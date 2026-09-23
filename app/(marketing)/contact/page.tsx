@@ -15,7 +15,7 @@ import type { MarketingSettings } from "@/components/marketing/types";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Contact",
-  description: "Questions about booking, corporate events, or custom hunts? Reach the Nashville Scavenger Hunt team.",
+  description: "Questions about booking, corporate events, or custom hunts? Reach the Music City Scavenger Hunt team.",
   path: "/contact",
 });
 
@@ -75,7 +75,7 @@ export default async function ContactPage() {
             </p>
           )}
           <p className="mt-6 text-sm text-cream/60">
-            Downtown Nashville · Hunt support available on event days.
+            Downtown Music City · Hunt support available on event days.
           </p>
         </Card>
       </div>

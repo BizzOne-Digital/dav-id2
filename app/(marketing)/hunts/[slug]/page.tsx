@@ -67,7 +67,7 @@ export default async function HuntDetailPage({ params }: PageProps) {
 
   const descriptionHtml =
     hunt?.fullDescription ??
-    `<p>${shortDescription ?? "A signature Nashville scavenger hunt experience."}</p>`;
+    `<p>${shortDescription ?? "A signature Music City scavenger hunt experience."}</p>`;
 
   const cover =
     hunt?.coverImage ||

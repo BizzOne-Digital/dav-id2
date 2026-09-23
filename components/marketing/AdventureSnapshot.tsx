@@ -36,7 +36,7 @@ const SNAPSHOTS = [
     id: "clues",
     icon: Compass,
     title: "Local Clues",
-    description: "Riddles rooted in Nashville history, music legends, and hidden downtown gems.",
+    description: "Riddles rooted in Music City history, music legends, and hidden downtown gems.",
     image: MARKETING_IMAGES.ryman,
     spotLabel: "Ryman & downtown landmarks",
   },
@@ -207,7 +207,7 @@ export function AdventureSnapshot() {
         <SectionHeading
           eyebrow="The Adventure"
           title="Your hunt at a glance"
-          subtitle="Teams, iconic stops, and live competition—built for Nashville, not a generic walking tour."
+          subtitle="Teams, iconic stops, and live competition—built for Music City, not a generic walking tour."
         />
 
         <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-10">

@@ -12,7 +12,7 @@ export const PLAY_FORMAT_OPTIONS: Array<{
   {
     value: "single_group",
     title: "Single group",
-    summary: "One team, one join code—explore Nashville together.",
+    summary: "One team, one join code—explore Music City together.",
     detail: "Best for couples, families, and friends who want one shared experience on the leaderboard.",
   },
   {
