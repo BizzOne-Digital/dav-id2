@@ -3,6 +3,7 @@ import { z } from "zod";
 import { connectDB } from "@/lib/db/connect";
 import { Booking, Hunt } from "@/lib/models";
 import { generateBookingReference } from "@/lib/utils";
+import { syncCatalogHuntsToDb } from "@/lib/hunts/syncCatalogHunts";
 
 const draftSchema = z.object({
   step: z.enum(["details", "team", "preferences", "review"]),
@@ -58,9 +59,17 @@ export async function POST(request: Request) {
     await connectDB();
     const data = parsed.data;
 
+    if (data.huntSlug) {
+      try {
+        await syncCatalogHuntsToDb();
+      } catch (syncErr) {
+        console.error("[booking] catalog sync", syncErr);
+      }
+    }
+
     let huntId = data.huntId;
     if (!huntId && data.huntSlug) {
-      const hunt = await Hunt.findOne({ slug: data.huntSlug }).lean();
+      const hunt = await Hunt.findOne({ slug: data.huntSlug, status: "published" }).lean();
       huntId = hunt?._id?.toString();
     }
     if (!huntId && !data.bookingId) {

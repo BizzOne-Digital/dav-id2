@@ -28,7 +28,11 @@ function LoginForm() {
     });
     setLoading(false);
     if (result?.error) {
-      setError("Invalid email or password");
+      setError(
+        result.error === "Configuration"
+          ? "Sign-in is not configured on the server yet. Please contact support."
+          : "Invalid email or password"
+      );
       return;
     }
     window.location.href = callbackUrl;

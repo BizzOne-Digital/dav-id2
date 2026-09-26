@@ -22,8 +22,6 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.index({ email: 1 });
-
 export type IUser = InferSchemaType<typeof UserSchema> & { _id: string };
 
 export const User: Model<IUser> = models.User || model<IUser>("User", UserSchema);

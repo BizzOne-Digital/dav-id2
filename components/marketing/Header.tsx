@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { useClientMounted } from "@/lib/hooks/useClientMounted";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, User, CalendarDays } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -70,9 +72,19 @@ function BookHuntButton({ className, onClick, compact }: { className?: string; o
 
 export function Header({ settings }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const mounted = useClientMounted();
   const pathname = usePathname();
   const { data: session } = useSession();
   const isHome = pathname === "/";
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   function isActive(link: (typeof NAV_LINKS)[number]) {
     if (link.match === "exact") return pathname === "/";
@@ -118,54 +130,68 @@ export function Header({ settings }: HeaderProps) {
         </div>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 overflow-y-auto bg-charcoal/98 backdrop-blur-lg safe-bottom lg:hidden"
-            style={{ top: "var(--site-header-height, 4.25rem)" }}
-          >
-            <motion.nav
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 12, opacity: 0 }}
-              className="flex min-h-0 flex-col px-5 py-6 sm:px-6 sm:py-8"
-              aria-label="Mobile"
-            >
-              <ul className="flex flex-col gap-4">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.04 * i }}
-                  >
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                key="mobile-nav"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[200] lg:hidden"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Site menu"
+              >
+                <button
+                  type="button"
+                  className="absolute inset-0 bg-black/55"
+                  aria-label="Close menu"
+                  onClick={() => setOpen(false)}
+                />
+                <motion.nav
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "100%" }}
+                  transition={{ type: "tween", duration: 0.22 }}
+                  className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col overflow-y-auto border-l border-cream/10 bg-charcoal/98 px-5 py-6 backdrop-blur-lg safe-bottom safe-top sm:px-6 sm:py-8"
+                  aria-label="Mobile"
+                >
+                  <ul className="flex flex-col gap-4">
+                    {NAV_LINKS.map((link, i) => (
+                      <motion.li
+                        key={link.href}
+                        initial={{ opacity: 0, x: 12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.04 * i }}
+                      >
+                        <Link
+                          href={link.href}
+                          className="font-[family-name:var(--font-bebas)] text-xl tracking-wide text-cream sm:text-2xl"
+                          onClick={() => setOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </ul>
+                  <div className="mt-8 flex flex-col gap-3">
                     <Link
-                      href={link.href}
-                      className="font-[family-name:var(--font-bebas)] text-xl tracking-wide text-cream sm:text-2xl"
+                      href={session ? "/dashboard" : "/login"}
+                      className="text-center text-cream/80"
                       onClick={() => setOpen(false)}
                     >
-                      {link.label}
+                      {session ? "Dashboard" : "Login"}
                     </Link>
-                  </motion.li>
-                ))}
-              </ul>
-              <div className="mt-8 flex flex-col gap-3">
-                <Link
-                  href={session ? "/dashboard" : "/login"}
-                  className="text-center text-cream/80"
-                  onClick={() => setOpen(false)}
-                >
-                  {session ? "Dashboard" : "Login"}
-                </Link>
-                <BookHuntButton className="w-full py-3.5" onClick={() => setOpen(false)} />
-              </div>
-            </motion.nav>
-          </motion.div>
+                    <BookHuntButton className="w-full py-3.5" onClick={() => setOpen(false)} />
+                  </div>
+                </motion.nav>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </header>
   );
 }

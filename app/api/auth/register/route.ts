@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createRegisteredUser } from "@/lib/actions/auth";
+import { missingServerEnv, registrationUnavailableMessage } from "@/lib/env/required";
+
+export const runtime = "nodejs";
 
 const bodySchema = z.object({
   name: z.string().min(2).max(120),
@@ -11,6 +14,15 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const missing = missingServerEnv(["MONGODB_URI"]);
+  if (missing.length) {
+    console.error("[auth/register] Missing env:", missing.join(", "));
+    return NextResponse.json(
+      { success: false, error: registrationUnavailableMessage(missing) },
+      { status: 503 }
+    );
+  }
+
   try {
     const json: unknown = await request.json();
     const parsed = bodySchema.safeParse(json);
@@ -27,7 +39,15 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, userId: result.userId }, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error("[auth/register]", err);
+    const message = err instanceof Error ? err.message : "Registration failed";
+    if (message.includes("MONGODB_URI")) {
+      return NextResponse.json(
+        { success: false, error: registrationUnavailableMessage(["MONGODB_URI"]) },
+        { status: 503 }
+      );
+    }
     return NextResponse.json({ success: false, error: "Registration failed" }, { status: 500 });
   }
 }

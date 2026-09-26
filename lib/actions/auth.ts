@@ -32,16 +32,23 @@ export async function createRegisteredUser(input: RegisterInput): Promise<Regist
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
-  const user = await User.create({
-    name,
-    email: email.toLowerCase(),
-    passwordHash,
-    phone,
-    role: "customer",
-    consent: { marketing: marketing ?? false },
-  });
-
-  return { success: true, userId: user._id.toString() };
+  try {
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      passwordHash,
+      phone,
+      role: "customer",
+      consent: { marketing: marketing ?? false },
+    });
+    return { success: true, userId: user._id.toString() };
+  } catch (err) {
+    const code = err && typeof err === "object" && "code" in err ? (err as { code?: number }).code : undefined;
+    if (code === 11000) {
+      return { success: false, error: "An account with this email already exists" };
+    }
+    throw err;
+  }
 }
 
 export async function registerUser(formData: FormData): Promise<RegisterResult> {
