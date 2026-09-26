@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Signpost } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { cn } from "@/lib/utils";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
 
 const NEIGHBORHOODS = [
@@ -33,7 +32,7 @@ const NEIGHBORHOODS = [
     image: MARKETING_IMAGES.skylineRiver,
   },
   {
-    name: "East Nashville",
+    name: "East Side",
     tagline: "Creative crossroads",
     detail: "Eclectic vibes and local favorites just across the river.",
     image: MARKETING_IMAGES.porch,
@@ -54,37 +53,41 @@ const NEIGHBORHOODS = [
 
 export function ExploreNashville() {
   return (
-    <section id="explore" className="bg-cream section-y">
+    <section id="explore" className="border-y border-cream/10 bg-charcoal section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
-          eyebrow="Explore Nashville"
+          eyebrow="Explore Music City"
           title="Neighborhood signposts"
           subtitle="Promotional examples only—your assigned route appears after booking and game activation."
-          className="[&_h2]:text-charcoal [&_p]:text-charcoal/70"
         />
 
-        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-          {NEIGHBORHOODS.map((n, i) => (
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+          {NEIGHBORHOODS.map((n) => (
             <motion.article
               key={n.name}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              className={cn(
-                "overflow-hidden rounded-xl border-4 border-charcoal bg-[#F6E8CB] shadow-[4px_4px_0_#101216]",
-                i === 0 && "sm:col-span-2 lg:col-span-2"
-              )}
+              whileHover={{ y: -3 }}
+              className="min-w-0 overflow-hidden rounded-xl border border-cream/15 bg-gradient-to-b from-[#161b24] to-charcoal shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] hover:border-gold/30 hover:shadow-[0_12px_44px_rgba(201,147,42,0.08)]"
             >
-              <div className={cn("relative w-full", i === 0 ? "h-52 sm:h-56" : "h-40")}>
-                <Image src={n.image.src} alt={n.image.alt} fill className="object-cover" sizes="400px" />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 to-transparent" />
-                <Signpost className="absolute right-4 top-4 size-8 text-gold drop-shadow" aria-hidden />
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src={n.image.src}
+                  alt={n.image.alt}
+                  fill
+                  className="object-cover object-center brightness-[1.08] contrast-[1.03]"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/25 to-transparent" />
+                <MapPin className="absolute right-3 top-3 size-7 text-gold drop-shadow-md" aria-hidden />
               </div>
-              <div className="p-5">
-                <p className="text-xs font-bold uppercase tracking-widest text-orange">{n.tagline}</p>
-                <h3 className="mt-1 font-[family-name:var(--font-bebas)] text-2xl tracking-wide">{n.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal/75">{n.detail}</p>
+              <div className="border-t border-cream/10 px-5 py-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-gold">{n.tagline}</p>
+                <h3 className="mt-1 font-[family-name:var(--font-bebas)] text-2xl tracking-wide text-cream">
+                  {n.name}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-cream/70">{n.detail}</p>
               </div>
             </motion.article>
           ))}

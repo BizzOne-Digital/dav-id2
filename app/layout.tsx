@@ -22,13 +22,13 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "Nashville Scavenger Hunt | Music City Adventure",
-    template: "%s | Nashville Scavenger Hunt",
+    default: "Music City Scavenger Hunt | Music City Adventure",
+    template: "%s | Music City Scavenger Hunt",
   },
   description:
-    "Turn downtown Nashville into your personal game board. Solve clues, complete challenges, compete on the leaderboard, and earn your Music City certificate.",
+    "Turn downtown Music City into your personal game board. Solve clues, complete challenges, compete on the leaderboard, and earn your Music City certificate.",
   openGraph: {
-    siteName: "Nashville Scavenger Hunt",
+    siteName: "Music City Scavenger Hunt",
     locale: "en_US",
     type: "website",
   },

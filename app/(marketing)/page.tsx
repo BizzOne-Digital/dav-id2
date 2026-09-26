@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/marketing/Hero";
+import { PromoFlyerSection } from "@/components/marketing/PromoFlyerSection";
 import { AdventureSnapshot } from "@/components/marketing/AdventureSnapshot";
 import { HowItWorksJourney } from "@/components/marketing/HowItWorksJourney";
 import { ExperienceCards } from "@/components/marketing/ExperienceCards";
@@ -12,8 +13,8 @@ import { TestimonialCarousel } from "@/components/marketing/TestimonialCarousel"
 import { FaqPreview } from "@/components/marketing/FaqPreview";
 import { ReadySetHunt } from "@/components/marketing/ReadySetHunt";
 import { NashvilleGalleryStrip } from "@/components/marketing/NashvilleGalleryStrip";
-import { PromoFlyerSection } from "@/components/marketing/PromoFlyerSection";
-import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
+import { InGameOffersSection } from "@/components/marketing/InGameOffersSection";
+import { resolveInGameOffers } from "@/lib/site/inGameOffers";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { getSiteSettings, getHomepageData } from "@/lib/site/getSiteSettings";
 import { buildPageMetadata, settingsToDefaultDescription } from "@/lib/site/buildMetadata";
@@ -28,7 +29,7 @@ import type {
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteSettings();
   const s = settings as MarketingSettings & { seo?: { defaultTitle?: string } };
-  const title = s.seo?.defaultTitle ?? s.businessName ?? "Nashville Scavenger Hunt";
+  const title = s.seo?.defaultTitle ?? s.businessName ?? "Music City Scavenger Hunt";
   return buildPageMetadata({
     title,
     description: settingsToDefaultDescription(s),
@@ -60,17 +61,16 @@ export default async function HomePage() {
     completedStops: entry.completedStops,
   }));
 
+  const inGameOffers = resolveInGameOffers(
+    (settings as { inGameOffers?: Parameters<typeof resolveInGameOffers>[0] }).inGameOffers
+  );
+
   return (
     <PageTransition>
       <Hero settings={marketingSettings} pricing={marketingPricing} />
+      <PromoFlyerSection pricePerPersonCents={marketingPricing?.pricePerPersonCents ?? marketingSettings.defaultPricePerPersonCents} />
       <NashvilleGalleryStrip />
-      <PromoFlyerSection
-        pricePerPersonCents={
-          marketingPricing?.pricePerPersonCents ??
-          marketingSettings.defaultPricePerPersonCents ??
-          DEFAULT_STANDARD_PRICE_CENTS
-        }
-      />
+      <InGameOffersSection offers={inGameOffers} />
       <AdventureSnapshot />
       <HowItWorksJourney />
       <ExperienceCards />

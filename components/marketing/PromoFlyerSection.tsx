@@ -30,7 +30,7 @@ export function PromoFlyerSection({ pricePerPersonCents = DEFAULT_STANDARD_PRICE
   return (
     <section
       id="music-city-challenge"
-      className="section-y relative overflow-hidden border-y border-gold/25 bg-gradient-to-br from-[#1a2840] via-charcoal to-[#2a1520]"
+      className="section-y relative overflow-hidden border-y border-gold/25 bg-gradient-to-br from-[#243552] via-[#1e2430] to-[#3a2230]"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-40"

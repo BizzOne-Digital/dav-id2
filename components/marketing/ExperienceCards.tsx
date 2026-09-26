@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Briefcase, Cake, Heart, GraduationCap, Users } from "lucide-react";
+import { Briefcase, Cake, Heart, GraduationCap, Sparkles, Users } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -22,9 +22,17 @@ const EXPERIENCES = [
     image: MARKETING_IMAGES.flatlay,
   },
   {
+    icon: Sparkles,
+    title: "Bachelorette Parties",
+    description:
+      "Broadway-ready clues, photo stops, and lighthearted competition for the bride tribe—no spreadsheets, just Music City.",
+    href: "/booking?hunt=bachelorette-downtown",
+    image: MARKETING_IMAGES.bachelorette,
+  },
+  {
     icon: Cake,
     title: "Celebrations",
-    description: "Bachelorette parties, milestones, and any excuse to make Nashville your playground.",
+    description: "Bachelor parties, milestones, and any excuse to make Music City your playground.",
     href: "/booking?type=celebration",
     image: MARKETING_IMAGES.prizes,
   },
@@ -51,7 +59,7 @@ export function ExperienceCards() {
         <SectionHeading
           eyebrow="Experiences"
           title="Built for your kind of crew"
-          subtitle="Every hunt uses the same Nashville soul—tuned for how your group likes to play."
+          subtitle="Every hunt uses the same Music City soul—tuned for how your group likes to play."
         />
 
         <div className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -65,10 +73,10 @@ export function ExperienceCards() {
                       src={exp.image.src}
                       alt={exp.image.alt}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover brightness-[1.1] contrast-[1.03] saturate-[1.05] transition-transform duration-500 group-hover:scale-105"
                       sizes="400px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/10 to-transparent" />
                     <Icon className="absolute left-4 top-4 size-9 text-gold drop-shadow" aria-hidden />
                   </div>
                   <div className="p-6">

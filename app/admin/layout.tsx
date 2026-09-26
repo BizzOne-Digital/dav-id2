@@ -11,6 +11,8 @@ import {
   Radio,
   FileText,
   Image,
+  Gift,
+  Megaphone,
 } from "lucide-react";
 import { AdminToastProvider } from "@/components/admin/AdminToastProvider";
 
@@ -23,6 +25,8 @@ const nav = [
   { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/admin/live", label: "Live", icon: Radio },
   { href: "/admin/content", label: "Content", icon: FileText },
+  { href: "/admin/offers", label: "In-game offers", icon: Gift },
+  { href: "/admin/marketing", label: "Marketing", icon: Megaphone },
   { href: "/admin/media", label: "Media", icon: Image },
 ];
 

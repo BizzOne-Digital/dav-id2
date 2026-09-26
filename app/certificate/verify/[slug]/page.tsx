@@ -23,7 +23,7 @@ export default async function VerifyCertificatePage({ params }: PageProps) {
           <Badge className="mb-2">Verified authentic</Badge>
           <CardTitle>{cert.teamName}</CardTitle>
           <CardDescription>
-            Completed the Nashville Scavenger Hunt · {cert.rankTitle}
+            Completed the Music City Scavenger Hunt · {cert.rankTitle}
           </CardDescription>
         </CardHeader>
         <dl className="space-y-2 text-sm text-cream/80">

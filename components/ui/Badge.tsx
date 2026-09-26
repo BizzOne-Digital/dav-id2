@@ -1,8 +1,10 @@
 import { cn } from "@/lib/utils";
 
 const variants = {
-  default: "bg-gold/20 text-gold border-gold/30",
-  orange: "bg-orange/20 text-orange border-orange/30",
+  default: "bg-gold/12 text-orange border-orange/25",
+  subtle:
+    "bg-charcoal/[0.06] text-charcoal/80 border-charcoal/12 dark:bg-charcoal/20 dark:text-cream/85 dark:border-cream/15",
+  orange: "bg-orange/15 text-orange border-orange/25",
   outline: "bg-transparent text-cream/80 border-cream/30",
 } as const;
 

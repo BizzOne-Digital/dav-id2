@@ -9,50 +9,80 @@ export const SITE_LOGO_PATH = "/images/nashville-logo.jpg";
 type BrandLogoProps = {
   logoUrl?: string | null;
   className?: string;
-  /** header = nav bar; footer = larger brand block */
-  variant?: "header" | "footer";
-  /** Bigger + brighter treatment on the home page header */
-  homeHero?: boolean;
+  /** header = nav bar; footer = larger; hero = homepage left (~600×400); spotlight = centered hunts CTA */
+  variant?: "header" | "footer" | "hero" | "spotlight";
+  /** Center artwork inside the logo frame (e.g. spotlight column) */
+  imageAlign?: "left" | "center";
 };
 
 const sizeByVariant = {
   header:
-    "relative block h-[4.75rem] w-[min(62vw,12.5rem)] sm:h-[5.5rem] sm:w-[15rem] md:h-24 md:w-[18rem] lg:h-28 lg:w-[21rem]",
-  headerHome:
-    "relative block h-[5.75rem] w-[min(72vw,15rem)] sm:h-[7rem] sm:w-[18rem] md:h-32 md:w-[22rem] lg:h-36 lg:w-[26rem] xl:h-[9.5rem] xl:w-[28rem]",
+    "relative block h-[4.25rem] w-[min(58vw,13rem)] sm:h-20 sm:w-[15rem] md:h-[5.25rem] md:w-[18rem] lg:h-24 lg:w-[21rem] xl:h-[6.25rem] xl:w-[23rem]",
   footer:
-    "relative block h-32 w-[min(100%,20rem)] sm:h-40 sm:w-[24rem] md:h-44 md:w-[28rem] lg:h-48 lg:w-[30rem]",
+    "relative block h-36 w-[min(100%,22rem)] sm:h-44 sm:w-[26rem] md:h-48 md:w-[30rem] lg:h-52 lg:w-[34rem] xl:h-56 xl:w-[36rem]",
+  hero:
+    "relative mr-auto block h-[220px] w-[min(88vw,480px)] sm:h-[260px] sm:w-[min(86vw,520px)] md:h-[320px] md:w-[540px] lg:h-[360px] lg:w-[540px] xl:h-[380px] xl:w-[560px]",
+  spotlight:
+    "relative mx-auto block h-24 w-full max-h-[8.25rem] sm:h-[7.5rem] md:h-[8.25rem]",
 } as const;
 
-export function BrandLogo({ logoUrl, className, variant = "header", homeHero }: BrandLogoProps) {
+export function BrandLogo({
+  logoUrl,
+  className,
+  variant = "header",
+  imageAlign = "left",
+}: BrandLogoProps) {
   const raw = logoUrl?.trim() ? logoUrl : SITE_LOGO_PATH;
   const src = raw.startsWith("/images/") || raw.startsWith("/api/uploads/") ? raw : resolvePublicImageUrl(raw);
   const unoptimized = src.startsWith("/api/uploads/");
-  const sizeKey = variant === "header" && homeHero ? "headerHome" : variant;
+  const sizeKey =
+    variant === "footer"
+      ? "footer"
+      : variant === "hero"
+        ? "hero"
+        : variant === "spotlight"
+          ? "spotlight"
+          : "header";
 
   return (
     <Link
       href="/"
-      className={cn(sizeByVariant[sizeKey], "shrink-0 transition-opacity hover:opacity-95", className)}
-      aria-label="Nashville Scavenger Hunt — Home"
+      className={cn(
+        sizeByVariant[sizeKey],
+        "shrink-0 bg-transparent transition-opacity hover:opacity-95",
+        variant === "hero" && "isolate",
+        className
+      )}
+      aria-label="Music City Scavenger Hunt — Home"
     >
       <Image
         src={src}
-        alt="Nashville Scavenger Hunt"
+        alt="Music City Scavenger Hunt"
         fill
-        priority={variant === "header"}
+        priority={variant === "header" || variant === "hero" || variant === "spotlight"}
         className={cn(
-          "object-contain object-left",
-          homeHero || variant === "footer"
-            ? "brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
-            : "brightness-[1.08] saturate-[1.1] drop-shadow-[0_4px_20px_rgba(242,182,50,0.25)]"
+          "object-contain",
+          variant === "spotlight"
+            ? "object-center brightness-[1.12] contrast-[1.06] saturate-[1.18] drop-shadow-[0_4px_28px_rgba(242,182,50,0.38)] [object-position:50%_48%]"
+            : imageAlign === "center"
+              ? "object-center"
+              : "object-left",
+          variant === "hero"
+            ? "mix-blend-lighten brightness-[1.15] contrast-[1.08] saturate-[1.2] drop-shadow-[0_0_28px_rgba(201,147,42,0.35)]"
+            : variant === "footer"
+              ? "brightness-[1.14] contrast-[1.06] saturate-[1.2] drop-shadow-[0_0_32px_rgba(242,182,50,0.42)]"
+              : variant === "spotlight"
+                ? ""
+                : "brightness-[1.1] contrast-[1.05] saturate-[1.15] drop-shadow-[0_4px_24px_rgba(242,182,50,0.32)]"
         )}
         sizes={
-          homeHero
-            ? "(max-width:768px) 240px, 448px"
+          variant === "hero"
+            ? "(max-width:768px) 520px, 600px"
             : variant === "footer"
-              ? "(max-width:768px) 320px, 480px"
-              : "(max-width:768px) 200px, 336px"
+              ? "(max-width:768px) 352px, 576px"
+              : variant === "spotlight"
+                ? "(max-width:768px) 320px, 352px"
+                : "(max-width:768px) 240px, 368px"
         }
         unoptimized={unoptimized}
       />

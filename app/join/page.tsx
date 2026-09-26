@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { HUNT_PLAY_WINDOW_HOURS } from "@/lib/game/playWindow";
 
 export default function JoinPage() {
   const router = useRouter();
@@ -46,7 +47,10 @@ export default function JoinPage() {
       <Card>
         <CardHeader>
           <CardTitle>Join your team</CardTitle>
-          <CardDescription>Enter the 6-digit code from your captain.</CardDescription>
+          <CardDescription>
+            Enter the 6-digit code from your captain. Codes work for {HUNT_PLAY_WINDOW_HOURS} hours after
+            purchase—enough for a typical weekend trip.
+          </CardDescription>
         </CardHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <Input

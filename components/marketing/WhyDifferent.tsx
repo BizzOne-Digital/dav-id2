@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
 
 const DIFFERENTIATORS = [
-  "Designed by Nashville locals—not a generic franchise template.",
+  "Designed by Music City locals—not a generic franchise template.",
   "Competitive scoring and live leaderboards keep energy high.",
   "Mix of riddles, trivia, and creative photo challenges at every stop.",
   "Flexible pacing: race hard or stroll and savor the city.",

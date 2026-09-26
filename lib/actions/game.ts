@@ -18,11 +18,30 @@ import {
 } from "@/lib/models";
 import { generateRoute } from "@/lib/routing/route-generator";
 import { isAnswerCorrect } from "@/lib/game/answer";
+import {
+  isPlayWindowExpired,
+  PLAY_WINDOW_EXPIRED_MESSAGE,
+  resolvePlayExpiresAt,
+} from "@/lib/game/playWindow";
 import { calculatePoints, getNashvilleRank } from "@/lib/scoring/ranks";
 import { signCompletion, verifyCompletionSignature } from "@/lib/verification/completion";
 import { generateCompletionNumber, slugify } from "@/lib/utils";
 import crypto from "crypto";
 import { z } from "zod";
+
+async function loadPlayWindowExpiry(
+  session: { bookingId?: unknown; playExpiresAt?: Date | null },
+  bookingId?: unknown
+) {
+  const id = bookingId ?? session.bookingId;
+  const booking =
+    id && mongoose.Types.ObjectId.isValid(String(id))
+      ? await Booking.findById(id)
+          .select("playExpiresAt updatedAt createdAt status")
+          .lean()
+      : null;
+  return resolvePlayExpiresAt(session, booking);
+}
 
 export async function buildRouteManifestForSession(sessionId: string) {
   await connectDB();
@@ -32,6 +51,11 @@ export async function buildRouteManifestForSession(sessionId: string) {
 
   const session = await GameSession.findById(sessionId);
   if (!session) throw new Error("Session not found");
+
+  const playExpiresAt = await loadPlayWindowExpiry(session);
+  if (isPlayWindowExpired(playExpiresAt)) {
+    throw new Error(PLAY_WINDOW_EXPIRED_MESSAGE);
+  }
 
   const existing = await RouteManifest.findOne({ sessionId: session._id });
   if (existing) return existing;
@@ -135,6 +159,11 @@ export async function verifyAndSubmitChallenge(
   const session = await GameSession.findById(sessionId);
   if (!session || session.status !== "active") {
     return { success: false, error: "Session not active" };
+  }
+
+  const playExpiresAt = await loadPlayWindowExpiry(session);
+  if (isPlayWindowExpired(playExpiresAt)) {
+    return { success: false, error: PLAY_WINDOW_EXPIRED_MESSAGE };
   }
 
   const manifest = await RouteManifest.findOne({ sessionId: session._id });
@@ -289,6 +318,7 @@ export type FinishGameResult =
   | {
       success: true;
       certificateId: string;
+      certificateIds: string[];
       verificationSlug: string;
       rankTitle: string;
       finalScore: number;
@@ -307,14 +337,16 @@ export async function finishGameSession(
   const session = await GameSession.findById(parsed.data.sessionId);
   if (!session) return { success: false, error: "Session not found" };
   if (session.status === "finished") {
-    const existing = await Certificate.findOne({ sessionId: session._id }).lean();
-    if (existing) {
+    const existing = await Certificate.find({ sessionId: session._id }).sort({ ticketIndex: 1 }).lean();
+    if (existing.length) {
+      const first = existing[0];
       return {
         success: true,
-        certificateId: existing.certificateId,
-        verificationSlug: existing.verificationSlug ?? "",
-        rankTitle: existing.rankTitle ?? getNashvilleRank(session.score ?? 0),
-        finalScore: existing.finalScore ?? session.score ?? 0,
+        certificateId: first.certificateId,
+        certificateIds: existing.map((c) => c.certificateId),
+        verificationSlug: first.verificationSlug ?? "",
+        rankTitle: first.rankTitle ?? getNashvilleRank(session.score ?? 0),
+        finalScore: first.finalScore ?? session.score ?? 0,
       };
     }
   }
@@ -352,28 +384,61 @@ export async function finishGameSession(
   }
 
   const team = await Team.findById(session.teamId).lean();
+  const booking = session.bookingId ? await Booking.findById(session.bookingId).lean() : null;
   const rankTitle = getNashvilleRank(session.score ?? 0);
   session.status = "finished";
   session.finishedAt = new Date();
   session.finalRankTitle = rankTitle;
   await session.save();
 
-  const certificateId = `NSH-CERT-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
-  const verificationSlug = `${slugify(team?.name ?? "team")}-${crypto.randomBytes(3).toString("hex")}`;
+  const members = await TeamMember.find({ teamId: session.teamId }).sort({ createdAt: 1 }).lean();
+  const paidSeats = Math.max(1, booking?.playerCount ?? team?.playerCount ?? members.length ?? 1);
+  const roster = (booking?.playerRoster ?? []).filter((n): n is string => !!n?.trim());
 
-  await Certificate.findOneAndUpdate(
-    { sessionId: session._id },
-    {
+  const recipients: { name: string; teamMemberId?: string }[] = [];
+  for (let i = 0; i < paidSeats; i++) {
+    const member = members[i];
+    const name =
+      member?.displayName?.trim() ||
+      roster[i]?.trim() ||
+      (i === 0 ? booking?.captainName?.trim() : "") ||
+      `Player ${i + 1}`;
+    recipients.push({
+      name,
+      teamMemberId: member?._id?.toString(),
+    });
+  }
+
+  await Certificate.deleteMany({ sessionId: session._id });
+
+  const certificateIds: string[] = [];
+  const baseSlug = slugify(team?.name ?? "team");
+
+  for (let i = 0; i < recipients.length; i++) {
+    const ticketNum = i + 1;
+    const certificateId = `NSH-CERT-${crypto.randomBytes(3).toString("hex").toUpperCase()}-${ticketNum}`;
+    const verificationSlug = `${baseSlug}-t${ticketNum}-${crypto.randomBytes(2).toString("hex")}`;
+    certificateIds.push(certificateId);
+    await Certificate.create({
       sessionId: session._id,
       teamId: session.teamId,
       certificateId,
       teamName: team?.name,
+      playerDisplayName: recipients[i].name,
+      teamMemberId: recipients[i].teamMemberId,
+      ticketIndex: ticketNum,
       finalScore: session.score,
       rankTitle,
       verificationSlug,
-    },
-    { upsert: true, new: true }
-  );
+    });
+  }
+
+  const primaryId = certificateIds[0] ?? "";
+  let verificationSlug = "";
+  if (primaryId) {
+    const first = await Certificate.findOne({ certificateId: primaryId }).lean();
+    verificationSlug = first?.verificationSlug ?? "";
+  }
 
   await LeaderboardEntry.findOneAndUpdate(
     { sessionId: session._id },
@@ -393,7 +458,8 @@ export async function finishGameSession(
 
   return {
     success: true,
-    certificateId,
+    certificateId: primaryId,
+    certificateIds,
     verificationSlug,
     rankTitle,
     finalScore: session.score ?? 0,
@@ -420,6 +486,20 @@ export async function joinTeamByCode(input: z.infer<typeof joinSchema>) {
   const team = await Team.findOne({ joinCode: parsed.data.joinCode });
   if (!team) {
     return { success: false as const, error: "Invalid join code" };
+  }
+
+  const playExpiresAt = await loadPlayWindowExpiry({}, team.bookingId);
+  if (isPlayWindowExpired(playExpiresAt)) {
+    return { success: false as const, error: PLAY_WINDOW_EXPIRED_MESSAGE };
+  }
+
+  const memberCount = await TeamMember.countDocuments({ teamId: team._id });
+  const seatLimit = team.playerCount ?? 4;
+  if (memberCount >= seatLimit) {
+    return {
+      success: false as const,
+      error: `This team is full (${seatLimit} tickets). Ask the captain to confirm player count or book additional tickets.`,
+    };
   }
 
   const memberFilter = parsed.data.userId

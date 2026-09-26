@@ -10,7 +10,7 @@ import { PAGE_HERO_IMAGES } from "@/lib/site/marketingImages";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Book Your Hunt",
-  description: "Reserve your Nashville scavenger hunt in minutes—pick a hunt, team size, and date.",
+  description: "Reserve your Music City scavenger hunt in minutes—pick a hunt, team size, and date.",
   path: "/booking",
 });
 
@@ -40,7 +40,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
       _id: String(h._id),
       slug: h.slug,
       title: h.title,
-      minimumPlayers: h.minimumPlayers ?? 4,
+      minimumPlayers: h.minimumPlayers ?? 1,
       pricePerPersonCents: h.pricePerPersonCents ?? defaultPrice,
       pricingPlanId: h.pricingPlanId ? String(h.pricingPlanId) : undefined,
     }));
@@ -61,7 +61,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
       <PageHero
         eyebrow="Reservations"
         title="Book your hunt"
-        subtitle="Four quick steps—then checkout securely online."
+        subtitle="Four steps—pick your group size, name your team (or corporate squads), then checkout securely."
         backgroundImage={PAGE_HERO_IMAGES.booking}
       />
       <div className="site-x page-y">

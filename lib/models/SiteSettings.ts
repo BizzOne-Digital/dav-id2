@@ -3,7 +3,7 @@ import { Schema, model, models, type Model, type InferSchemaType } from "mongoos
 const SiteSettingsSchema = new Schema(
   {
     key: { type: String, required: true, unique: true, default: "default" },
-    businessName: { type: String, default: "Nashville Scavenger Hunt" },
+    businessName: { type: String, default: "Music City Scavenger Hunt" },
     tagline: { type: String, default: "Explore. Discover. Compete. Create Memories." },
     phone: { type: String, default: "615-571-9900" },
     email: { type: String, default: "howigetemail@gmail.com" },
@@ -24,6 +24,7 @@ const SiteSettingsSchema = new Schema(
       instagram: String,
       tiktok: String,
       youtube: String,
+      twitter: String,
     },
     hero: {
       headline: String,
@@ -36,7 +37,7 @@ const SiteSettingsSchema = new Schema(
     defaultPricePerPersonCents: { type: Number, default: 2995 },
     volumePricePerPersonCents: { type: Number, default: 2500 },
     volumeMinPlayers: { type: Number, default: 10 },
-    minimumPlayers: { type: Number, default: 4 },
+    minimumPlayers: { type: Number, default: 1 },
     typicalDurationHours: { type: String, default: "2–3" },
     seo: {
       defaultTitle: String,
@@ -46,6 +47,31 @@ const SiteSettingsSchema = new Schema(
     stats: [{ label: String, value: String, isSample: { type: Boolean, default: true } }],
     newsletterHeading: String,
     footerText: String,
+    inGameOffers: {
+      heading: String,
+      subtitle: String,
+      discounts: {
+        title: String,
+        description: String,
+        note: String,
+        published: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: true },
+      },
+      coupons: {
+        title: String,
+        description: String,
+        note: String,
+        published: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: true },
+      },
+      prizes: {
+        title: String,
+        description: String,
+        note: String,
+        published: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: true },
+      },
+    },
   },
   { timestamps: true }
 );

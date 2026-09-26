@@ -14,14 +14,14 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     title: "Safety",
     seoTitle: "Safety Guidelines",
     seoDescription:
-      "How we keep Nashville scavenger hunts fun and safe for every group—weather, walking, and supervision tips.",
+      "How we keep Music City scavenger hunts fun and safe for every group—weather, walking, and supervision tips.",
     heroTitle: "Play smart in Music City",
     heroSubtitle: "Our hunts are designed for walkable downtown routes with clear safety expectations.",
     content: `
       <h2>Before you start</h2>
       <p>Wear comfortable shoes, bring water, and keep phones charged. Groups are responsible for supervising minors at all times.</p>
       <h2>Traffic &amp; crossings</h2>
-      <p>Follow Nashville pedestrian signals. Do not run across Broadway or busy intersections while solving clues.</p>
+      <p>Follow Music City pedestrian signals. Do not run across Broadway or busy intersections while solving clues.</p>
       <h2>Weather</h2>
       <p>Hunts continue in light rain. We pause or reschedule for lightning, ice, or unsafe conditions.</p>
       <h2>Alcohol-free options</h2>
@@ -34,7 +34,7 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     slug: "terms",
     title: "Terms of Service",
     seoTitle: "Terms of Service",
-    seoDescription: "Terms governing bookings, participation, and use of Nashville Scavenger Hunt services.",
+    seoDescription: "Terms governing bookings, participation, and use of Music City Scavenger Hunt services.",
     heroTitle: "Terms of Service",
     heroSubtitle: "Please read before booking or joining a hunt.",
     content: `
@@ -54,7 +54,7 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     slug: "privacy",
     title: "Privacy Policy",
     seoTitle: "Privacy Policy",
-    seoDescription: "How Nashville Scavenger Hunt collects, uses, and protects your personal information.",
+    seoDescription: "How Music City Scavenger Hunt collects, uses, and protects your personal information.",
     heroTitle: "Privacy Policy",
     heroSubtitle: "We collect only what we need to run great hunts.",
     content: `
@@ -74,7 +74,7 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     slug: "refund-policy",
     title: "Refund Policy",
     seoTitle: "Refund & Cancellation Policy",
-    seoDescription: "Cancellation windows, rescheduling, and refund eligibility for Nashville scavenger hunt bookings.",
+    seoDescription: "Cancellation windows, rescheduling, and refund eligibility for Music City scavenger hunt bookings.",
     heroTitle: "Refunds & cancellations",
     heroSubtitle: "Flexible rescheduling when plans change.",
     content: `
@@ -93,12 +93,12 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
   about: {
     slug: "about",
     title: "About Us",
-    seoTitle: "About Nashville Scavenger Hunt",
-    seoDescription: "Locally written clues, fair routes, and unforgettable team adventures in downtown Nashville.",
+    seoTitle: "About Music City Scavenger Hunt",
+    seoDescription: "Locally written clues, fair routes, and unforgettable team adventures in downtown Music City.",
     heroTitle: "We turn Music City into your game board",
     heroSubtitle: "Designed by Nashvillians who love stories, street art, and a little friendly competition.",
     content: `
-      <p>Nashville Scavenger Hunt creates mobile adventures for families, friends, bachelorette parties, and corporate teams.</p>
+      <p>Music City Scavenger Hunt creates mobile adventures for families, friends, bachelorette parties, and corporate teams.</p>
       <p>Every route is walkable, phone-friendly, and packed with Music City flavor—from honky-tonk history to hidden murals.</p>
       <p>Book online, split into teams, and chase the leaderboard. When you finish, celebrate with a completion certificate worthy of Broadway.</p>
     `,
@@ -114,7 +114,7 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     content: `
       <p>Choose your hunt and date, gather your crew, and we send join codes before start time.</p>
       <p>On hunt day, open the link in any mobile browser, follow GPS-guided stops, and submit answers and photo challenges.</p>
-      <p>Scores update live. Finish all stops, claim your rank, and keep exploring Nashville afterward.</p>
+      <p>Scores update live. Finish all stops, claim your rank, and keep exploring Music City afterward.</p>
     `,
   },
 };

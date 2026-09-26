@@ -22,6 +22,11 @@ type SettingsForm = {
   heroCtaPrimary: string;
   heroCtaSecondary: string;
   heroBackgroundImage: string;
+  socialFacebook: string;
+  socialInstagram: string;
+  socialTiktok: string;
+  socialYoutube: string;
+  socialTwitter: string;
 };
 
 const emptyForm: SettingsForm = {
@@ -29,7 +34,7 @@ const emptyForm: SettingsForm = {
   tagline: "",
   phone: "",
   email: "",
-  minimumPlayers: 4,
+  minimumPlayers: 1,
   typicalDurationHours: "2–3",
   logoUrl: "",
   footerText: "",
@@ -39,6 +44,11 @@ const emptyForm: SettingsForm = {
   heroCtaPrimary: "Book Your Hunt",
   heroCtaSecondary: "Preview a Challenge",
   heroBackgroundImage: "",
+  socialFacebook: "",
+  socialInstagram: "",
+  socialTiktok: "",
+  socialYoutube: "",
+  socialTwitter: "",
 };
 
 export default function AdminSettingsPage() {
@@ -56,7 +66,7 @@ export default function AdminSettingsPage() {
             tagline: s.tagline ?? "",
             phone: s.phone ?? "",
             email: s.email ?? "",
-            minimumPlayers: s.minimumPlayers ?? 4,
+            minimumPlayers: s.minimumPlayers ?? 1,
             typicalDurationHours: s.typicalDurationHours ?? "2–3",
             logoUrl: s.logoUrl ?? "",
             footerText: s.footerText ?? "",
@@ -66,6 +76,11 @@ export default function AdminSettingsPage() {
             heroCtaPrimary: s.hero?.ctaPrimary ?? "Book Your Hunt",
             heroCtaSecondary: s.hero?.ctaSecondary ?? "Preview a Challenge",
             heroBackgroundImage: s.hero?.backgroundImage ?? "",
+            socialFacebook: s.socialLinks?.facebook ?? "",
+            socialInstagram: s.socialLinks?.instagram ?? "",
+            socialTiktok: s.socialLinks?.tiktok ?? "",
+            socialYoutube: s.socialLinks?.youtube ?? "",
+            socialTwitter: s.socialLinks?.twitter ?? "",
           });
         }
       });
@@ -92,6 +107,13 @@ export default function AdminSettingsPage() {
           ctaPrimary: form.heroCtaPrimary,
           ctaSecondary: form.heroCtaSecondary,
           backgroundImage: form.heroBackgroundImage,
+        },
+        socialLinks: {
+          facebook: form.socialFacebook,
+          instagram: form.socialInstagram,
+          tiktok: form.socialTiktok,
+          youtube: form.socialYoutube,
+          twitter: form.socialTwitter,
         },
       }),
     });
@@ -186,6 +208,36 @@ export default function AdminSettingsPage() {
             label="Secondary CTA label"
             value={form.heroCtaSecondary}
             onChange={(e) => setForm({ ...form, heroCtaSecondary: e.target.value })}
+          />
+
+          <CardHeader className="px-0 pt-4">
+            <CardTitle className="text-lg">Social links</CardTitle>
+            <CardDescription>YouTube, Facebook, Instagram, TikTok, X — shown in the footer when filled.</CardDescription>
+          </CardHeader>
+          <Input
+            label="Facebook URL"
+            value={form.socialFacebook}
+            onChange={(e) => setForm({ ...form, socialFacebook: e.target.value })}
+          />
+          <Input
+            label="Instagram URL"
+            value={form.socialInstagram}
+            onChange={(e) => setForm({ ...form, socialInstagram: e.target.value })}
+          />
+          <Input
+            label="YouTube URL"
+            value={form.socialYoutube}
+            onChange={(e) => setForm({ ...form, socialYoutube: e.target.value })}
+          />
+          <Input
+            label="TikTok URL"
+            value={form.socialTiktok}
+            onChange={(e) => setForm({ ...form, socialTiktok: e.target.value })}
+          />
+          <Input
+            label="X (Twitter) URL"
+            value={form.socialTwitter}
+            onChange={(e) => setForm({ ...form, socialTwitter: e.target.value })}
           />
 
           <Button type="submit">Save settings</Button>

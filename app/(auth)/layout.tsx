@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         href="/"
         className="relative mb-8 font-[family-name:var(--font-bebas)] text-3xl tracking-wide text-gold"
       >
-        Nashville Scavenger Hunt
+        Music City Scavenger Hunt
       </Link>
       <div className="relative w-full max-w-md rounded-2xl border border-cream/10 bg-charcoal/80 p-1 backdrop-blur-sm">
         {children}

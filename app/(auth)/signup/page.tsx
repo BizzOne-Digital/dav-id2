@@ -56,8 +56,9 @@ export default function SignupPage() {
         <CardDescription>Book hunts, manage teams, and track certificates.</CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit} className="space-y-4">
-        <Input label="Full name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
+        <Input variant="light" label="Full name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
         <Input
+          variant="light"
           label="Email"
           type="email"
           name="email"
@@ -66,6 +67,7 @@ export default function SignupPage() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
+          variant="light"
           label="Phone (optional)"
           type="tel"
           name="phone"
@@ -73,6 +75,7 @@ export default function SignupPage() {
           onChange={(e) => setPhone(e.target.value)}
         />
         <Input
+          variant="light"
           label="Password"
           type="password"
           name="password"
@@ -88,7 +91,7 @@ export default function SignupPage() {
             onChange={(e) => setMarketing(e.target.checked)}
             className="rounded border-cream/30"
           />
-          Send me hunt tips and Nashville deals
+          Send me hunt tips and Music City deals
         </label>
         {error && <p className="text-sm text-orange">{error}</p>}
         <Button type="submit" className="w-full" disabled={loading}>

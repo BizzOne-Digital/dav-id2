@@ -5,10 +5,16 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency } from "@/lib/utils";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
+import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
 import {
-  DEFAULT_STANDARD_PRICE_CENTS,
-  VOLUME_PRICING_SUMMARY,
-} from "@/lib/pricing/resolve-price";
+  CORPORATE_PRICING_NOTE,
+  PRICING_SUBLINE,
+} from "@/lib/site/pricingCopy";
+import {
+  pricingGroupSizeSummary,
+  resolveMinPlayers,
+  standardPricingDescription,
+} from "@/lib/site/groupSizeCopy";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 
 const DEFAULT_FEATURES = [
@@ -27,7 +33,7 @@ type PricingSpotlightProps = {
 export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
   const priceCents =
     pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
-  const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
+  const minPlayers = resolveMinPlayers(pricing?.minimumPlayers, settings.minimumPlayers);
   const duration =
     pricing?.durationLabel ??
     (settings.typicalDurationHours ? `${settings.typicalDurationHours} hours` : "2–3 hours");
@@ -35,21 +41,19 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
   const features =
     pricing?.features && pricing.features.length > 0 ? pricing.features : DEFAULT_FEATURES;
   const description =
-    pricing?.description ??
-    `$29.95 per person with a ${minPlayers}-player minimum. ${VOLUME_PRICING_SUMMARY}`;
+    pricing?.description ?? standardPricingDescription(minPlayers);
 
   return (
-    <section id="pricing" className="bg-cream section-y">
+    <section id="pricing" className="border-y border-cream/10 bg-[#12161e] section-y">
       <div className="site-x mx-auto max-w-7xl">
         <SectionHeading
           eyebrow="Pricing"
           title="Simple, transparent rates"
           subtitle="What you see here comes straight from our live booking settings—no surprise fees at the door."
-          className="[&_h2]:text-charcoal [&_p]:text-charcoal/70"
         />
 
         <div className="mt-8 grid items-center gap-8 sm:mt-10 lg:grid-cols-2 lg:gap-10">
-          <div className="relative min-h-[320px] overflow-hidden rounded-2xl border-4 border-charcoal shadow-[8px_8px_0_#101216]">
+          <div className="relative min-h-[320px] overflow-hidden rounded-2xl border border-gold/25 shadow-[0_12px_48px_rgba(0,0,0,0.45)]">
             <Image
               src={MARKETING_IMAGES.hotChicken.src}
               alt={MARKETING_IMAGES.hotChicken.alt}
@@ -59,21 +63,22 @@ export function PricingSpotlight({ settings, pricing }: PricingSpotlightProps) {
             />
           </div>
 
-          <Card className="border-charcoal/15 bg-white p-8 text-charcoal shadow-xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-orange">{planName}</p>
+          <Card className="border-cream/15 bg-charcoal/90 p-8 text-cream shadow-xl">
+            <p className="text-sm font-semibold uppercase tracking-wider text-gold">{planName}</p>
             <p className="mt-4 flex items-baseline gap-1">
-              <span className="text-5xl font-bold text-charcoal">{formatCurrency(priceCents)}</span>
-              <span className="text-charcoal/60">/ person</span>
+              <span className="text-5xl font-bold text-cream">{formatCurrency(priceCents)}</span>
+              <span className="text-cream/60">/ person</span>
             </p>
-            <p className="mt-2 text-sm text-charcoal/65">
-              Minimum {minPlayers} players · {duration}
+            <p className="mt-2 text-sm text-cream/70">
+              {pricingGroupSizeSummary(minPlayers, duration)}
             </p>
-            <p className="mt-1 text-sm font-medium text-charcoal/80">{VOLUME_PRICING_SUMMARY}</p>
-            <p className="mt-4 text-sm leading-relaxed text-charcoal/70">{description}</p>
+            <p className="mt-2 text-sm leading-relaxed text-cream/65">{PRICING_SUBLINE}</p>
+            <p className="mt-3 text-xs leading-relaxed text-cream/50">{CORPORATE_PRICING_NOTE}</p>
+            <p className="mt-4 text-sm leading-relaxed text-cream/65">{description}</p>
 
             <ul className="mt-8 space-y-3">
               {features.map((feature) => (
-                <li key={feature} className="flex gap-2 text-sm">
+                <li key={feature} className="flex gap-2 text-sm text-cream/85">
                   <Check className="size-5 shrink-0 text-gold" aria-hidden />
                   {feature}
                 </li>

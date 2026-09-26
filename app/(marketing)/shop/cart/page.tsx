@@ -6,7 +6,7 @@ import { buildPageMetadata } from "@/lib/site/buildMetadata";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Cart",
-  description: "Review gift cards and shop items in your Nashville Scavenger Hunt cart.",
+  description: "Review gift cards and shop items in your Music City Scavenger Hunt cart.",
   path: "/shop/cart",
 });
 

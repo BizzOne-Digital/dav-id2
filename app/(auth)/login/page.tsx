@@ -42,6 +42,7 @@ function LoginForm() {
       </CardHeader>
       <form onSubmit={onSubmit} className="space-y-4">
         <Input
+          variant="light"
           label="Email"
           type="email"
           name="email"
@@ -51,6 +52,7 @@ function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
+          variant="light"
           label="Password"
           type="password"
           name="password"

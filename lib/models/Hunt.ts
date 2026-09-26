@@ -11,7 +11,7 @@ const HuntSchema = new Schema(
     priceType: { type: String, enum: ["per_person", "flat", "contact"], default: "per_person" },
     pricePerPersonCents: Number,
     flatPriceCents: Number,
-    minimumPlayers: { type: Number, default: 4 },
+    minimumPlayers: { type: Number, default: 1 },
     maximumPlayers: Number,
     duration: { type: String, default: "2–3 hours" },
     difficulty: { type: String, enum: ["easy", "moderate", "challenging"], default: "moderate" },

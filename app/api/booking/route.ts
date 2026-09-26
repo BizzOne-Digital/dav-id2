@@ -26,6 +26,18 @@ const draftSchema = z.object({
   captainEmail: z.string().email().optional(),
   captainPhone: z.string().max(30).optional(),
   teamColor: z.enum(["BLUE", "GOLD", "GREEN", "PINK", "RED", "CYAN"]).optional(),
+  playerRoster: z.array(z.string().max(80)).max(100).optional(),
+  squads: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(120),
+        color: z.enum(["BLUE", "GOLD", "GREEN", "PINK", "RED", "CYAN"]),
+        playerCount: z.number().int().min(1).max(100),
+      })
+    )
+    .max(6)
+    .optional(),
+  playFormat: z.enum(["single_group", "competition"]).optional(),
   emergencyConsent: z.boolean().optional(),
   referralCode: z.string().max(50).optional(),
   promoCode: z.string().max(50).optional(),
@@ -82,6 +94,9 @@ export async function POST(request: Request) {
     if (data.captainEmail) patch.captainEmail = data.captainEmail.toLowerCase();
     if (data.captainPhone) patch.captainPhone = data.captainPhone;
     if (data.teamColor) patch.teamColor = data.teamColor;
+    if (data.playerRoster) patch.playerRoster = data.playerRoster.map((n) => n.trim()).filter(Boolean);
+    if (data.squads) patch.squads = data.squads;
+    if (data.playFormat) patch.playFormat = data.playFormat;
     if (data.emergencyConsent !== undefined) patch.emergencyConsent = data.emergencyConsent;
     if (data.referralCode) patch.referralCode = data.referralCode;
     if (data.promoCode) patch.promoCode = data.promoCode;

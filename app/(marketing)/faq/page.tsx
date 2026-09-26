@@ -10,7 +10,7 @@ import { PAGE_HERO_IMAGES } from "@/lib/site/marketingImages";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "FAQ",
-  description: "Answers about booking, gameplay, weather, group size, and corporate hunts in Nashville.",
+  description: "Answers about booking, gameplay, weather, group size, and corporate hunts in Music City.",
   path: "/faq",
 });
 

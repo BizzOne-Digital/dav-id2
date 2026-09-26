@@ -12,7 +12,7 @@ import type { MarketingTestimonial } from "@/components/marketing/types";
 const FALLBACK_TESTIMONIALS: MarketingTestimonial[] = [
   {
     quote:
-      "Best team-building activity we've done in Nashville. Competitive but hilarious—the photo challenges had us crying laughing.",
+      "Best team-building activity we've done in Music City. Competitive but hilarious—the photo challenges had us crying laughing.",
     name: "Jordan M.",
     groupType: "Corporate off-site",
     rating: 5,

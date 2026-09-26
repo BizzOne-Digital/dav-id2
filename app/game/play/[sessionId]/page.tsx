@@ -2,8 +2,9 @@ export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
 import { connectDB } from "@/lib/db/connect";
-import { GameSession, RouteManifest, Team, Location, Challenge } from "@/lib/models";
+import { Booking, GameSession, RouteManifest, Team, Location, Challenge } from "@/lib/models";
 import { GamePlayClient } from "@/components/game/GamePlayClient";
+import { isPlayWindowExpired, resolvePlayExpiresAt } from "@/lib/game/playWindow";
 
 type PageProps = { params: Promise<{ sessionId: string }> };
 
@@ -13,6 +14,16 @@ export default async function GamePlayPage({ params }: PageProps) {
 
   const session = await GameSession.findById(sessionId).lean();
   if (!session) redirect("/dashboard");
+
+  const booking = session.bookingId
+    ? await Booking.findById(session.bookingId)
+        .select("playExpiresAt updatedAt createdAt status")
+        .lean()
+    : null;
+  if (isPlayWindowExpired(resolvePlayExpiresAt(session, booking))) {
+    redirect(`/game/expired?sessionId=${sessionId}`);
+  }
+
   if (session.status === "lobby") redirect(`/game/lobby/${sessionId}`);
   if (session.status === "finished") redirect(`/game/finish/${sessionId}`);
 

@@ -37,6 +37,7 @@ const GameSessionSchema = new Schema(
     pausedAt: Date,
     startedAt: Date,
     finishedAt: Date,
+    playExpiresAt: Date,
     routeSeed: String,
     ruleVersion: Number,
     wave: String,

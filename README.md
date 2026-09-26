@@ -1,4 +1,4 @@
-# Nashville Scavenger Hunt
+# Music City Scavenger Hunt
 
 Production-ready **Next.js App Router** website and **mobile-first browser game** for [NashvilleScavengerHunt.com](https://nashvillescavengerhunt.com). One unified project — marketing site, booking, Stripe checkout, team play, certificates, and admin portal — backed by **MongoDB Atlas**.
 
@@ -68,7 +68,7 @@ Copy `.env.example` to `.env.local`:
 4. Connect → copy the connection string into `MONGODB_URI`.
 5. Run `npm run seed` once per environment.
 
-Seed creates: site settings, **$29.95/person** ( **$25/person for groups of 10+**, corporate included), hunts, ~15 Nashville locations, challenges (including a **preview-safe riddle**), FAQs, sample testimonials, demo leaderboard, gift card product, and an **admin account** from env vars.
+Seed creates: site settings, **$29.95/person** ( **$25/person for groups of 10+**, corporate included), hunts, ~15 Music City locations, challenges (including a **preview-safe riddle**), FAQs, sample testimonials, demo leaderboard, gift card product, and an **admin account** from env vars.
 
 ## Stripe setup (live)
 
@@ -175,4 +175,4 @@ Replace `public/icon.svg` and upload your logo via **Admin → Settings** when r
 
 ## License
 
-Proprietary — Nashville Scavenger Hunt. All rights reserved.
+Proprietary — Music City Scavenger Hunt. All rights reserved.

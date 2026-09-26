@@ -8,7 +8,7 @@ const PricingPlanSchema = new Schema(
     volumePricePerPersonCents: { type: Number, default: 2500 },
     volumeMinPlayers: { type: Number, default: 10 },
     currency: { type: String, default: "usd" },
-    minimumPlayers: { type: Number, default: 4 },
+    minimumPlayers: { type: Number, default: 1 },
     maximumPlayers: { type: Number },
     durationLabel: { type: String, default: "2–3 hours" },
     features: [String],

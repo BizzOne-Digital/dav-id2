@@ -20,6 +20,21 @@ const BookingSchema = new Schema(
     captainEmail: String,
     captainPhone: String,
     teamColor: String,
+    playerRoster: [String],
+    squads: [
+      {
+        name: String,
+        color: {
+          type: String,
+          enum: ["BLUE", "GOLD", "GREEN", "PINK", "RED", "CYAN"],
+        },
+        playerCount: Number,
+      },
+    ],
+    playFormat: {
+      type: String,
+      enum: ["single_group", "competition"],
+    },
     emergencyConsent: { type: Boolean, default: false },
     referralCode: String,
     promoCode: String,
@@ -30,6 +45,8 @@ const BookingSchema = new Schema(
     },
     bookingReference: { type: String, unique: true, sparse: true },
     teamId: { type: Schema.Types.ObjectId, ref: "Team" },
+    /** Join codes invalid after this time (72h from purchase by default). */
+    playExpiresAt: Date,
     idempotencyKey: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }

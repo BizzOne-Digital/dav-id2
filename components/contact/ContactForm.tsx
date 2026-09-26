@@ -49,24 +49,24 @@ export function ContactForm({ defaultEmail }: ContactFormProps) {
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-cream/80">Name</label>
-          <Input required value={name} onChange={(e) => setName(e.target.value)} />
+          <Input variant="light" required value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div>
           <label className="mb-2 block text-sm font-medium text-cream/80">Email</label>
-          <Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input variant="light" required type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
       </div>
       <div>
         <label className="mb-2 block text-sm font-medium text-cream/80">Phone (optional)</label>
-        <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Input variant="light" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
       </div>
       <div>
         <label className="mb-2 block text-sm font-medium text-cream/80">Subject</label>
-        <Input required value={subject} onChange={(e) => setSubject(e.target.value)} />
+        <Input variant="light" required value={subject} onChange={(e) => setSubject(e.target.value)} />
       </div>
       <div>
         <label className="mb-2 block text-sm font-medium text-cream/80">Message</label>
-        <Textarea required rows={6} value={message} onChange={(e) => setMessage(e.target.value)} />
+        <Textarea variant="light" required rows={6} value={message} onChange={(e) => setMessage(e.target.value)} />
       </div>
       {defaultEmail && (
         <p className="text-sm text-cream/50">

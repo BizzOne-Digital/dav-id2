@@ -4,8 +4,8 @@ import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
 export const BRAND_COPY = {
   challengeEyebrow: "The Ultimate Music City Challenge",
   actionLine: "Explore · Solve · Compete · Win",
-  tagline: "Real Nashville. Real challenges. Real fun.",
-  audiences: "Perfect for friends, families, bachelorette parties & corporate teams",
+  tagline: "Real Music City. Real challenges. Real fun.",
+  audiences: "Perfect for singles, couples, friends, families, bachelorette parties & corporate teams",
   bookCta: "Book your adventure",
   groupDiscountLine: "Discounts for groups of 10 or more",
   promoFlyer: MARKETING_IMAGES.promoFlyer,

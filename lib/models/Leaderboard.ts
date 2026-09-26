@@ -28,7 +28,10 @@ const CertificateSchema = new Schema(
     rankTitle: String,
     rank: Number,
     pdfUrl: String,
-    verificationSlug: { type: String, unique: true },
+    verificationSlug: { type: String, unique: true, sparse: true },
+    playerDisplayName: String,
+    teamMemberId: { type: Schema.Types.ObjectId, ref: "TeamMember" },
+    ticketIndex: { type: Number, min: 1 },
   },
   { timestamps: true }
 );

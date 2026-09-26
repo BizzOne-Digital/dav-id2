@@ -17,8 +17,11 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { resolvePublicImageUrl } from "@/lib/uploads/constants";
 import { DEFAULT_STANDARD_PRICE_CENTS } from "@/lib/pricing/resolve-price";
-import { BRAND_COPY } from "@/lib/site/brandCopy";
+import { heroPlayFormatHeadline } from "@/lib/site/groupSizeCopy";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
+
+const HERO_TAGLINE = "Explore. Discover. Compete. Create Memories.";
 
 type HeroProps = {
   settings: MarketingSettings;
@@ -48,7 +51,7 @@ function HeroRouteOverlay({ animate }: { animate: boolean }) {
       <motion.path
         d={path}
         fill="none"
-        stroke="#F2B632"
+        stroke="#c9932a"
         strokeWidth="3"
         strokeDasharray="8 10"
         strokeLinecap="round"
@@ -78,7 +81,7 @@ function HeroRouteOverlay({ animate }: { animate: boolean }) {
         </motion.g>
       ))}
       {animate && (
-        <motion.circle r="6" fill="#F2B632" filter="url(#routeGlow)">
+        <motion.circle r="6" fill="#c9932a" filter="url(#routeGlow)">
           <animateMotion dur="10s" repeatCount="indefinite" path={path} />
         </motion.circle>
       )}
@@ -107,7 +110,9 @@ function PolaroidCard({
       <div className="flex aspect-[4/3] flex-col items-center justify-center gap-2 bg-charcoal/90">
         <Icon className="size-8 text-gold" strokeWidth={1.5} />
       </div>
-      <p className="mt-2 text-center font-[family-name:var(--font-bebas)] text-sm tracking-wide text-charcoal">{title}</p>
+      <p className="mt-2 text-center font-[family-name:var(--font-bebas)] text-sm tracking-wide text-charcoal">
+        {title}
+      </p>
     </motion.div>
   );
 }
@@ -115,13 +120,9 @@ function PolaroidCard({
 export function Hero({ settings, pricing }: HeroProps) {
   const reduceMotion = useReducedMotion();
   const hero = settings.hero ?? {};
-  const headline =
-    hero.headline?.trim() ||
-    settings.tagline?.trim() ||
-    "Explore. Discover. Compete. Create Memories.";
   const subheadline =
     hero.subheadline ??
-    "Turn downtown Nashville into your personal game board. Solve clues, complete challenges, earn points and create unforgettable memories.";
+    "Turn downtown Music City into your personal game board. Solve locally inspired clues, complete creative challenges, earn points, climb the leaderboard, and create unforgettable Music City memories.";
   const ctaPrimary = hero.ctaPrimary ?? "Book Your Hunt";
   const ctaSecondary = hero.ctaSecondary ?? "Preview a Challenge";
   const heroBg = hero.backgroundImage?.trim()
@@ -129,52 +130,62 @@ export function Hero({ settings, pricing }: HeroProps) {
     : "/images/hero-nashville.jpg";
   const heroBgUnoptimized = heroBg.startsWith("/api/uploads/");
 
-  const priceCents = pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
-  const minPlayers = pricing?.minimumPlayers ?? settings.minimumPlayers ?? 4;
+  const priceCents =
+    pricing?.pricePerPersonCents ?? settings.defaultPricePerPersonCents ?? DEFAULT_STANDARD_PRICE_CENTS;
+  const playFormatHeadline = heroPlayFormatHeadline();
   const duration = pricing?.durationLabel ?? `${settings.typicalDurationHours ?? "2–3"} hours`;
 
   return (
-    <section className="relative min-h-[100dvh] overflow-hidden">
+    <section className="relative min-h-[85dvh] overflow-hidden sm:min-h-[88dvh] lg:min-h-[90dvh]">
       <Image
         src={heroBg}
         alt=""
         fill
         priority
         unoptimized={heroBgUnoptimized}
-        className="object-cover object-center"
+        className="object-cover object-center brightness-[1.1] contrast-[1.03] saturate-[1.05]"
         sizes="100vw"
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/25" aria-hidden />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/90 via-transparent to-black/40" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/55 via-black/22 to-black/5"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/55 via-transparent to-black/22"
+        aria-hidden
+      />
 
       <HeroRouteOverlay animate={!reduceMotion} />
 
-      <div className="relative site-x mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center pb-20 pt-[calc(6.75rem+var(--safe-top))] sm:pb-24 sm:pt-[calc(7.75rem+var(--safe-top))] lg:pb-20 lg:pt-[calc(9.5rem+var(--safe-top))]">
-        <div className="grid flex-1 items-center gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+      <div className="relative site-x mx-auto max-w-[1400px] pb-14 pt-[calc(2.5rem+var(--safe-top))] sm:pb-16 sm:pt-[calc(2.625rem+var(--safe-top))] lg:pb-14">
+        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[minmax(0,0.92fr)_1.08fr] lg:gap-8 xl:gap-10">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="max-w-2xl"
+            className="w-full max-w-xl lg:max-w-[520px]"
           >
-            <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:text-sm">
-              <Star className="size-4 fill-gold text-gold" aria-hidden />
-              {BRAND_COPY.challengeEyebrow}
+            <div className="translate-x-[0.25in] -translate-y-[0.125in]">
+              <p className="mb-1.5 flex items-center justify-start gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-2 sm:text-sm">
+                <Star className="size-4 fill-gold text-gold" aria-hidden />
+                The Ultimate Music City Adventure
+              </p>
+
+              <div className="flex justify-start">
+                <BrandLogo logoUrl={settings.logoUrl} variant="hero" />
+              </div>
+            </div>
+
+            <p className="mt-4 max-w-xl text-left text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">
+              {subheadline}
             </p>
 
-            <h1 className="hero-headline-distressed text-balance font-[family-name:var(--font-bebas)] text-[1.85rem] leading-[0.95] tracking-wide text-white min-[380px]:text-[2.25rem] sm:text-5xl md:text-6xl lg:text-[5.25rem]">
-              {headline}
-            </h1>
-
-            <p className="mt-3 font-[family-name:var(--font-bebas)] text-lg tracking-wide text-gold/95 sm:text-xl">
-              {BRAND_COPY.actionLine}
-            </p>
-
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">{subheadline}</p>
-
-            <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:items-center sm:gap-3">
-              <Link href="/booking" className="hero-cta-primary inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-bold uppercase tracking-wider text-charcoal sm:w-auto sm:px-6 sm:py-3.5">
+            <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:items-center sm:justify-start sm:gap-3">
+              <Link
+                href="/booking"
+                className="hero-cta-primary inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-bold uppercase tracking-wider text-charcoal sm:w-auto sm:px-6 sm:py-3.5"
+              >
                 <CalendarDays className="size-5" aria-hidden />
                 {ctaPrimary}
               </Link>
@@ -187,7 +198,7 @@ export function Hero({ settings, pricing }: HeroProps) {
               </Link>
             </div>
 
-            <ul className="mt-6 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-8 sm:flex sm:flex-row sm:flex-wrap sm:gap-4">
+            <ul className="mt-6 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-8 sm:flex sm:flex-row sm:flex-wrap sm:justify-start sm:gap-4">
               <li className="flex items-center gap-3">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-crimson shadow-lg">
                   <MapPin className="size-5 text-white" aria-hidden />
@@ -203,7 +214,9 @@ export function Hero({ settings, pricing }: HeroProps) {
                   <Users className="size-5 text-white" aria-hidden />
                 </span>
                 <span className="font-[family-name:var(--font-bebas)] text-lg leading-tight text-white sm:text-xl">
-                  Minimum {minPlayers} Players
+                  <span className="text-gold">{playFormatHeadline.primary}</span>
+                  <br />
+                  <span className="text-sm text-white/80">{playFormatHeadline.secondary}</span>
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -217,22 +230,16 @@ export function Hero({ settings, pricing }: HeroProps) {
             </ul>
           </motion.div>
 
-          <div className="relative mt-4 min-h-[120px] sm:mt-6 sm:min-h-[140px] lg:mt-0 lg:min-h-[320px]">
-            <div className="flex justify-center gap-1.5 sm:gap-2 lg:absolute lg:right-0 lg:top-8 lg:justify-end lg:gap-3">
+          <div className="relative mt-4 w-full sm:mt-6 lg:mt-0 lg:flex lg:flex-col lg:items-end lg:self-end lg:pb-2">
+            <div className="flex justify-center gap-1.5 sm:gap-2 lg:justify-end lg:gap-3">
               <PolaroidCard title="Solve Clues" icon={Search} rotate="-6deg" delay={0.55} />
               <PolaroidCard title="Earn Points" icon={Trophy} rotate="4deg" delay={0.65} />
               <PolaroidCard title="Win Prizes" icon={Gift} rotate="-3deg" delay={0.75} />
             </div>
 
-            <motion.div
-              initial={reduceMotion ? false : { scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.9, type: "spring" }}
-              className="absolute -bottom-1 right-0 flex size-20 flex-col items-center justify-center rounded-full border-[3px] border-gold bg-charcoal/90 shadow-[0_0_40px_rgba(242,182,50,0.35)] sm:size-24 lg:bottom-4 lg:right-8 lg:size-28"
-            >
-              <span className="font-[family-name:var(--font-bebas)] text-2xl text-gold">{formatCurrency(priceCents)}</span>
-              <span className="text-[10px] uppercase tracking-widest text-cream/70">/ Person</span>
-            </motion.div>
+            <h1 className="hero-headline-distressed mt-5 max-w-md text-balance text-center font-[family-name:var(--font-bebas)] text-[1.65rem] leading-[0.95] tracking-wide text-white min-[380px]:text-2xl sm:mt-6 sm:text-3xl md:text-4xl lg:mt-4 lg:text-right lg:text-[2.35rem]">
+              {HERO_TAGLINE}
+            </h1>
           </div>
         </div>
 
@@ -248,7 +255,7 @@ export function Hero({ settings, pricing }: HeroProps) {
         </motion.div>
       </div>
 
-      <p className="sr-only">All you need is a smartphone and a sense of adventure.</p>
+      <p className="sr-only">{HERO_TAGLINE}</p>
     </section>
   );
 }

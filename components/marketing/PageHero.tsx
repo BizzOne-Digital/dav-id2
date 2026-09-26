@@ -13,8 +13,10 @@ export function PageHero({ eyebrow, title, subtitle, className, backgroundImage 
   return (
     <section
       className={cn(
-        "relative overflow-hidden border-b border-cream/10 py-10 sm:py-14 lg:py-16",
-        backgroundImage ? "min-h-[220px] sm:min-h-[280px] lg:min-h-[320px]" : "bg-charcoal",
+        "relative overflow-hidden border-b border-cream/10",
+        backgroundImage
+          ? "!min-h-[160px] !py-5 sm:!min-h-[180px] sm:!py-6 lg:!min-h-[200px]"
+          : "bg-charcoal !min-h-0",
         className
       )}
     >
@@ -45,7 +47,9 @@ export function PageHero({ eyebrow, title, subtitle, className, backgroundImage 
           {title}
         </h1>
         {subtitle && (
-          <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-cream/85 sm:mt-4 sm:text-base md:text-lg">{subtitle}</p>
+          <p className="mx-auto mt-2 max-w-2xl text-pretty text-sm leading-snug text-cream/85 sm:mt-2.5 sm:text-base md:text-lg">
+            {subtitle}
+          </p>
         )}
       </div>
     </section>
