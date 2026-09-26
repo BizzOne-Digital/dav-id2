@@ -50,6 +50,15 @@ const draftSchema = z.object({
 });
 
 function mapBookingError(err: unknown): { status: number; message: string } {
+  const code =
+    err && typeof err === "object" && "code" in err ? String((err as { code?: string }).code) : "";
+  if (code === "ENOTFOUND" || (err instanceof Error && err.message.includes("ENOTFOUND"))) {
+    return {
+      status: 503,
+      message:
+        "Database host not found. In Vercel, set MONGODB_URI to the exact connection string from MongoDB Atlas (Connect → Drivers)—check the cluster hostname for typos.",
+    };
+  }
   if (err instanceof Error && err.message.includes("MONGODB_URI")) {
     return { status: 503, message: registrationUnavailableMessage(["MONGODB_URI"]) };
   }
