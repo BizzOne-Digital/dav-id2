@@ -1,0 +1,18 @@
+{
+  "name": "Nashville Scavenger Hunt",
+  "short_name": "NSH Hunt",
+  "description": "Explore downtown Nashville with clues, challenges, and live leaderboards.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#101216",
+  "theme_color": "#F2B632",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
