@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db/connect";
 import { Booking, Hunt } from "@/lib/models";
 import { generateBookingReference } from "@/lib/utils";
 import { syncCatalogHuntsToDb } from "@/lib/hunts/syncCatalogHunts";
+import { missingServerEnv, registrationUnavailableMessage } from "@/lib/env/required";
+
+export const runtime = "nodejs";
 
 const draftSchema = z.object({
   step: z.enum(["details", "team", "preferences", "review"]),
@@ -45,7 +49,29 @@ const draftSchema = z.object({
   userId: z.string().optional(),
 });
 
+function mapBookingError(err: unknown): { status: number; message: string } {
+  if (err instanceof Error && err.message.includes("MONGODB_URI")) {
+    return { status: 503, message: registrationUnavailableMessage(["MONGODB_URI"]) };
+  }
+  if (err && typeof err === "object" && "name" in err && err.name === "ValidationError") {
+    return { status: 400, message: "Please check your booking details and try again." };
+  }
+  if (err && typeof err === "object" && "code" in err && (err as { code?: number }).code === 11000) {
+    return { status: 409, message: "This booking session already exists—refresh and try again." };
+  }
+  return { status: 500, message: "Failed to save booking" };
+}
+
 export async function POST(request: Request) {
+  const missingDb = missingServerEnv(["MONGODB_URI"]);
+  if (missingDb.length) {
+    console.error("[booking] Missing env:", missingDb.join(", "));
+    return NextResponse.json(
+      { success: false, error: registrationUnavailableMessage(missingDb) },
+      { status: 503 }
+    );
+  }
+
   try {
     const json: unknown = await request.json();
     const parsed = draftSchema.safeParse(json);
@@ -59,7 +85,7 @@ export async function POST(request: Request) {
     await connectDB();
     const data = parsed.data;
 
-    if (data.huntSlug) {
+    if (data.huntSlug || !data.bookingId) {
       try {
         await syncCatalogHuntsToDb();
       } catch (syncErr) {
@@ -74,7 +100,12 @@ export async function POST(request: Request) {
     }
     if (!huntId && !data.bookingId) {
       return NextResponse.json(
-        { success: false, error: "huntId or huntSlug is required for a new booking" },
+        {
+          success: false,
+          error: data.huntSlug
+            ? `Hunt "${data.huntSlug}" is not available. Refresh the page or pick another hunt.`
+            : "Select a hunt to continue.",
+        },
         { status: 400 }
       );
     }
@@ -86,7 +117,7 @@ export async function POST(request: Request) {
     }
 
     const patch: Record<string, unknown> = { status: "draft" };
-    if (huntId) patch.huntId = huntId;
+    if (huntId) patch.huntId = new mongoose.Types.ObjectId(huntId);
     if (data.groupType) patch.groupType = data.groupType;
     if (data.scheduledDate) patch.scheduledDate = new Date(data.scheduledDate);
     if (data.startWindow) patch.startWindow = data.startWindow;
@@ -126,7 +157,7 @@ export async function POST(request: Request) {
 
       booking = await Booking.create({
         ...patch,
-        huntId,
+        huntId: new mongoose.Types.ObjectId(huntId),
         groupType: data.groupType,
         scheduledDate: new Date(data.scheduledDate),
         startWindow: data.startWindow,
@@ -159,6 +190,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     console.error("[booking]", err);
-    return NextResponse.json({ success: false, error: "Failed to save booking" }, { status: 500 });
+    const mapped = mapBookingError(err);
+    return NextResponse.json({ success: false, error: mapped.message }, { status: mapped.status });
   }
 }

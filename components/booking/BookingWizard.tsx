@@ -321,6 +321,20 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
 
   async function goNext() {
     setError(null);
+    if (step === "details") {
+      if (!huntSlug || !hunts.length) {
+        setError("No hunt is selected. Go back to Hunts and choose an experience.");
+        return;
+      }
+      if (!scheduledDate) {
+        setError("Pick a date for your hunt.");
+        return;
+      }
+      if (!startWindow) {
+        setError("Choose a start window.");
+        return;
+      }
+    }
     if (step === "team") {
       if (!captainEmail.trim()) {
         setError("Captain email is required so we can send join codes and receipts.");
