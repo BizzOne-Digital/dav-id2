@@ -60,6 +60,9 @@ export async function createCheckoutSession(
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
+    // Wallets (Apple Pay / Google Pay) appear on Stripe Checkout when enabled in the
+    // Stripe Dashboard and the customer’s browser/device supports them (domain must be registered for Apple Pay).
+    automatic_payment_methods: { enabled: true },
     customer_email: params.customerEmail,
     line_items: params.lineItems.map((item) => ({
       quantity: item.quantity,
