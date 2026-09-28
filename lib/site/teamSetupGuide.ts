@@ -17,15 +17,34 @@ export type GroupSetupGuide = {
 };
 
 const GUIDES: Record<string, GroupSetupGuide> = {
-  singles_couples: {
-    title: "Solo or pair",
-    summary: "One booking ticket covers 1–2 players on the same team.",
+  single: {
+    title: "Single player",
+    summary: "One ticket, one player, one hunt game—your own team on the leaderboard.",
     steps: [
-      "Pick a fun team name (even for two people—it shows on the leaderboard).",
-      "Choose a team color so friends downtown can spot you.",
-      "Both players use the same join code after checkout.",
+      "Pick a team name (it shows on the leaderboard and certificate).",
+      "Choose a team color.",
+      "Use your join code after checkout to open the lobby and start when ready.",
+    ],
+    teamNamingTip: "Examples: “Solo on Broadway”, “One and Done”, or your nickname.",
+  },
+  couple: {
+    title: "Couple",
+    summary: "Two tickets (one per person), one team, one join code—one shared hunt game.",
+    steps: [
+      "Pick a fun team name for both of you.",
+      "Choose a team color.",
+      "Each person has a ticket; both join the same team with one code after checkout.",
     ],
     teamNamingTip: "Examples: “Dynamic Duo”, “Broadway Two-Step”, or your last names.",
+  },
+  singles_couples: {
+    title: "Solo or couple",
+    summary: "One ticket per player. Couples purchase 2 tickets and share one team.",
+    steps: [
+      "Pick a team name and color.",
+      "Each ticket holder joins the same team with one join code.",
+    ],
+    teamNamingTip: "Examples: “Dynamic Duo”, “Music City Explorer”.",
   },
   friends: {
     title: "Friends group",
@@ -99,8 +118,11 @@ export function defaultSingleSquadName(groupType: string): string {
       return "Celebration Squad";
     case "family":
       return "Family Team";
+    case "single":
+      return "Solo Explorer";
+    case "couple":
     case "singles_couples":
-      return "Music City Explorer";
+      return "Music City Duo";
     default:
       return "Broadway Squad";
   }

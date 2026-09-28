@@ -23,14 +23,14 @@ export const DEFAULT_IN_GAME_OFFERS: InGameOffersConfig = {
     description: "Save at Music City shops, restaurants, and attractions when you hit certain checkpoints.",
     note: "Partner offers will appear here and inside the live game.",
     published: true,
-    comingSoon: true,
+    comingSoon: false,
   },
   coupons: {
     title: "Hunt coupons",
     description: "Exclusive codes and vouchers earned by completing challenges along your route.",
-    note: "Coupon copy and redemption rules coming soon.",
+    note: "Redeem partner coupons from your hunt dashboard and at participating stops.",
     published: true,
-    comingSoon: true,
+    comingSoon: false,
   },
   prizes: {
     title: "Prizes & bonuses",
@@ -67,8 +67,8 @@ export function resolveInGameOffers(raw?: RawOffers | null): InGameOffersConfig 
   return {
     heading: raw.heading?.trim() || DEFAULT_IN_GAME_OFFERS.heading,
     subtitle: raw.subtitle?.trim() || DEFAULT_IN_GAME_OFFERS.subtitle,
-    discounts: mergeSlot(DEFAULT_IN_GAME_OFFERS.discounts, raw.discounts),
-    coupons: mergeSlot(DEFAULT_IN_GAME_OFFERS.coupons, raw.coupons),
+    discounts: { ...mergeSlot(DEFAULT_IN_GAME_OFFERS.discounts, raw.discounts), comingSoon: false },
+    coupons: { ...mergeSlot(DEFAULT_IN_GAME_OFFERS.coupons, raw.coupons), comingSoon: false },
     prizes: mergeSlot(DEFAULT_IN_GAME_OFFERS.prizes, raw.prizes),
   };
 }

@@ -24,6 +24,7 @@ import {
   resolvePlayExpiresAt,
 } from "@/lib/game/playWindow";
 import { calculatePoints, getNashvilleRank } from "@/lib/scoring/ranks";
+import { routeRecipeGroupType } from "@/lib/site/groupSizeCopy";
 import { signCompletion, verifyCompletionSignature } from "@/lib/verification/completion";
 import { generateCompletionNumber, slugify } from "@/lib/utils";
 import crypto from "crypto";
@@ -62,8 +63,9 @@ export async function buildRouteManifestForSession(sessionId: string) {
 
   const booking = session.bookingId ? await Booking.findById(session.bookingId).lean() : null;
   const groupType = session.groupType || booking?.groupType || "friends";
+  const recipeGroupType = routeRecipeGroupType(groupType);
 
-  const recipe = await RouteRecipe.findOne({ groupType, active: true }).lean();
+  const recipe = await RouteRecipe.findOne({ groupType: recipeGroupType, active: true }).lean();
   if (!recipe) {
     throw new Error("No active route recipe for this group type");
   }

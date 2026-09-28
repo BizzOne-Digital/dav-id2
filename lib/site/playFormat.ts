@@ -1,4 +1,4 @@
-import { SINGLE_COUPLE_GROUP_TYPE } from "@/lib/site/groupSizeCopy";
+import { isSoloOrPairGroupType } from "@/lib/site/groupSizeCopy";
 
 /** How the group plays on hunt day — drives team setup & billing UX */
 export type PlayFormat = "single_group" | "competition";
@@ -34,7 +34,7 @@ export function playFormatLabel(format: PlayFormat): string {
 
 /** Singles/couples ticket path is always one group */
 export function playFormatAvailable(groupType: string, playerCount: number): boolean {
-  if (groupType === SINGLE_COUPLE_GROUP_TYPE && playerCount <= 2) {
+  if (isSoloOrPairGroupType(groupType)) {
     return false;
   }
   return playerCount >= 2;

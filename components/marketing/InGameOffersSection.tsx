@@ -34,7 +34,7 @@ function OfferCard({
         ACCENTS[slotKey]
       )}
     >
-      {offer.comingSoon !== false && (
+      {offer.comingSoon === true && (
         <Badge variant="outline" className="absolute right-4 top-4 border-gold/50 text-gold">
           Coming soon
         </Badge>

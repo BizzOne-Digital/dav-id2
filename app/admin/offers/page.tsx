@@ -131,7 +131,7 @@ export default function AdminOffersPage() {
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
-                  checked={slots[key].comingSoon !== false}
+                  checked={slots[key].comingSoon === true}
                   onChange={(e) => updateSlot(key, { comingSoon: e.target.checked })}
                 />
                 Show &quot;Coming soon&quot; badge

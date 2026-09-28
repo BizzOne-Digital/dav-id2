@@ -5,10 +5,11 @@ import { COMPETITION_RULES } from "@/lib/site/competitionRules";
 import { getGroupSetupGuide } from "@/lib/site/teamSetupGuide";
 
 const GROUP_LINKS = [
-  { type: "singles_couples", label: "Solo / couple" },
-  { type: "friends", label: "Friends" },
-  { type: "family", label: "Family" },
-  { type: "corporate", label: "Corporate" },
+  { type: "single", label: "Single" },
+  { type: "couple", label: "Couple" },
+  { type: "friends", label: "Group — friends" },
+  { type: "family", label: "Group — family" },
+  { type: "corporate", label: "Group — corporate" },
 ];
 
 export function TeamsAndGroupsSection({ spacing = "default" }: { spacing?: "default" | "tight" }) {
@@ -26,7 +27,7 @@ export function TeamsAndGroupsSection({ spacing = "default" }: { spacing?: "defa
         <SectionHeading
           eyebrow="Teams & groups"
           title="How you establish teams"
-          subtitle="Every competitor needs a ticket. Teams are how you show up on the leaderboard—with a name, a color, and a join code."
+          subtitle="Single, couple, or group—one ticket per player, one hunt game per ticket. Teams use a name, color, and join code on the leaderboard."
         />
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">

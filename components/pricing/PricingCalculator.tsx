@@ -11,7 +11,7 @@ import {
   resolvePricePerPersonCents,
   DEFAULT_VOLUME_MIN_PLAYERS,
 } from "@/lib/pricing/resolve-price";
-import { DEFAULT_MIN_PLAYERS } from "@/lib/site/groupSizeCopy";
+import { DEFAULT_MIN_PLAYERS, TICKET_ONE_GAME_LINE } from "@/lib/site/groupSizeCopy";
 import { CORPORATE_PRICING_NOTE } from "@/lib/site/pricingCopy";
 
 export type PricingPlanOption = {
@@ -89,7 +89,7 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-cream/80">Players</label>
+          <label className="mb-2 block text-sm font-medium text-cream/80">Tickets (players)</label>
           <Input
             type="number"
             min={min}
@@ -98,9 +98,8 @@ export function PricingCalculator({ plans, defaultPlanId }: PricingCalculatorPro
             onChange={(e) => setPlayers(Number(e.target.value) || min)}
           />
           <p className="mt-2 text-xs text-cream/50">
-            {min <= 1
-              ? "Singles & couples: 1–2 on one ticket"
-              : `Minimum ${min} players`}
+            {TICKET_ONE_GAME_LINE}
+            {min > 1 ? ` Minimum ${min} tickets.` : ""}
             {plan?.durationLabel ? ` · ${plan.durationLabel}` : ""}
           </p>
         </div>

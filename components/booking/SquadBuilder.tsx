@@ -25,9 +25,16 @@ type SquadBuilderProps = {
   squads: SquadPlan[];
   requiredTickets: number;
   onChange: (squads: SquadPlan[]) => void;
+  fieldVariant?: "dark" | "light";
 };
 
-export function SquadBuilder({ squads, requiredTickets, onChange }: SquadBuilderProps) {
+export function SquadBuilder({
+  squads,
+  requiredTickets,
+  onChange,
+  fieldVariant = "light",
+}: SquadBuilderProps) {
+  const onLight = fieldVariant === "light";
   const total = squadTicketTotal(squads);
   const balanced = total === requiredTickets;
 
@@ -55,7 +62,9 @@ export function SquadBuilder({ squads, requiredTickets, onChange }: SquadBuilder
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-medium text-cream/90">Competing squads</p>
+        <p className={onLight ? "text-sm font-medium text-charcoal/90" : "text-sm font-medium text-cream/90"}>
+          Competing squads
+        </p>
         <p
           className={cn(
             "text-xs font-semibold",
@@ -70,10 +79,20 @@ export function SquadBuilder({ squads, requiredTickets, onChange }: SquadBuilder
         {squads.map((squad, i) => (
           <li
             key={`squad-${i}`}
-            className="rounded-lg border border-cream/10 bg-charcoal/40 p-3 sm:p-4"
+            className={
+              onLight
+                ? "rounded-lg border border-charcoal/10 bg-stone-50 p-3 sm:p-4"
+                : "rounded-lg border border-cream/10 bg-charcoal/40 p-3 sm:p-4"
+            }
           >
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-cream/50">
+              <span
+                className={
+                  onLight
+                    ? "text-xs font-semibold uppercase tracking-wider text-charcoal/50"
+                    : "text-xs font-semibold uppercase tracking-wider text-cream/50"
+                }
+              >
                 Squad {i + 1}
               </span>
               {squads.length > 1 && (
@@ -89,16 +108,19 @@ export function SquadBuilder({ squads, requiredTickets, onChange }: SquadBuilder
             </div>
             <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
               <Input
+                variant={fieldVariant}
                 placeholder="Squad name"
                 value={squad.name}
                 onChange={(e) => updateIndex(i, { name: e.target.value })}
               />
               <Select
+                variant={fieldVariant}
                 value={squad.color}
                 options={TEAM_COLORS.map((c) => ({ value: c, label: c }))}
                 onChange={(e) => updateIndex(i, { color: e.target.value as TeamColor })}
               />
               <Input
+                variant={fieldVariant}
                 type="number"
                 min={1}
                 max={requiredTickets}
@@ -109,7 +131,13 @@ export function SquadBuilder({ squads, requiredTickets, onChange }: SquadBuilder
                 aria-label={`Tickets for squad ${i + 1}`}
               />
             </div>
-            <div className="mt-2 flex items-center gap-2 text-xs text-cream/50">
+            <div
+              className={
+                onLight
+                  ? "mt-2 flex items-center gap-2 text-xs text-charcoal/50"
+                  : "mt-2 flex items-center gap-2 text-xs text-cream/50"
+              }
+            >
               <span className={cn("size-3 rounded-full", COLOR_DOT[squad.color])} aria-hidden />
               Shown on leaderboard & certificates for this squad
             </div>
@@ -118,7 +146,12 @@ export function SquadBuilder({ squads, requiredTickets, onChange }: SquadBuilder
       </ul>
 
       {squads.length < TEAM_COLORS.length && squads.length < requiredTickets && (
-        <Button type="button" variant="ghost" className="w-full gap-2 text-sm" onClick={addSquad}>
+        <Button
+          type="button"
+          variant="ghost"
+          className={cn("w-full gap-2 text-sm", onLight && "text-charcoal hover:bg-charcoal/5")}
+          onClick={addSquad}
+        >
           <Plus className="size-4" /> Add another squad
         </Button>
       )}

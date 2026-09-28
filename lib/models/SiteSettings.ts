@@ -55,14 +55,14 @@ const SiteSettingsSchema = new Schema(
         description: String,
         note: String,
         published: { type: Boolean, default: true },
-        comingSoon: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: false },
       },
       coupons: {
         title: String,
         description: String,
         note: String,
         published: { type: Boolean, default: true },
-        comingSoon: { type: Boolean, default: true },
+        comingSoon: { type: Boolean, default: false },
       },
       prizes: {
         title: String,

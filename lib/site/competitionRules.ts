@@ -3,9 +3,9 @@
 export const COMPETITION_RULES = {
   headline: "How you play",
   bullets: [
-    "Every person who plays needs a ticket at $29.95 per person—solo, one group, or each competing squad.",
+    "Single, couple, or group—every player needs their own ticket ($29.95). One ticket = one player = one hunt game.",
     "You have 72 hours from purchase to join, play, and finish—ideal for a weekend or long-weekend trip; then join codes expire.",
-    "Single group: one team name, one color, one join code—perfect for couples, families, and one crew.",
+    "Single or couple: one team, one join code (couples buy 2 tickets). Groups: one team or competing squads.",
     "Competition: split into squads that race on the leaderboard (great for friends or corporate departments).",
     "Corporate: book headcount, choose competition, assign squad names/colors—or contact us for a facilitated event.",
     "Each paid player earns their own completion certificate at the finish.",
