@@ -69,7 +69,7 @@ const STEPS = ["details", "team", "preferences", "review"] as const;
 type Step = (typeof STEPS)[number];
 
 const FORM_FIELD = "light" as const;
-const FORM_LABEL = "mb-2 block text-sm font-medium text-charcoal/80";
+const FORM_LABEL = "mb-2 block text-sm font-medium text-cream/85";
 
 const GROUP_TYPES = [
   { value: SINGLE_GROUP_TYPE, label: "Single (1 ticket)" },
@@ -430,10 +430,10 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         ))}
       </ol>
 
-      <Card className="border-charcoal/15 bg-white text-charcoal shadow-lg sm:p-8">
+      <Card className="sm:p-8">
         {step === "details" && (
           <div className="space-y-5">
-            <h2 className="text-xl font-semibold text-charcoal">Hunt details</h2>
+            <h2 className="text-xl font-semibold text-cream">Hunt details</h2>
             <div>
               <label className={FORM_LABEL}>Hunt</label>
               <Select
@@ -453,12 +453,12 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               />
               <p className="mt-2 text-xs font-medium text-gold">{TICKET_ONE_GAME_LINE}</p>
             </div>
-            <p className="rounded-lg border border-gold/30 bg-amber-50 px-4 py-3 text-sm text-charcoal/85">
+            <p className="rounded-lg border border-gold/25 bg-gold/5 px-4 py-3 text-sm text-cream/85">
               {BOOKING_PLAY_WINDOW_SUMMARY}
             </p>
             <div>
               <label className={FORM_LABEL}>
-                Planned visit date <span className="font-normal text-charcoal/50">(optional)</span>
+                Planned visit date <span className="font-normal text-cream/50">(optional)</span>
               </label>
               <Input
                 variant={FORM_FIELD}
@@ -466,14 +466,14 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 value={scheduledDate}
                 onChange={(e) => setScheduledDate(e.target.value)}
               />
-              <p className="mt-1 text-xs text-charcoal/55">
+              <p className="mt-1 text-xs text-cream/55">
                 For our planning only—your clock starts when you complete checkout.
               </p>
             </div>
             <div>
               <label className={FORM_LABEL}>Tickets (players)</label>
               {fixedTicketCountForGroupType(groupType) != null ? (
-                <p className="rounded-lg border border-charcoal/15 bg-stone-50 px-4 py-3 text-sm text-charcoal">
+                <p className="rounded-xl border border-cream/20 bg-white px-4 py-3 text-sm text-charcoal">
                   <strong className="text-gold">{playerCount}</strong> ticket{playerCount === 1 ? "" : "s"} —{" "}
                   {groupType === SINGLE_GROUP_TYPE
                     ? "solo hunt game"
@@ -487,7 +487,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                     max={playerBounds.max}
                     onChange={onPlayerCountChange}
                   />
-                  <p className="mt-2 text-xs text-charcoal/60">
+                  <p className="mt-2 text-xs text-cream/55">
                     Tap + or − anytime—one team, one join code; add a ticket for each player (
                     {formatCurrency(pricePerPerson)} each).
                   </p>
@@ -497,7 +497,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
 
             {showPlayFormatChoice ? (
               <div>
-                <p className="mb-2 block text-sm font-medium text-charcoal/90">How do you want to play?</p>
+                <p className="mb-2 block text-sm font-medium text-cream/90">How do you want to play?</p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {PLAY_FORMAT_OPTIONS.map((option) => {
                     const selected = resolvedPlayFormat === option.value;
@@ -510,43 +510,43 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                           "rounded-xl border p-4 text-left transition-colors",
                           selected
                             ? "border-gold bg-gold/10 ring-1 ring-gold/40"
-                            : "border-charcoal/15 bg-stone-50 hover:border-charcoal/25"
+                            : "border-cream/15 bg-cream/5 hover:border-cream/25"
                         )}
                       >
-                        <p className="font-semibold text-charcoal">{option.title}</p>
-                        <p className="mt-1 text-xs text-charcoal/70">{option.summary}</p>
-                        <p className="mt-2 text-xs text-charcoal/55">{option.detail}</p>
+                        <p className="font-semibold text-cream">{option.title}</p>
+                        <p className="mt-1 text-xs text-cream/70">{option.summary}</p>
+                        <p className="mt-2 text-xs text-cream/55">{option.detail}</p>
                       </button>
                     );
                   })}
                 </div>
               </div>
             ) : isSoloOrPairGroupType(groupType) ? (
-              <p className="text-xs text-charcoal/60">
+              <p className="text-xs text-cream/55">
                 One team, one join code—{groupType === SINGLE_GROUP_TYPE ? "solo" : "couple"} play together on the
                 leaderboard.
               </p>
             ) : (
-              <p className="text-xs text-charcoal/60">
+              <p className="text-xs text-cream/55">
                 Playing as one squad? Keep tickets equal to your group size. Need competing teams? Choose competition
                 above when available.
               </p>
             )}
 
-            <div className="rounded-xl border border-charcoal/10 bg-stone-50 p-4">
+            <div className="rounded-xl border border-cream/10 bg-charcoal/40 p-4">
               <p className="text-lg font-semibold text-gold">{PRICING_HEADLINE}</p>
-              <p className="mt-1 text-sm text-charcoal/65">{PRICING_SUBLINE}</p>
-              <p className="mt-3 text-sm text-charcoal/80">
+              <p className="mt-1 text-sm text-cream/65">{PRICING_SUBLINE}</p>
+              <p className="mt-3 text-sm text-cream/80">
                 {pricingTotalLine(pricePerPerson, playerCount)} ={" "}
                 <span className="font-semibold text-gold">{formatCurrency(estimatedTotal)}</span>
               </p>
               {groupType === "corporate" && (
-                <p className="mt-2 text-xs leading-relaxed text-charcoal/50">{CORPORATE_PRICING_NOTE}</p>
+                <p className="mt-2 text-xs leading-relaxed text-cream/50">{CORPORATE_PRICING_NOTE}</p>
               )}
             </div>
-            <div className="rounded-xl border border-gold/30 bg-amber-50/80 p-4 text-sm text-charcoal/85">
+            <div className="rounded-xl border border-gold/25 bg-gold/5 p-4 text-sm text-cream/85">
               <p className="font-semibold text-gold">{COMPETITION_RULES.headline}</p>
-              <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-charcoal/75">
+              <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-cream/75">
                 {COMPETITION_RULES.bullets.slice(0, 3).map((b) => (
                   <li key={b}>{b}</li>
                 ))}
@@ -557,15 +557,15 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
 
         {step === "team" && (
           <div className="space-y-5">
-            <h2 className="text-xl font-semibold text-charcoal">Team & tickets</h2>
-            <TeamSetupGuidePanel groupType={groupType} guide={setupGuide} tone="light" />
-            <p className="text-sm text-charcoal/70">
+            <h2 className="text-xl font-semibold text-cream">Team & tickets</h2>
+            <TeamSetupGuidePanel groupType={groupType} guide={setupGuide} tone="dark" />
+            <p className="text-sm text-cream/70">
               {playerCount} ticket{playerCount === 1 ? "" : "s"} purchased — one certificate per ticket at the finish line.
             </p>
-            <p className="text-sm text-charcoal/75">
-              <strong className="text-charcoal">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}
+            <p className="text-sm text-cream/75">
+              <strong className="text-cream">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}
               {resolvedPlayFormat === "competition" && !multiSquadsEnabled && (
-                <span className="text-charcoal/65">
+                <span className="text-cream/65">
                   {" "}
                   — one squad on the city leaderboard; add players or choose corporate to split squads.
                 </span>
@@ -632,13 +632,13 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             />
 
             {resolvedPlayFormat === "competition" && multiSquadsEnabled && (
-              <p className="rounded-lg border border-charcoal/10 bg-stone-50 px-3 py-2 text-xs text-charcoal/75">
+              <p className="rounded-lg border border-cream/10 bg-cream/5 px-3 py-2 text-xs text-cream/75">
                 {suggestedTeams} squads suggested for {playerCount} tickets—adjust names, colors, and ticket split below.
               </p>
             )}
 
             <div>
-              <p className="mb-2 text-sm font-medium text-charcoal/80">Player names (optional, for certificates)</p>
+              <p className="mb-2 text-sm font-medium text-cream/80">Player names (optional, for certificates)</p>
               <div className="space-y-2">
                 {playerRoster.map((name, i) => (
                   <Input
@@ -659,7 +659,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 ))}
               </div>
             </div>
-            <label className="flex items-start gap-3 text-sm text-charcoal/80">
+            <label className="flex items-start gap-3 text-sm text-cream/80">
               <input
                 type="checkbox"
                 className="mt-1"
@@ -673,7 +673,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
 
         {step === "preferences" && (
           <div className="space-y-5">
-            <h2 className="text-xl font-semibold text-charcoal">Preferences</h2>
+            <h2 className="text-xl font-semibold text-cream">Preferences</h2>
             <div>
               <label className={FORM_LABEL}>Youngest player age (optional)</label>
               <Input
@@ -684,7 +684,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 onChange={(e) => setYoungestAge(e.target.value === "" ? "" : Number(e.target.value))}
               />
             </div>
-            <label className="flex items-center gap-3 text-sm text-charcoal/80">
+            <label className="flex items-center gap-3 text-sm text-cream/80">
               <input type="checkbox" checked={alcoholFree} onChange={(e) => setAlcoholFree(e.target.checked)} />
               Prefer alcohol-free route
             </label>
@@ -712,21 +712,21 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         )}
 
         {step === "review" && (
-          <div className="space-y-4 text-charcoal/85">
-            <h2 className="text-xl font-semibold text-charcoal">Review & pay</h2>
-            <p><strong className="text-charcoal">Hunt:</strong> {hunt?.title}</p>
-            <p><strong className="text-charcoal">When to play:</strong> {BOOKING_PLAY_WINDOW_SUMMARY}</p>
+          <div className="space-y-4 text-cream/85">
+            <h2 className="text-xl font-semibold text-cream">Review & pay</h2>
+            <p><strong className="text-cream">Hunt:</strong> {hunt?.title}</p>
+            <p><strong className="text-cream">When to play:</strong> {BOOKING_PLAY_WINDOW_SUMMARY}</p>
             {scheduledDate ? (
-              <p><strong className="text-charcoal">Planned visit:</strong> {scheduledDate}</p>
+              <p><strong className="text-cream">Planned visit:</strong> {scheduledDate}</p>
             ) : null}
-            <p><strong className="text-charcoal">Group:</strong> {GROUP_TYPES.find((g) => g.value === groupType)?.label ?? groupType}</p>
-            <p><strong className="text-charcoal">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}</p>
-            <p><strong className="text-charcoal">Tickets:</strong> {playerCount} ({TICKET_ONE_GAME_LINE})</p>
-            <p><strong className="text-charcoal">Rate:</strong> {formatCurrency(pricePerPerson)} / person</p>
-            <p><strong className="text-charcoal">Tickets:</strong> {playerCount} × {formatCurrency(pricePerPerson)}</p>
+            <p><strong className="text-cream">Group:</strong> {GROUP_TYPES.find((g) => g.value === groupType)?.label ?? groupType}</p>
+            <p><strong className="text-cream">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}</p>
+            <p><strong className="text-cream">Tickets:</strong> {playerCount} ({TICKET_ONE_GAME_LINE})</p>
+            <p><strong className="text-cream">Rate:</strong> {formatCurrency(pricePerPerson)} / person</p>
+            <p><strong className="text-cream">Tickets:</strong> {playerCount} × {formatCurrency(pricePerPerson)}</p>
             {useSquads && effectiveSquads.length > 0 ? (
               <div>
-                <p className="text-charcoal"><strong>Squads:</strong></p>
+                <p className="text-cream"><strong>Squads:</strong></p>
                 <ul className="mt-1 list-inside list-disc text-sm">
                   {effectiveSquads.map((s) => (
                     <li key={`${s.name}-${s.color}`}>
@@ -736,9 +736,9 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 </ul>
               </div>
             ) : (
-              <p><strong className="text-charcoal">Team:</strong> {teamName || "—"} · {teamColor}</p>
+              <p><strong className="text-cream">Team:</strong> {teamName || "—"} · {teamColor}</p>
             )}
-            <p><strong className="text-charcoal">Captain:</strong> {captainName} · {captainEmail}</p>
+            <p><strong className="text-cream">Captain:</strong> {captainName} · {captainEmail}</p>
             <p className="text-2xl font-bold text-gold">Total: {formatCurrency(estimatedTotal)}</p>
             <Button variant="primary" onClick={handleCheckout} disabled={checkoutLoading}>
               {checkoutLoading ? "Redirecting…" : "Continue to payment"}
@@ -750,11 +750,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
 
         {step !== "review" && (
           <div className="mt-8 flex justify-between gap-4">
-            <Button
-              type="button"
-              variant="ghost"
-              className="text-charcoal hover:bg-charcoal/5"
-              onClick={goBack}
+            <Button type="button" variant="ghost" onClick={goBack}
               disabled={stepIndex === 0}
             >
               <ChevronLeft className="size-4" /> Back
