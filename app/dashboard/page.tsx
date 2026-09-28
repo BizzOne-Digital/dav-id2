@@ -73,8 +73,10 @@ export default async function DashboardPage() {
                     <CardHeader>
                       <CardTitle>{hunt?.title ?? "Scavenger hunt"}</CardTitle>
                       <CardDescription>
-                        {new Date(booking.scheduledDate).toLocaleDateString()} · {booking.startWindow} ·{" "}
-                        {booking.playerCount} players
+                        {booking.scheduledDate
+                          ? new Date(booking.scheduledDate).toLocaleDateString()
+                          : "Flexible"}{" "}
+                        · {booking.playerCount} players · 72h from purchase
                       </CardDescription>
                     </CardHeader>
                     {gameSession ? (

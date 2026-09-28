@@ -46,6 +46,10 @@ import {
 } from "@/lib/site/teamSetupGuide";
 import { TeamSetupGuidePanel } from "@/components/booking/TeamSetupGuidePanel";
 import { SquadBuilder } from "@/components/booking/SquadBuilder";
+import {
+  BOOKING_FLEXIBLE_START_WINDOW,
+  BOOKING_PLAY_WINDOW_SUMMARY,
+} from "@/lib/site/bookingFlex";
 import { cn } from "@/lib/utils";
 
 export type HuntOption = {
@@ -66,13 +70,6 @@ const GROUP_TYPES = [
   { value: "bachelorette", label: "Bachelorette / Bachelor" },
   { value: "corporate", label: "Corporate" },
   { value: "tourists", label: "Visitors / Tourists" },
-];
-
-const START_WINDOWS = [
-  { value: "morning", label: "Morning (9–11 AM)" },
-  { value: "midday", label: "Midday (11 AM–2 PM)" },
-  { value: "afternoon", label: "Afternoon (2–5 PM)" },
-  { value: "evening", label: "Evening (5–8 PM)" },
 ];
 
 type BookingWizardProps = {
@@ -102,7 +99,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const [huntSlug, setHuntSlug] = useState(defaultSlug);
   const [groupType, setGroupType] = useState(SINGLE_COUPLE_GROUP_TYPE);
   const [scheduledDate, setScheduledDate] = useState("");
-  const [startWindow, setStartWindow] = useState("afternoon");
   const [playerCount, setPlayerCount] = useState(2);
 
   const [teamName, setTeamName] = useState("");
@@ -262,7 +258,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         huntSlug,
         groupType,
         scheduledDate: scheduledDate ? new Date(scheduledDate).toISOString() : undefined,
-        startWindow,
+        startWindow: BOOKING_FLEXIBLE_START_WINDOW,
         playerCount,
         playFormat: resolvedPlayFormat,
         playerRoster: playerRoster.map((n) => n.trim()).filter(Boolean),
@@ -301,7 +297,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
       groupType,
       resolvedPlayFormat,
       scheduledDate,
-      startWindow,
       playerCount,
       teamName,
       captainName,
@@ -324,14 +319,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
     if (step === "details") {
       if (!huntSlug || !hunts.length) {
         setError("No hunt is selected. Go back to Hunts and choose an experience.");
-        return;
-      }
-      if (!scheduledDate) {
-        setError("Pick a date for your hunt.");
-        return;
-      }
-      if (!startWindow) {
-        setError("Choose a start window.");
         return;
       }
     }
@@ -442,24 +429,19 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 onChange={(e) => onGroupTypeChange(e.target.value)}
               />
             </div>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm text-cream/80">Date</label>
-                <Input
-                  type="date"
-                  required
-                  value={scheduledDate}
-                  onChange={(e) => setScheduledDate(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="mb-2 block text-sm text-cream/80">Start window</label>
-                <Select
-                  value={startWindow}
-                  options={START_WINDOWS}
-                  onChange={(e) => setStartWindow(e.target.value)}
-                />
-              </div>
+            <p className="rounded-lg border border-gold/25 bg-gold/5 px-4 py-3 text-sm text-cream/85">
+              {BOOKING_PLAY_WINDOW_SUMMARY}
+            </p>
+            <div>
+              <label className="mb-2 block text-sm text-cream/80">
+                Planned visit date <span className="text-cream/50">(optional)</span>
+              </label>
+              <Input
+                type="date"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
+              />
+              <p className="mt-1 text-xs text-cream/55">For our planning only—your clock starts when you complete checkout.</p>
             </div>
             <div>
               <label className="mb-2 block text-sm text-cream/80">Players</label>
@@ -675,7 +657,10 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
           <div className="space-y-4 text-cream/85">
             <h2 className="text-xl font-semibold text-cream">Review & pay</h2>
             <p><strong className="text-cream">Hunt:</strong> {hunt?.title}</p>
-            <p><strong className="text-cream">Date:</strong> {scheduledDate} ({startWindow})</p>
+            <p><strong className="text-cream">When to play:</strong> {BOOKING_PLAY_WINDOW_SUMMARY}</p>
+            {scheduledDate ? (
+              <p><strong className="text-cream">Planned visit:</strong> {scheduledDate}</p>
+            ) : null}
             <p><strong className="text-cream">Group:</strong> {GROUP_TYPES.find((g) => g.value === groupType)?.label ?? groupType}</p>
             <p><strong className="text-cream">Play format:</strong> {playFormatLabel(resolvedPlayFormat)}</p>
             <p><strong className="text-cream">Players:</strong> {playerCount}</p>

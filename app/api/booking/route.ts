@@ -6,6 +6,7 @@ import { Booking, Hunt } from "@/lib/models";
 import { generateBookingReference } from "@/lib/utils";
 import { syncCatalogHuntsToDb } from "@/lib/hunts/syncCatalogHunts";
 import { missingServerEnv, registrationUnavailableMessage } from "@/lib/env/required";
+import { BOOKING_FLEXIBLE_START_WINDOW } from "@/lib/site/bookingFlex";
 
 export const runtime = "nodejs";
 
@@ -153,12 +154,11 @@ export async function POST(request: Request) {
     if (data.idempotencyKey) patch.idempotencyKey = data.idempotencyKey;
 
     if (!booking) {
-      if (!huntId || !data.groupType || !data.scheduledDate || !data.startWindow || !data.playerCount) {
+      if (!huntId || !data.groupType || data.playerCount === undefined) {
         return NextResponse.json(
           {
             success: false,
-            error:
-              "New bookings require huntId, groupType, scheduledDate, startWindow, and playerCount",
+            error: "New bookings require a hunt, group type, and player count",
           },
           { status: 400 }
         );
@@ -168,8 +168,8 @@ export async function POST(request: Request) {
         ...patch,
         huntId: new mongoose.Types.ObjectId(huntId),
         groupType: data.groupType,
-        scheduledDate: new Date(data.scheduledDate),
-        startWindow: data.startWindow,
+        scheduledDate: data.scheduledDate ? new Date(data.scheduledDate) : new Date(),
+        startWindow: data.startWindow ?? BOOKING_FLEXIBLE_START_WINDOW,
         playerCount: data.playerCount,
         bookingReference: generateBookingReference(),
       });
