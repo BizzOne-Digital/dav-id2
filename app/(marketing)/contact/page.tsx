@@ -12,6 +12,7 @@ import { getPublicHuntListings } from "@/lib/site/getPublicHuntListings";
 import { MARKETING_IMAGES } from "@/lib/site/marketingImages";
 import { PRICING_HEADLINE } from "@/lib/site/pricingCopy";
 import type { MarketingSettings } from "@/components/marketing/types";
+import { resolvePublicPhone, sitePhoneTelHref } from "@/lib/site/contactInfo";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Contact",
@@ -22,6 +23,7 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function ContactPage() {
   const [{ settings }, hunts] = await Promise.all([getSiteSettings(), getPublicHuntListings()]);
   const s = settings as MarketingSettings;
+  const phone = resolvePublicPhone(s.phone);
 
   return (
     <PageTransition>
@@ -62,13 +64,11 @@ export default async function ContactPage() {
         </Card>
         <Card>
           <h2 className="text-lg font-semibold text-cream">Direct line</h2>
-          {s.phone && (
-            <p className="mt-4">
-              <a href={`tel:${s.phone.replace(/\D/g, "")}`} className="text-gold hover:underline">
-                {s.phone}
-              </a>
-            </p>
-          )}
+          <p className="mt-4">
+            <a href={sitePhoneTelHref(phone)} className="text-gold hover:underline">
+              {phone}
+            </a>
+          </p>
           {s.email && (
             <p className="mt-2">
               <a href={`mailto:${s.email}`} className="text-gold hover:underline">{s.email}</a>

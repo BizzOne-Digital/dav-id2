@@ -1,4 +1,5 @@
 import { connectDB } from "@/lib/db/connect";
+import { resolvePublicPhone, SITE_PHONE } from "@/lib/site/contactInfo";
 import { SiteSettings } from "@/lib/models/SiteSettings";
 import { PricingPlan } from "@/lib/models/PricingPlan";
 import { FAQ } from "@/lib/models/Content";
@@ -20,13 +21,16 @@ export async function getSiteSettings() {
     if (!pricing) {
       pricing = await PricingPlan.findOne({ isDefault: true, active: true }).lean();
     }
-    return { settings, pricing };
+    return {
+      settings: { ...settings, phone: resolvePublicPhone(settings.phone) },
+      pricing,
+    };
   } catch {
     return {
       settings: {
         businessName: "Music City Scavenger Hunt",
         tagline: "Explore. Discover. Compete. Create Memories.",
-        phone: "615-571-9900",
+        phone: SITE_PHONE,
         email: "howigetemail@gmail.com",
         defaultPricePerPersonCents: 2995,
         volumePricePerPersonCents: 2500,

@@ -69,7 +69,7 @@ Send **test keys first**, then **live keys** when ready. Use a password manager 
 | Public brand name | |
 | Stripe account email | |
 | Support email on site | |
-| Support phone | |
+| Support phone | **+1 (629) 395-1625** |
 | Live website URL | |
 
 ### B) Stripe API keys (from Dashboard → Developers → API keys)

@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { cn } from "@/lib/utils";
+import { resolvePublicPhone, sitePhoneTelHref } from "@/lib/site/contactInfo";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 import { footerGroupSizeLine, resolveMinPlayers } from "@/lib/site/groupSizeCopy";
 
@@ -80,7 +81,7 @@ export function Footer({ settings, pricing }: FooterProps) {
 
   const businessName = settings.businessName ?? "Music City Scavenger Hunt";
   const tagline = settings.tagline ?? "Explore. Discover. Compete. Create Memories.";
-  const phone = settings.phone ?? "615-571-9900";
+  const phone = resolvePublicPhone(settings.phone);
   const contactEmail = settings.email ?? "howigetemail@gmail.com";
   const newsletterHeading =
     settings.newsletterHeading ?? "Get hunt tips & Music City insider clues";
@@ -182,7 +183,7 @@ export function Footer({ settings, pricing }: FooterProps) {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               <a
-                href={`tel:${phone.replace(/\D/g, "")}`}
+                href={sitePhoneTelHref(phone)}
                 className="flex items-center gap-3 rounded-xl border border-cream/10 bg-charcoal/80 p-4 transition-colors hover:border-gold/40 hover:bg-cream/5"
               >
                 <span className="flex size-10 items-center justify-center rounded-full bg-gold/15">
