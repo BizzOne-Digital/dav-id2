@@ -9,7 +9,8 @@
     "lint": "eslint",
     "seed": "tsx scripts/seed.ts",
     "prod:check": "npm run lint && npm run build",
-    "stripe:verify": "node --env-file=.env.local ./node_modules/tsx/dist/cli.mjs scripts/verify-stripe.ts"
+    "stripe:verify": "node --env-file=.env.local ./node_modules/tsx/dist/cli.mjs scripts/verify-stripe.ts",
+    "favicon:generate": "node scripts/generate-favicon.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -45,6 +46,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
+    "to-ico": "^1.1.5",
     "tsx": "^4.23.13",
     "typescript": "^5"
   }
