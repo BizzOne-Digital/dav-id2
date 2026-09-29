@@ -50,15 +50,15 @@ export const MARKETING_IMAGES = {
     alt: "Completion certificate and polaroids with Music City skyline at night",
   },
   promoFlyer: {
-    src: "/images/nashville-promo-flyer.png",
-    alt: "Music City Scavenger Hunt promo — Music City challenge, $29.95 per person, book your adventure",
+    src: "/images/nashville-promo-flyer.jpg",
+    alt: "Music City Scavenger Hunt — The Ultimate Music City Challenge. Explore, solve, compete, win. $29.95 per person with QR code to book.",
   },
   /** High-resolution homepage poster (client artwork) */
   promoPoster: {
     src: "/images/nashville-promo-poster.jpg",
     alt: "Music City Scavenger Hunt — The Ultimate Music City Challenge. Explore, solve, compete, win. Book your adventure.",
-    width: 648,
-    height: 1024,
+    width: 1200,
+    height: 1600,
   },
 } as const;
 
