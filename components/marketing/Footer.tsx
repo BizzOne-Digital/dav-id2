@@ -181,29 +181,31 @@ export function Footer({ settings, pricing }: FooterProps) {
               </li>
             </ul>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="mt-8 flex max-w-md flex-col gap-3">
               <a
                 href={sitePhoneTelHref(phone)}
-                className="flex items-center gap-3 rounded-xl border border-cream/10 bg-charcoal/80 p-4 transition-colors hover:border-gold/40 hover:bg-cream/5"
+                className="flex min-w-0 items-start gap-3 rounded-xl border border-cream/10 bg-charcoal/80 p-4 transition-colors hover:border-gold/40 hover:bg-cream/5"
               >
-                <span className="flex size-10 items-center justify-center rounded-full bg-gold/15">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold/15">
                   <Phone className="size-4 text-gold" aria-hidden />
                 </span>
-                <span>
+                <span className="min-w-0">
                   <span className="block text-[10px] uppercase tracking-wider text-cream/50">Call us</span>
                   <span className="text-sm font-semibold text-cream">{phone}</span>
                 </span>
               </a>
               <a
                 href={`mailto:${contactEmail}`}
-                className="flex items-center gap-3 rounded-xl border border-cream/10 bg-charcoal/80 p-4 transition-colors hover:border-gold/40 hover:bg-cream/5"
+                className="flex min-w-0 items-start gap-3 rounded-xl border border-cream/10 bg-charcoal/80 p-4 transition-colors hover:border-gold/40 hover:bg-cream/5"
               >
-                <span className="flex size-10 items-center justify-center rounded-full bg-gold/15">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold/15">
                   <Mail className="size-4 text-gold" aria-hidden />
                 </span>
-                <span className="min-w-0">
+                <span className="min-w-0 flex-1">
                   <span className="block text-[10px] uppercase tracking-wider text-cream/50">Email</span>
-                  <span className="truncate text-sm font-semibold text-cream">{contactEmail}</span>
+                  <span className="block text-sm font-semibold leading-snug text-cream [overflow-wrap:anywhere]">
+                    {contactEmail}
+                  </span>
                 </span>
               </a>
             </div>
