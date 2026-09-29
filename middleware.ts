@@ -18,7 +18,7 @@ export default auth((request) => {
     }
   }
 
-  if (pathname.startsWith("/dashboard") || pathname.startsWith("/game")) {
+  if (pathname.startsWith("/dashboard")) {
     if (!session?.user) {
       return NextResponse.redirect(new URL(`/login?callbackUrl=${pathname}`, request.url));
     }
@@ -28,5 +28,5 @@ export default auth((request) => {
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/dashboard/:path*", "/game/:path*"],
+  matcher: ["/admin/:path*", "/dashboard/:path*"],
 };

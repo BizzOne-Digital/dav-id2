@@ -42,7 +42,11 @@ function LoginForm() {
     <Card>
       <CardHeader>
         <CardTitle>Welcome back</CardTitle>
-        <CardDescription>Sign in to manage your hunt and team.</CardDescription>
+        <CardDescription>
+          Sign in to manage bookings and certificates. If you just paid as a guest, create an account with the
+          same email you used at checkout—or open the game lobby from your confirmation page (login not required
+          to play).
+        </CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit} className="space-y-4">
         <Input

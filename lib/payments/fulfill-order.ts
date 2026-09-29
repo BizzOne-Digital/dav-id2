@@ -111,16 +111,21 @@ export async function fulfillOrder(input: FulfillOrderInput): Promise<FulfillOrd
       asObjectId(booking.userId) ??
       (input.userId ? new mongoose.Types.ObjectId(input.userId) : undefined);
     if (!captainId && booking.captainEmail) {
-      const captain = await User.findOne({ email: booking.captainEmail.toLowerCase() });
-      captainId = asObjectId(captain?._id);
+      const email = booking.captainEmail.toLowerCase();
+      let captain = await User.findOne({ email });
+      if (!captain) {
+        captain = await User.create({
+          email,
+          name: booking.captainName?.trim() || "Hunt Captain",
+          role: "customer",
+        });
+      }
+      captainId = asObjectId(captain._id);
     }
     if (!captainId) {
-      const placeholder = await User.findOne({ email: "placeholder@captain.local" });
-      captainId = asObjectId(placeholder?._id);
+      throw new Error("Cannot create game session without a captain email on the booking");
     }
-    if (!captainId) {
-      throw new Error("Cannot create game session without a captain user");
-    }
+    booking.userId = captainId;
 
     type SquadRow = { name: string; color: string; playerCount: number };
     const squads: SquadRow[] =

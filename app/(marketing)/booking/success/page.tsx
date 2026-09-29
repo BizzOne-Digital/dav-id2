@@ -92,9 +92,21 @@ export default async function BookingSuccessPage({
 
         <Card className="mt-10 space-y-4">
           {booking?.bookingReference && (
-            <p>
-              <span className="text-cream/60">Booking reference: </span>
-              <strong className="text-gold">{booking.bookingReference}</strong>
+            <div>
+              <p>
+                <span className="text-cream/60">Booking reference: </span>
+                <strong className="text-gold">{booking.bookingReference}</strong>
+              </p>
+              <p className="mt-1 text-xs text-cream/55">
+                For receipts and support only—not a join code. Players need the 6-digit team code below.
+              </p>
+            </div>
+          )}
+
+          {booking && teams.length === 0 && (
+            <p className="rounded-lg border border-orange/40 bg-orange/10 px-4 py-3 text-sm text-cream/85">
+              Your team codes are still being prepared. Refresh this page in a few seconds. If nothing appears,
+              email support with your booking reference.
             </p>
           )}
 
@@ -139,13 +151,14 @@ export default async function BookingSuccessPage({
           )}
 
           <ol className="list-decimal space-y-2 pl-5 text-sm text-cream/80">
-            <li>Invite players with the join code or link from your dashboard.</li>
+            <li>Share the 6-digit join code above—players do not need to log in.</li>
+            <li>Captain: use Open game lobby below (no account required).</li>
             <li>
               Start and finish within {HUNT_PLAY_WINDOW_HOURS} hours of purchase
               {playDeadlineLabel ? ` (by ${playDeadlineLabel})` : ""}.
             </li>
-            <li>Open the game lobby when your group is ready—captain starts the hunt.</li>
-            <li>Clues appear one stop at a time on any phone browser.</li>
+            <li>When your group is ready, the captain starts the hunt from the lobby.</li>
+            <li>Clues appear one stop at a time in any phone browser.</li>
             {teams.length > 1 && (
               <li>Corporate groups: assign one captain per squad to start their lobby.</li>
             )}
@@ -158,8 +171,11 @@ export default async function BookingSuccessPage({
               Open game lobby
             </Button>
           ) : null}
-          <Button href="/dashboard" variant={teams.length === 1 ? "secondary" : "primary"}>
-            Go to dashboard
+          <Button href="/signup" variant={teams.length === 1 ? "secondary" : "primary"}>
+            Create account (optional)
+          </Button>
+          <Button href="/dashboard" variant="ghost">
+            Dashboard (sign in)
           </Button>
           <Button href="/join" variant="ghost">
             Join as player

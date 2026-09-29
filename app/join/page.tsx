@@ -19,10 +19,19 @@ export default function JoinPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    const raw = joinCode.trim();
+    if (/^BK-/i.test(raw)) {
+      setError(
+        "That looks like a booking reference (BK-…), not a join code. Use the 6-digit team code from your confirmation page or captain."
+      );
+      setLoading(false);
+      return;
+    }
+    const normalized = raw.replace(/\s/g, "").toUpperCase();
     const res = await fetch("/api/join", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ joinCode: joinCode.trim(), displayName }),
+      body: JSON.stringify({ joinCode: normalized, displayName }),
     });
     const data = (await res.json()) as {
       success?: boolean;
@@ -48,8 +57,8 @@ export default function JoinPage() {
         <CardHeader>
           <CardTitle>Join your team</CardTitle>
           <CardDescription>
-            Enter the 6-digit code from your captain. Codes work for {HUNT_PLAY_WINDOW_HOURS} hours after
-            purchase—enough for a typical weekend trip.
+            Enter the <strong className="text-cream">6-digit team join code</strong> from your captain—not your
+            BK- booking reference. Codes work for {HUNT_PLAY_WINDOW_HOURS} hours after purchase.
           </CardDescription>
         </CardHeader>
         <form onSubmit={onSubmit} className="space-y-4">
