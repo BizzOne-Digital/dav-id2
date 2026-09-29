@@ -6,8 +6,8 @@ import { PageTransition } from "@/components/motion/PageTransition";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle2 } from "lucide-react";
-import { CopyJoinCodeButton } from "@/components/booking/CopyJoinCodeButton";
-import { confirmCheckoutSession } from "@/lib/payments/confirm-checkout-session";
+import { ensureBookingPlayReady } from "@/lib/payments/ensure-booking-ready";
+import { BookingSuccessJoinPanel } from "@/components/booking/BookingSuccessJoinPanel";
 import {
   formatPlayDeadline,
   HUNT_PLAY_WINDOW_HOURS,
@@ -30,16 +30,9 @@ export default async function BookingSuccessPage({
   }> = [];
   let sessions: Array<{ _id: unknown; teamId: unknown; sessionCode: string }> = [];
 
-  if (stripeSessionId) {
-    try {
-      await confirmCheckoutSession(stripeSessionId);
-    } catch (err) {
-      console.error("[booking/success] Stripe confirm failed", err);
-    }
-  }
-
   if (bookingId) {
     try {
+      await ensureBookingPlayReady(bookingId, stripeSessionId);
       await connectDB();
       booking = await Booking.findById(bookingId).lean();
       if (booking) {
@@ -68,6 +61,17 @@ export default async function BookingSuccessPage({
       )
     : null;
   const playDeadlineLabel = playExpiresAt ? formatPlayDeadline(playExpiresAt) : null;
+
+  const teamRows = teams.map((team) => {
+    const session = sessionByTeam.get(String(team._id));
+    return {
+      id: String(team._id),
+      name: team.name,
+      color: team.color,
+      joinCode: team.joinCode,
+      sessionId: session ? String(session._id) : null,
+    };
+  });
 
   return (
     <PageTransition>
@@ -103,52 +107,13 @@ export default async function BookingSuccessPage({
             </div>
           )}
 
-          {booking && teams.length === 0 && (
-            <p className="rounded-lg border border-orange/40 bg-orange/10 px-4 py-3 text-sm text-cream/85">
-              Your team codes are still being prepared. Refresh this page in a few seconds. If nothing appears,
-              email support with your booking reference.
-            </p>
-          )}
-
-          {teams.length > 0 && (
-            <div className="space-y-4">
-              {teams.map((team) => {
-                const session = sessionByTeam.get(String(team._id));
-                return (
-                  <div
-                    key={String(team._id)}
-                    className="rounded-lg border border-cream/10 bg-charcoal/30 p-4"
-                  >
-                    <p>
-                      <span className="text-cream/60">Team: </span>
-                      <strong>{team.name}</strong> ({team.color}{" "}
-                      {String(team.number).padStart(2, "0")})
-                    </p>
-                    <p className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className="text-cream/60">Join code: </span>
-                      <strong className="text-gold">{team.joinCode}</strong>
-                      <CopyJoinCodeButton code={team.joinCode} />
-                    </p>
-                    {session?.sessionCode ? (
-                      <p className="mt-1 text-sm">
-                        <span className="text-cream/60">Session: </span>
-                        <strong>{session.sessionCode}</strong>
-                      </p>
-                    ) : null}
-                    {session ? (
-                      <Button
-                        href={`/game/lobby/${String(session._id)}`}
-                        variant="secondary"
-                        className="mt-3 w-full sm:w-auto"
-                      >
-                        Open this squad&apos;s lobby
-                      </Button>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          {bookingId ? (
+            <BookingSuccessJoinPanel
+              bookingId={bookingId}
+              stripeSessionId={stripeSessionId}
+              initialTeams={teamRows}
+            />
+          ) : null}
 
           <ol className="list-decimal space-y-2 pl-5 text-sm text-cream/80">
             <li>Share the 6-digit join code above—players do not need to log in.</li>
