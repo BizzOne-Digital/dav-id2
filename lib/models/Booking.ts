@@ -36,6 +36,7 @@ const BookingSchema = new Schema(
       enum: ["single_group", "competition"],
     },
     emergencyConsent: { type: Boolean, default: false },
+    photoMarketingConsent: { type: Boolean, default: false },
     referralCode: String,
     promoCode: String,
     status: {

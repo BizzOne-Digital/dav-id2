@@ -43,7 +43,7 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
       <h2>Participation</h2>
       <p>Players must follow local laws, respect businesses, and behave responsibly in public spaces.</p>
       <h2>Content &amp; photos</h2>
-      <p>Challenge submissions may be used for leaderboards and marketing unless you opt out in writing.</p>
+      <p>Challenge submissions appear on leaderboards. We only use your photos or videos in marketing if you opt in at checkout (optional checkbox). You may withdraw marketing consent anytime by contacting us.</p>
       <h2>Liability</h2>
       <p>Activities involve walking outdoors. Participation is at your own risk to the extent permitted by Tennessee law.</p>
       <h2>Changes</h2>
@@ -112,8 +112,8 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     heroTitle: "From booking to victory lap",
     heroSubtitle: "Eight simple steps from your couch to the top of the leaderboard.",
     content: `
-      <p>Choose your hunt and date, gather your crew, and we send join codes before start time.</p>
-      <p>On hunt day, open the link in any mobile browser, follow GPS-guided stops, and submit answers and photo challenges.</p>
+      <p>Choose your hunt and tickets, gather your crew, and complete checkout when you are ready to play. An optional visit date is for planning only.</p>
+      <p>Join codes arrive by email after purchase. Your 72-hour window starts at checkout—open the hunt in any mobile browser, follow GPS-guided stops, and submit answers and photo challenges.</p>
       <p>Scores update live. Finish all stops, claim your rank, and keep exploring Music City afterward.</p>
     `,
   },

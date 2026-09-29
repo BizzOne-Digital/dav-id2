@@ -16,8 +16,16 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ALL_MARKETING_IMAGES } from "@/lib/site/marketingImages";
 
 const STEPS = [
-  { icon: CalendarCheck, title: "Book online", body: "Pick your date, group size, and experience type in minutes." },
-  { icon: KeyRound, title: "Get your codes", body: "Receive team join codes by email—you have 72 hours from purchase to play and finish." },
+  {
+    icon: CalendarCheck,
+    title: "Book online",
+    body: "Choose your hunt, tickets, and group type. Optional visit date helps us plan—your play clock starts at checkout.",
+  },
+  {
+    icon: KeyRound,
+    title: "Get your codes",
+    body: "Join codes arrive by email right after purchase. You have 72 hours from checkout to join, play, and finish.",
+  },
   { icon: UsersRound, title: "Form teams", body: "Split into squads—or stay one big crew—and choose a team name." },
   { icon: Smartphone, title: "Open the hunt", body: "Use any phone browser; no app download required." },
   { icon: MapPinned, title: "Follow the route", body: "GPS-guided stops across downtown and signature neighborhoods." },

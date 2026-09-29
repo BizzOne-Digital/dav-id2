@@ -7,6 +7,11 @@ import {
   coverImageForHunt,
 } from "@/lib/site/huntCatalog";
 
+function catalogSortIndex(slug: string): number {
+  const i = CATALOG_HUNTS.findIndex((h) => h.slug === slug);
+  return i === -1 ? 999 : i;
+}
+
 /** Idempotent: ensures every catalog hunt exists as published (same as seed). */
 export async function syncCatalogHuntsToDb(): Promise<void> {
   await connectDB();
@@ -59,9 +64,10 @@ export async function getBookableHunts(): Promise<BookableHuntOption[]> {
     const plan = await PricingPlan.findOne({ isDefault: true, active: true }).lean();
     if (plan?.pricePerPersonCents) defaultPrice = plan.pricePerPersonCents;
 
-    const rows = await Hunt.find({ status: "published" }).sort({ featured: -1, title: 1 }).lean();
+    const rows = await Hunt.find({ status: "published" }).lean();
     if (rows.length > 0) {
-      return rows.map((h) => ({
+      const sorted = [...rows].sort((a, b) => catalogSortIndex(a.slug) - catalogSortIndex(b.slug));
+      return sorted.map((h) => ({
         id: String(h._id),
         slug: h.slug,
         title: h.title,

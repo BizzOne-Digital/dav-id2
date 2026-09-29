@@ -19,6 +19,9 @@ export const CATALOG_HUNT_COVER_PATHS = [
   "/images/prizes-trophy.jpg",
 ];
 
+/** Default hunt in booking when no `?hunt=` param — general downtown experience, not party-specific */
+export const DEFAULT_BOOKING_HUNT_SLUG = "broadway-beats";
+
 export const CATALOG_HUNTS: CatalogHunt[] = [
   {
     title: "Broadway Beats Hunt",

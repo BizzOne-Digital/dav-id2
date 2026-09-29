@@ -66,7 +66,10 @@ export function InGameOffersSection({ offers }: InGameOffersSectionProps) {
       ["coupons", offers.coupons],
       ["prizes", offers.prizes],
     ] as const
-  ).filter(([, o]) => o.published !== false);
+  ).filter(
+    ([key, o]) =>
+      o.published !== false && !(key === "prizes" && o.comingSoon === true)
+  );
 
   if (cards.length === 0) return null;
 

@@ -53,8 +53,10 @@ import { SquadBuilder } from "@/components/booking/SquadBuilder";
 import { TicketCountStepper } from "@/components/booking/TicketCountStepper";
 import {
   BOOKING_FLEXIBLE_START_WINDOW,
+  BOOKING_PLANNED_DATE_HINT,
   BOOKING_PLAY_WINDOW_SUMMARY,
 } from "@/lib/site/bookingFlex";
+import { DEFAULT_BOOKING_HUNT_SLUG } from "@/lib/site/huntCatalog";
 import { cn } from "@/lib/utils";
 
 export type HuntOption = {
@@ -98,7 +100,11 @@ function resizePlayerRoster(prev: string[], count: number): string[] {
 
 export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const router = useRouter();
-  const defaultSlug = initialHuntSlug ?? hunts[0]?.slug ?? "";
+  const defaultSlug =
+    initialHuntSlug ??
+    hunts.find((h) => h.slug === DEFAULT_BOOKING_HUNT_SLUG)?.slug ??
+    hunts[0]?.slug ??
+    "";
   const [step, setStep] = useState<Step>("details");
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [idempotencyKey] = useState(() => crypto.randomUUID());
@@ -116,6 +122,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const [captainPhone, setCaptainPhone] = useState("");
   const [teamColor, setTeamColor] = useState<TeamColor>("GOLD");
   const [emergencyConsent, setEmergencyConsent] = useState(false);
+  const [photoMarketingConsent, setPhotoMarketingConsent] = useState(false);
   const [squads, setSquads] = useState<SquadPlan[]>([]);
 
   const [youngestAge, setYoungestAge] = useState<number | "">("");
@@ -290,6 +297,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         teamColor: useSquads && effectiveSquads[0] ? effectiveSquads[0].color : teamColor,
         squads: useSquads ? effectiveSquads : undefined,
         emergencyConsent,
+        photoMarketingConsent,
         youngestAge: youngestAge === "" ? undefined : youngestAge,
         accessibilityNotes: accessibilityNotes || undefined,
         alcoholFree,
@@ -328,6 +336,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
       effectiveSquads,
       playerRoster,
       emergencyConsent,
+      photoMarketingConsent,
       youngestAge,
       accessibilityNotes,
       alcoholFree,
@@ -467,7 +476,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 onChange={(e) => setScheduledDate(e.target.value)}
               />
               <p className="mt-1 text-xs text-cream/55">
-                For our planning only—your clock starts when you complete checkout.
+                For our planning only—your clock starts when you complete checkout. {BOOKING_PLANNED_DATE_HINT}
               </p>
             </div>
             <div>
@@ -523,8 +532,9 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               </div>
             ) : isSoloOrPairGroupType(groupType) ? (
               <p className="text-xs text-cream/55">
-                One team, one join code—{groupType === SINGLE_GROUP_TYPE ? "solo" : "couple"} play together on the
-                leaderboard.
+                {groupType === SINGLE_GROUP_TYPE
+                  ? "One player forms one team and receives one join code for the leaderboard."
+                  : "One team, one join code—couples buy two tickets (one per player)."}
               </p>
             ) : (
               <p className="text-xs text-cream/55">
@@ -667,6 +677,15 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 onChange={(e) => setEmergencyConsent(e.target.checked)}
               />
               I agree to receive hunt-day updates by email or text.
+            </label>
+            <label className="flex items-start gap-3 text-sm text-cream/80">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={photoMarketingConsent}
+                onChange={(e) => setPhotoMarketingConsent(e.target.checked)}
+              />
+              Optional: I agree my hunt photos and videos may be used in Music City Scavenger Hunt marketing.
             </label>
           </div>
         )}

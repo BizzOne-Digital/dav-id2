@@ -7,8 +7,8 @@ import {
   CalendarDays,
   CirclePlay,
   Clock,
-  Gift,
   MapPin,
+  Medal,
   Search,
   Star,
   Trophy,
@@ -234,7 +234,7 @@ export function Hero({ settings, pricing }: HeroProps) {
             <div className="flex justify-center gap-1.5 sm:gap-2 lg:justify-end lg:gap-3">
               <PolaroidCard title="Solve Clues" icon={Search} rotate="-6deg" delay={0.55} />
               <PolaroidCard title="Earn Points" icon={Trophy} rotate="4deg" delay={0.65} />
-              <PolaroidCard title="Win Prizes" icon={Gift} rotate="-3deg" delay={0.75} />
+              <PolaroidCard title="Climb the Board" icon={Medal} rotate="-3deg" delay={0.75} />
             </div>
 
             <h1 className="hero-headline-distressed mt-5 max-w-md text-balance text-center font-[family-name:var(--font-bebas)] text-[1.65rem] leading-[0.95] tracking-wide text-white min-[380px]:text-2xl sm:mt-6 sm:text-3xl md:text-4xl lg:mt-4 lg:text-right lg:text-[2.35rem]">

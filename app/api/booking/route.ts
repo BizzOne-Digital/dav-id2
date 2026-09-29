@@ -45,6 +45,7 @@ const draftSchema = z.object({
     .optional(),
   playFormat: z.enum(["single_group", "competition"]).optional(),
   emergencyConsent: z.boolean().optional(),
+  photoMarketingConsent: z.boolean().optional(),
   referralCode: z.string().max(50).optional(),
   promoCode: z.string().max(50).optional(),
   userId: z.string().optional(),
@@ -148,6 +149,7 @@ export async function POST(request: Request) {
     if (data.squads) patch.squads = data.squads;
     if (data.playFormat) patch.playFormat = data.playFormat;
     if (data.emergencyConsent !== undefined) patch.emergencyConsent = data.emergencyConsent;
+    if (data.photoMarketingConsent !== undefined) patch.photoMarketingConsent = data.photoMarketingConsent;
     if (data.referralCode) patch.referralCode = data.referralCode;
     if (data.promoCode) patch.promoCode = data.promoCode;
     if (data.userId) patch.userId = data.userId;
