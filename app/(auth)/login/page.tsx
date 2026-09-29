@@ -85,6 +85,11 @@ function LoginForm() {
           Create one
         </Link>
       </p>
+      <p className="mt-4 border-t border-cream/10 pt-4 text-center text-sm text-cream/65">
+        Just paid? You don&apos;t need this page—use{" "}
+        <Link href="/join" className="text-gold hover:underline">Join</Link> with your 6-digit code, or reopen
+        your browser tab titled &quot;You&apos;re booked!&quot;
+      </p>
     </Card>
   );
 }
