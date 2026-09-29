@@ -3,7 +3,7 @@ import { resolve } from "path";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/connect";
 import { DEFAULT_IN_GAME_OFFERS } from "@/lib/site/inGameOffers";
-import { SITE_PHONE } from "@/lib/site/contactInfo";
+import { SITE_EMAIL, SITE_PHONE } from "@/lib/site/contactInfo";
 import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
 import { CATALOG_HUNTS, CATALOG_HUNT_COVER_PATHS, coverImageForHunt } from "@/lib/site/huntCatalog";
 import { slugify } from "@/lib/utils";
@@ -89,7 +89,7 @@ async function upsertSiteSettings(pricingPlanId: string) {
       businessName: "Music City Scavenger Hunt",
       tagline: "Explore. Discover. Compete. Create Memories.",
       phone: SITE_PHONE,
-      email: "howigetemail@gmail.com",
+      email: SITE_EMAIL,
       domain: "NashvilleScavengerHunt.com",
       hero: {
         headline: "Explore. Discover. Compete. Create Memories.",

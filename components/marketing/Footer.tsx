@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { cn } from "@/lib/utils";
-import { resolvePublicPhone, sitePhoneTelHref } from "@/lib/site/contactInfo";
+import { resolvePublicEmail, resolvePublicPhone, sitePhoneTelHref } from "@/lib/site/contactInfo";
 import type { MarketingPricing, MarketingSettings } from "@/components/marketing/types";
 import { footerGroupSizeLine, resolveMinPlayers } from "@/lib/site/groupSizeCopy";
 
@@ -82,7 +82,7 @@ export function Footer({ settings, pricing }: FooterProps) {
   const businessName = settings.businessName ?? "Music City Scavenger Hunt";
   const tagline = settings.tagline ?? "Explore. Discover. Compete. Create Memories.";
   const phone = resolvePublicPhone(settings.phone);
-  const contactEmail = settings.email ?? "howigetemail@gmail.com";
+  const contactEmail = resolvePublicEmail(settings.email);
   const newsletterHeading =
     settings.newsletterHeading ?? "Get hunt tips & Music City insider clues";
   const footerText =

@@ -1,5 +1,17 @@
+/** Public contact email shown on the website */
+export const SITE_EMAIL = "contact@musiccityscavengerhunt.com";
+
 /** Public business phone (E.164 +1 629 395 1625) */
 export const SITE_PHONE = "+1 (629) 395-1625";
+
+const LEGACY_EMAILS = new Set(["howigetemail@gmail.com"]);
+
+export function resolvePublicEmail(email?: string | null): string {
+  if (!email?.trim()) return SITE_EMAIL;
+  const normalized = email.trim().toLowerCase();
+  if (LEGACY_EMAILS.has(normalized)) return SITE_EMAIL;
+  return email.trim();
+}
 
 const LEGACY_PHONE_DIGITS = new Set(["6155719900"]);
 

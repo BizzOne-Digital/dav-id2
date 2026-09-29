@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/db/connect";
-import { resolvePublicPhone, SITE_PHONE } from "@/lib/site/contactInfo";
+import { resolvePublicEmail, resolvePublicPhone, SITE_EMAIL, SITE_PHONE } from "@/lib/site/contactInfo";
 import { SiteSettings } from "@/lib/models/SiteSettings";
 import { PricingPlan } from "@/lib/models/PricingPlan";
 import { FAQ } from "@/lib/models/Content";
@@ -22,7 +22,11 @@ export async function getSiteSettings() {
       pricing = await PricingPlan.findOne({ isDefault: true, active: true }).lean();
     }
     return {
-      settings: { ...settings, phone: resolvePublicPhone(settings.phone) },
+      settings: {
+        ...settings,
+        phone: resolvePublicPhone(settings.phone),
+        email: resolvePublicEmail(settings.email),
+      },
       pricing,
     };
   } catch {
@@ -31,7 +35,7 @@ export async function getSiteSettings() {
         businessName: "Music City Scavenger Hunt",
         tagline: "Explore. Discover. Compete. Create Memories.",
         phone: SITE_PHONE,
-        email: "howigetemail@gmail.com",
+        email: SITE_EMAIL,
         defaultPricePerPersonCents: 2995,
         volumePricePerPersonCents: 2500,
         volumeMinPlayers: 10,

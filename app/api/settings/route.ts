@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSiteSettings } from "@/lib/site/getSiteSettings";
-import { resolvePublicPhone } from "@/lib/site/contactInfo";
+import { resolvePublicEmail, resolvePublicPhone } from "@/lib/site/contactInfo";
 import type { ISiteSettings } from "@/lib/models/SiteSettings";
 import type { IPricingPlan } from "@/lib/models/PricingPlan";
 
@@ -16,7 +16,7 @@ export async function GET() {
         businessName: site.businessName,
         tagline: site.tagline,
         phone: resolvePublicPhone(site.phone),
-        email: site.email,
+        email: resolvePublicEmail(site.email),
         domain: site.domain,
         logoUrl: site.logoUrl,
         faviconUrl: site.faviconUrl,

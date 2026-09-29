@@ -6,7 +6,7 @@ const SiteSettingsSchema = new Schema(
     businessName: { type: String, default: "Music City Scavenger Hunt" },
     tagline: { type: String, default: "Explore. Discover. Compete. Create Memories." },
     phone: { type: String, default: "+1 (629) 395-1625" },
-    email: { type: String, default: "howigetemail@gmail.com" },
+    email: { type: String, default: "contact@musiccityscavengerhunt.com" },
     domain: { type: String, default: "NashvilleScavengerHunt.com" },
     logoUrl: { type: String },
     faviconUrl: { type: String },
