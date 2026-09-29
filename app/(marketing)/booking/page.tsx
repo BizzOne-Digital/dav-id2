@@ -24,7 +24,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
       <PageHero
         eyebrow="Reservations"
         title="Book your hunt"
-        subtitle="Four steps—choose your hunt and tickets, set up your team, then checkout when you are ready to play. Your 72-hour window begins at payment, not on an optional visit date."
+        subtitle="Three steps—choose your hunt and tickets, set up your team, then checkout when you are ready to play. Your 72-hour window begins at payment, not on an optional visit date."
         backgroundImage={PAGE_HERO_IMAGES.booking}
       />
       <div className="site-x page-y">

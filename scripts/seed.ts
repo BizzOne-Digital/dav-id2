@@ -429,10 +429,13 @@ async function seedPages() {
       slug: "about",
       title: "About Us",
       seoTitle: "About Music City Scavenger Hunt",
+      seoDescription:
+        "Locally owned downtown adventures with local clues, friendly competition, and the energy of Music City—not just another tour.",
       heroTitle: "We turn Music City into your game board",
-      heroSubtitle: "Locally written clues, fair routes, and unforgettable team moments.",
-      content:
-        "<p>Music City Scavenger Hunt designs downtown adventures for families, friends, and corporate teams.</p>",
+      heroSubtitle:
+        "Locally owned by downtown enthusiasts who believe Nashville should be experienced—not simply toured.",
+      content: `<p>Music City Scavenger Hunt is locally owned and created by downtown enthusiasts who believe Nashville should be experienced—not simply toured. We turn what could be another tourist stop into an interactive adventure filled with local clues, friendly competition, memorable challenges, and unexpected discoveries.</p>
+<p>Our goal is to help visitors experience the energy, history, music, and personality of downtown Music City while having a whole lot of fun along the way.</p>`,
     },
     { upsert: true, new: true }
   );

@@ -43,8 +43,8 @@ export default async function HowItWorksPage() {
         />
       </div>
 
-      <div className="site-x mx-auto max-w-3xl border-b border-cream/10 pb-6 pt-0 text-center sm:pb-8">
-        <RichContent html={page.content} className="prose-p:mx-auto prose-p:max-w-2xl" />
+      <div className="site-x mx-auto max-w-3xl border-b border-cream/10 pb-6 pt-0 sm:pb-8">
+        <RichContent html={page.content} className="prose-p:text-pretty prose-p:leading-relaxed" />
       </div>
 
       <HowItWorksJourney showHeading={false} spacing="tight" />

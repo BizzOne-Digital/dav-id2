@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
 import { formatCurrency } from "@/lib/utils";
 import { resolvePricePerPersonCents } from "@/lib/pricing/resolve-price";
 import {
@@ -57,6 +56,7 @@ import {
   BOOKING_PLAY_WINDOW_SUMMARY,
 } from "@/lib/site/bookingFlex";
 import { DEFAULT_BOOKING_HUNT_SLUG } from "@/lib/site/huntCatalog";
+import { deriveBookingRoutePrefs } from "@/lib/site/bookingPreferences";
 import { cn } from "@/lib/utils";
 
 export type HuntOption = {
@@ -67,8 +67,14 @@ export type HuntOption = {
   pricePerPersonCents: number;
 };
 
-const STEPS = ["details", "team", "preferences", "review"] as const;
+const STEPS = ["details", "team", "review"] as const;
 type Step = (typeof STEPS)[number];
+
+const STEP_LABELS: Record<Step, string> = {
+  details: "Details",
+  team: "Team",
+  review: "Review",
+};
 
 const FORM_FIELD = "light" as const;
 const FORM_LABEL = "mb-2 block text-sm font-medium text-cream/85";
@@ -125,10 +131,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const [photoMarketingConsent, setPhotoMarketingConsent] = useState(false);
   const [squads, setSquads] = useState<SquadPlan[]>([]);
 
-  const [youngestAge, setYoungestAge] = useState<number | "">("");
-  const [accessibilityNotes, setAccessibilityNotes] = useState("");
-  const [alcoholFree, setAlcoholFree] = useState(false);
-  const [walkingPref, setWalkingPref] = useState("moderate");
   const [playFormat, setPlayFormat] = useState<PlayFormat>("single_group");
 
   const [playerRoster, setPlayerRoster] = useState<string[]>([""]);
@@ -279,6 +281,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
   const saveStep = useCallback(
     async (current: Step) => {
       setError(null);
+      const routePrefs = deriveBookingRoutePrefs(groupType, huntSlug);
       const body: Record<string, unknown> = {
         step: current,
         idempotencyKey,
@@ -298,10 +301,8 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
         squads: useSquads ? effectiveSquads : undefined,
         emergencyConsent,
         photoMarketingConsent,
-        youngestAge: youngestAge === "" ? undefined : youngestAge,
-        accessibilityNotes: accessibilityNotes || undefined,
-        alcoholFree,
-        walkingPref,
+        alcoholFree: routePrefs.alcoholFree,
+        youngestAge: routePrefs.youngestAge,
       };
 
       const res = await fetch("/api/booking", {
@@ -337,10 +338,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
       playerRoster,
       emergencyConsent,
       photoMarketingConsent,
-      youngestAge,
-      accessibilityNotes,
-      alcoholFree,
-      walkingPref,
     ]
   );
 
@@ -434,7 +431,7 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
             )}
           >
             {i < stepIndex ? <Check className="size-3.5" /> : <span>{i + 1}</span>}
-            {s}
+            {STEP_LABELS[s]}
           </li>
         ))}
       </ol>
@@ -444,7 +441,9 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
           <div className="space-y-5">
             <h2 className="text-xl font-semibold text-cream">Hunt details</h2>
             <div>
-              <label className={FORM_LABEL}>Hunt</label>
+              <label className={FORM_LABEL}>
+                <span className="font-semibold text-gold">Choose your hunt here:</span>
+              </label>
               <Select
                 variant={FORM_FIELD}
                 value={huntSlug}
@@ -461,6 +460,11 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
                 onChange={(e) => onGroupTypeChange(e.target.value)}
               />
               <p className="mt-2 text-xs font-medium text-gold">{TICKET_ONE_GAME_LINE}</p>
+              <p className="mt-2 text-xs text-cream/55">
+                Bringing kids? Choose <strong className="text-cream/75">Group — family</strong> or the{" "}
+                <strong className="text-cream/75">Family Friendly Downtown</strong> hunt—we skip bar-heavy stops
+                automatically.
+              </p>
             </div>
             <p className="rounded-lg border border-gold/25 bg-gold/5 px-4 py-3 text-sm text-cream/85">
               {BOOKING_PLAY_WINDOW_SUMMARY}
@@ -687,46 +691,6 @@ export function BookingWizard({ hunts, initialHuntSlug }: BookingWizardProps) {
               />
               Optional: I agree my hunt photos and videos may be used in Music City Scavenger Hunt marketing.
             </label>
-          </div>
-        )}
-
-        {step === "preferences" && (
-          <div className="space-y-5">
-            <h2 className="text-xl font-semibold text-cream">Preferences</h2>
-            <div>
-              <label className={FORM_LABEL}>Youngest player age (optional)</label>
-              <Input
-                variant={FORM_FIELD}
-                type="number"
-                min={0}
-                value={youngestAge}
-                onChange={(e) => setYoungestAge(e.target.value === "" ? "" : Number(e.target.value))}
-              />
-            </div>
-            <label className="flex items-center gap-3 text-sm text-cream/80">
-              <input type="checkbox" checked={alcoholFree} onChange={(e) => setAlcoholFree(e.target.checked)} />
-              Prefer alcohol-free route
-            </label>
-            <div>
-              <label className={FORM_LABEL}>Walking pace</label>
-              <Select
-                variant={FORM_FIELD}
-                value={walkingPref}
-                options={[
-                  { value: "easy", label: "Easy / frequent breaks" },
-                  { value: "moderate", label: "Moderate" },
-                  { value: "fast", label: "Fast-paced" },
-                ]}
-                onChange={(e) => setWalkingPref(e.target.value)}
-              />
-            </div>
-            <Textarea
-              variant={FORM_FIELD}
-              placeholder="Accessibility notes or special requests"
-              rows={4}
-              value={accessibilityNotes}
-              onChange={(e) => setAccessibilityNotes(e.target.value)}
-            />
           </div>
         )}
 

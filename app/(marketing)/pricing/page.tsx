@@ -10,10 +10,17 @@ import { buildPageMetadata } from "@/lib/site/buildMetadata";
 import { formatCurrency } from "@/lib/utils";
 import { PAGE_HERO_IMAGES } from "@/lib/site/marketingImages";
 import { standardPricingDescription } from "@/lib/site/groupSizeCopy";
+import {
+  PRICING_PAGE_EYEBROW,
+  PRICING_PAGE_INTRO,
+  PRICING_PAGE_SUBTITLE,
+  PRICING_PAGE_TITLE,
+} from "@/lib/site/pricingCopy";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Pricing",
-  description: "Transparent per-person pricing for Music City scavenger hunts. Singles, couples, and groups welcome.",
+  description:
+    "Simple pricing: one ticket, one challenge. Play solo, as a couple, or as a group—$29.95 for the full Music City scavenger hunt.",
   path: "/pricing",
 });
 
@@ -44,12 +51,15 @@ export default async function PricingPage() {
   return (
     <PageTransition>
       <PageHero
-        eyebrow="Simple pricing"
-        title="One price per player, all the fun included"
-        subtitle="No hidden fees for standard downtown hunts. Use the calculator for your group total."
+        eyebrow={PRICING_PAGE_EYEBROW}
+        title={PRICING_PAGE_TITLE}
+        subtitle={PRICING_PAGE_SUBTITLE}
         backgroundImage={PAGE_HERO_IMAGES.pricing}
       />
       <div className="site-x page-y mx-auto max-w-7xl">
+        <p className="mx-auto mb-10 max-w-3xl text-pretty text-lg leading-relaxed text-cream/85">
+          {PRICING_PAGE_INTRO}
+        </p>
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-6">
             {plans.length === 0 ? (

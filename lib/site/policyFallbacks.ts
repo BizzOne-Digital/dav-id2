@@ -94,13 +94,13 @@ export const POLICY_FALLBACKS: Record<string, StaticPageContent> = {
     slug: "about",
     title: "About Us",
     seoTitle: "About Music City Scavenger Hunt",
-    seoDescription: "Locally written clues, fair routes, and unforgettable team adventures in downtown Music City.",
+    seoDescription:
+      "Locally owned downtown adventures with local clues, friendly competition, and the energy of Music City—not just another tour.",
     heroTitle: "We turn Music City into your game board",
-    heroSubtitle: "Designed by Nashvillians who love stories, street art, and a little friendly competition.",
+    heroSubtitle: "Locally owned by downtown enthusiasts who believe Nashville should be experienced—not simply toured.",
     content: `
-      <p>Music City Scavenger Hunt creates mobile adventures for families, friends, bachelorette parties, and corporate teams.</p>
-      <p>Every route is walkable, phone-friendly, and packed with Music City flavor—from honky-tonk history to hidden murals.</p>
-      <p>Book online, split into teams, and chase the leaderboard. When you finish, celebrate with a completion certificate worthy of Broadway.</p>
+      <p>Music City Scavenger Hunt is locally owned and created by downtown enthusiasts who believe Nashville should be experienced—not simply toured. We turn what could be another tourist stop into an interactive adventure filled with local clues, friendly competition, memorable challenges, and unexpected discoveries.</p>
+      <p>Our goal is to help visitors experience the energy, history, music, and personality of downtown Music City while having a whole lot of fun along the way.</p>
     `,
   },
   "how-it-works": {
