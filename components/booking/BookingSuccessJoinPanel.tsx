@@ -85,7 +85,11 @@ export function BookingSuccessJoinPanel({
             Team: <strong className="text-cream">{team.name}</strong> ({team.color})
           </p>
           {team.sessionId ? (
-            <Button href={`/game/lobby/${team.sessionId}`} variant="primary" className="mt-4 w-full sm:w-auto">
+            <Button
+              href={`/game/lobby/${team.sessionId}?code=${encodeURIComponent(team.joinCode)}`}
+              variant="primary"
+              className="mt-4 w-full sm:w-auto"
+            >
               Open game lobby
             </Button>
           ) : null}

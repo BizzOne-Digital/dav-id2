@@ -13,7 +13,7 @@ export default async function GamePlayPage({ params }: PageProps) {
   await connectDB();
 
   const session = await GameSession.findById(sessionId).lean();
-  if (!session) redirect("/dashboard");
+  if (!session) redirect("/join");
 
   const booking = session.bookingId
     ? await Booking.findById(session.bookingId)

@@ -132,7 +132,10 @@ export default async function BookingSuccessPage({
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           {teams.length === 1 && primarySession ? (
-            <Button href={`/game/lobby/${String(primarySession._id)}`} variant="primary">
+            <Button
+              href={`/game/lobby/${String(primarySession._id)}?code=${encodeURIComponent(teamRows[0]?.joinCode ?? "")}`}
+              variant="primary"
+            >
               Open game lobby
             </Button>
           ) : null}

@@ -8,14 +8,18 @@ import {
   resolvePlayExpiresAt,
 } from "@/lib/game/playWindow";
 
-type PageProps = { params: Promise<{ sessionId: string }> };
+type PageProps = {
+  params: Promise<{ sessionId: string }>;
+  searchParams: Promise<{ code?: string }>;
+};
 
-export default async function GameLobbyPage({ params }: PageProps) {
+export default async function GameLobbyPage({ params, searchParams }: PageProps) {
   const { sessionId } = await params;
+  const { code: initialJoinCode } = await searchParams;
   await connectDB();
 
   const session = await GameSession.findById(sessionId).lean();
-  if (!session) redirect("/dashboard");
+  if (!session) redirect("/join");
 
   const booking = session.bookingId
     ? await Booking.findById(session.bookingId)
@@ -30,5 +34,11 @@ export default async function GameLobbyPage({ params }: PageProps) {
 
   const playDeadlineLabel = playExpiresAt ? formatPlayDeadline(playExpiresAt) : null;
 
-  return <GameLobbyClient sessionId={sessionId} playDeadlineLabel={playDeadlineLabel} />;
+  return (
+    <GameLobbyClient
+      sessionId={sessionId}
+      playDeadlineLabel={playDeadlineLabel}
+      initialJoinCode={initialJoinCode ?? null}
+    />
+  );
 }
