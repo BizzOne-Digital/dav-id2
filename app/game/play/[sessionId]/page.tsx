@@ -6,10 +6,15 @@ import { Booking, GameSession, RouteManifest, Team, Location, Challenge } from "
 import { GamePlayClient } from "@/components/game/GamePlayClient";
 import { isPlayWindowExpired, resolvePlayExpiresAt } from "@/lib/game/playWindow";
 
-type PageProps = { params: Promise<{ sessionId: string }> };
+type PageProps = {
+  params: Promise<{ sessionId: string }>;
+  searchParams: Promise<{ view?: string }>;
+};
 
-export default async function GamePlayPage({ params }: PageProps) {
+export default async function GamePlayPage({ params, searchParams }: PageProps) {
   const { sessionId } = await params;
+  const { view } = await searchParams;
+  const playView = view === "map" ? "map" : "play";
   await connectDB();
 
   const session = await GameSession.findById(sessionId).lean();
@@ -65,6 +70,7 @@ export default async function GamePlayPage({ params }: PageProps) {
       teamName={team?.name ?? "Team"}
       sessionCode={session.sessionCode}
       score={session.score ?? 0}
+      view={playView}
       stop={{
         stopIndex: activeIndex,
         totalStops: manifest.stops.length,

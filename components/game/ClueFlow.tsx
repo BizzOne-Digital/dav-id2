@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/Button";
@@ -43,6 +43,17 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [award, setAward] = useState<{ points: number; displayNumber: string } | null>(null);
+  const [advancing, setAdvancing] = useState(false);
+
+  useEffect(() => {
+    setPhase("CLUE");
+    setAnswer("");
+    setHintUsed(false);
+    setFeedback(null);
+    setAward(null);
+    setLoading(false);
+    setAdvancing(false);
+  }, [stop.stopIndex]);
 
   const fireConfetti = useCallback(() => {
     confetti({
@@ -84,8 +95,8 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
     }
   }
 
-  function advanceFromAward() {
-    setPhase("NEXT");
+  function goToNextStop() {
+    setAdvancing(true);
     onStopComplete?.(null);
   }
 
@@ -94,7 +105,7 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
   return (
     <div className="mx-auto max-w-lg px-4 pb-28 pt-4">
       <p className="mb-2 text-center text-xs uppercase tracking-widest text-cream/50">
-        Stop {stop.stopIndex + 1} of {stop.totalStops} · {phase}
+        Stop {stop.stopIndex + 1} of {stop.totalStops}
       </p>
       <AnimatePresence mode="wait">
         <motion.div
@@ -188,15 +199,9 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
               </motion.p>
               <p className="mt-2 text-cream/80">Completion #{award.displayNumber}</p>
               <p className="mt-1 text-xs text-cream/50">Save this number for the final vault</p>
-              <Button className="mt-6 w-full" onClick={() => setPhase("NEXT")}>Continue</Button>
-            </Card>
-          )}
-
-          {phase === "NEXT" && (
-            <Card>
-              <h2 className="text-lg font-semibold text-cream">Stop complete!</h2>
-              <p className="mt-2 text-sm text-cream/70">Loading your next clue…</p>
-              <Button className="mt-6 w-full" onClick={advanceFromAward}>Next stop</Button>
+              <Button className="mt-6 w-full" disabled={advancing} onClick={goToNextStop}>
+                {advancing ? "Loading next stop…" : "Continue to next stop"}
+              </Button>
             </Card>
           )}
         </motion.div>

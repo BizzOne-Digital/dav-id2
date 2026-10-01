@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed.ts",
+    "test-passes": "tsx scripts/issue-test-passes.ts",
     "prod:check": "npm run lint && npm run build",
     "stripe:verify": "node --env-file=.env.local ./node_modules/tsx/dist/cli.mjs scripts/verify-stripe.ts",
     "favicon:generate": "node scripts/generate-favicon.mjs"
