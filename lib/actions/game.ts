@@ -498,9 +498,19 @@ export async function joinTeamByCode(input: z.infer<typeof joinSchema>) {
   const memberCount = await TeamMember.countDocuments({ teamId: team._id });
   const seatLimit = team.playerCount ?? 4;
   if (memberCount >= seatLimit) {
+    const session = await GameSession.findOne({ teamId: team._id }).sort({ createdAt: -1 });
+    if (seatLimit === 1) {
+      return {
+        success: false as const,
+        error:
+          "This booking is for 1 player (solo). The captain should use Open game lobby on the You're booked! page—not Join. Join is only for extra players when you bought 2+ tickets.",
+        sessionId: session?._id.toString(),
+      };
+    }
     return {
       success: false as const,
       error: `This team is full (${seatLimit} tickets). Ask the captain to confirm player count or book additional tickets.`,
+      sessionId: session?._id.toString(),
     };
   }
 

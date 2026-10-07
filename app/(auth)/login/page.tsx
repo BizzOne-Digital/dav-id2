@@ -40,12 +40,24 @@ function LoginForm() {
 
   return (
     <Card>
-      <CardHeader>
+      <div className="mb-6 rounded-xl border-2 border-gold/50 bg-gold/10 p-4">
+        <p className="text-sm font-semibold uppercase tracking-wide text-gold">Already booked?</p>
+        <p className="mt-2 text-sm leading-relaxed text-cream/90">
+          You don&apos;t need to sign in to play. Use your <strong className="text-cream">6-digit join code</strong>{" "}
+          (extra players) or open the lobby from your confirmation page (captain / solo).
+        </p>
+        <Button href="/join" variant="primary" className="mt-4 w-full !text-charcoal">
+          Join with 6-digit code
+        </Button>
+        <p className="mt-3 text-xs text-cream/65">
+          Captain or 1 ticket? Reopen your <strong className="text-cream/80">You&apos;re booked!</strong> tab and tap{" "}
+          <strong className="text-cream/80">Open game lobby</strong>—not Join.
+        </p>
+      </div>
+      <CardHeader className="!pt-0">
         <CardTitle>Welcome back</CardTitle>
         <CardDescription>
-          Sign in to manage bookings and certificates. If you just paid as a guest, create an account with the
-          same email you used at checkout—or open the game lobby from your confirmation page (login not required
-          to play).
+          Sign in only if you want your dashboard and certificates. Playing the hunt does not require an account.
         </CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit} className="space-y-4">
@@ -84,11 +96,6 @@ function LoginForm() {
         <Link href="/signup" className="text-gold hover:underline">
           Create one
         </Link>
-      </p>
-      <p className="mt-4 border-t border-cream/10 pt-4 text-center text-sm text-cream/65">
-        Just paid? You don&apos;t need this page—use{" "}
-        <Link href="/join" className="text-gold hover:underline">Join</Link> with your 6-digit code, or reopen
-        your browser tab titled &quot;You&apos;re booked!&quot;
       </p>
     </Card>
   );

@@ -28,7 +28,14 @@ export async function POST(request: Request) {
 
     if (!result.success) {
       const status = result.error === PLAY_WINDOW_EXPIRED_MESSAGE ? 403 : 404;
-      return NextResponse.json({ success: false, error: result.error }, { status });
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error,
+          sessionId: "sessionId" in result ? result.sessionId : undefined,
+        },
+        { status }
+      );
     }
 
     return NextResponse.json(result);
