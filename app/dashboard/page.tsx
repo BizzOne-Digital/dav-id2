@@ -50,7 +50,7 @@ export default async function DashboardPage() {
         <Button href="/dashboard/orders" variant="secondary">Orders</Button>
         <Button href="/dashboard/certificates" variant="secondary">Certificates</Button>
         <Button href="/team/setup">Team setup</Button>
-        <Button href="/join">Join with code</Button>
+        <Button href="/play">Start / resume hunt</Button>
       </div>
 
       <section className="mb-10">

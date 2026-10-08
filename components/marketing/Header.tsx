@@ -107,6 +107,12 @@ export function Header({ settings }: HeaderProps) {
 
         <div className="hidden shrink-0 items-center gap-3 lg:flex xl:gap-4">
           <Link
+            href="/play"
+            className="text-sm font-semibold text-gold transition-colors hover:text-gold/85"
+          >
+            Play
+          </Link>
+          <Link
             href={session ? "/dashboard" : "/login"}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-white/90 transition-colors hover:text-gold"
           >
@@ -177,6 +183,13 @@ export function Header({ settings }: HeaderProps) {
                     ))}
                   </ul>
                   <div className="mt-8 flex flex-col gap-3">
+                    <Link
+                      href="/play"
+                      className="text-center font-semibold text-gold"
+                      onClick={() => setOpen(false)}
+                    >
+                      Start / resume hunt
+                    </Link>
                     <Link
                       href={session ? "/dashboard" : "/login"}
                       className="text-center text-cream/80"

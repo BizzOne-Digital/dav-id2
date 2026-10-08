@@ -14,15 +14,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         priority={false}
       />
       <div className="absolute inset-0 bg-charcoal/88" aria-hidden />
-      <div className="relative mb-4 flex w-full max-w-md items-center justify-between gap-4 px-1">
+      <div className="relative mb-4 flex w-full max-w-lg items-center justify-between gap-4 px-1">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 rounded-lg border border-cream/15 bg-charcoal/60 px-3 py-2 text-sm font-medium text-cream hover:border-gold/40 hover:text-gold"
         >
           ← Home
         </Link>
-        <Link href="/join" className="text-sm font-medium text-cream/75 hover:text-gold">
-          Join a team
+        <Link href="/play" className="text-sm font-medium text-gold hover:text-gold/90">
+          Start / resume hunt
         </Link>
       </div>
       <Link
@@ -31,7 +31,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       >
         Music City Scavenger Hunt
       </Link>
-      <div className="relative w-full max-w-md rounded-2xl border border-cream/10 bg-charcoal/80 p-1 backdrop-blur-sm">
+      <div className="relative w-full max-w-lg rounded-2xl border border-cream/10 bg-charcoal/80 p-1 backdrop-blur-sm">
         {children}
       </div>
     </div>

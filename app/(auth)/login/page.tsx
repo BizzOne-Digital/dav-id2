@@ -39,65 +39,64 @@ function LoginForm() {
   }
 
   return (
-    <Card>
-      <div className="mb-6 rounded-xl border-2 border-gold/50 bg-gold/10 p-4">
-        <p className="text-sm font-semibold uppercase tracking-wide text-gold">Already booked?</p>
-        <p className="mt-2 text-sm leading-relaxed text-cream/90">
-          You don&apos;t need to sign in to play. Use your <strong className="text-cream">6-digit join code</strong>{" "}
-          (extra players) or open the lobby from your confirmation page (captain / solo).
-        </p>
-        <Button href="/join" variant="primary" className="mt-4 w-full !text-charcoal">
-          Join with 6-digit code
+    <>
+      <Card className="mb-4 border-2 border-gold/40 bg-charcoal/95">
+        <CardHeader>
+          <CardTitle className="text-gold">Playing the hunt?</CardTitle>
+          <CardDescription>
+            You do <strong className="text-cream">not</strong> need an account. Use your 6-digit code or recover your
+            confirmation page in one step.
+          </CardDescription>
+        </CardHeader>
+        <Button href="/play" variant="primary" className="mx-4 mb-4 w-[calc(100%-2rem)] !text-charcoal">
+          Start or resume my hunt
         </Button>
-        <p className="mt-3 text-xs text-cream/65">
-          Captain or 1 ticket? Reopen your <strong className="text-cream/80">You&apos;re booked!</strong> tab and tap{" "}
-          <strong className="text-cream/80">Open game lobby</strong>—not Join.
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Sign in</CardTitle>
+          <CardDescription>Optional—dashboard, orders, and certificates only.</CardDescription>
+        </CardHeader>
+        <form onSubmit={onSubmit} className="space-y-4">
+          <Input
+            variant="light"
+            label="Email"
+            type="email"
+            name="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            variant="light"
+            label="Password"
+            type="password"
+            name="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {error && <p className="text-sm text-orange">{error}</p>}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing in…" : "Sign in"}
+          </Button>
+        </form>
+        <p className="mt-6 text-center text-sm text-cream/70">
+          <Link href="/forgot-password" className="text-gold hover:underline">
+            Forgot password?
+          </Link>
         </p>
-      </div>
-      <CardHeader className="!pt-0">
-        <CardTitle>Welcome back</CardTitle>
-        <CardDescription>
-          Sign in only if you want your dashboard and certificates. Playing the hunt does not require an account.
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={onSubmit} className="space-y-4">
-        <Input
-          variant="light"
-          label="Email"
-          type="email"
-          name="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          variant="light"
-          label="Password"
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p className="text-sm text-orange">{error}</p>}
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Signing in…" : "Sign in"}
-        </Button>
-      </form>
-      <p className="mt-6 text-center text-sm text-cream/70">
-        <Link href="/forgot-password" className="text-gold hover:underline">
-          Forgot password?
-        </Link>
-      </p>
-      <p className="mt-2 text-center text-sm text-cream/70">
-        No account?{" "}
-        <Link href="/signup" className="text-gold hover:underline">
-          Create one
-        </Link>
-      </p>
-    </Card>
+        <p className="mt-2 text-center text-sm text-cream/70">
+          No account?{" "}
+          <Link href="/signup" className="text-gold hover:underline">
+            Create one
+          </Link>
+        </p>
+      </Card>
+    </>
   );
 }
 

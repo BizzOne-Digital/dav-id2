@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { CopyJoinCodeButton } from "@/components/booking/CopyJoinCodeButton";
+import { saveHuntPass } from "@/lib/play/huntPass";
 
 type TeamRow = {
   id: string;
@@ -43,6 +44,15 @@ export function BookingSuccessJoinPanel({
       if (data.success && data.teams && data.teams.length > 0) {
         setTeams(data.teams);
         setPolling(false);
+        const first = data.teams[0];
+        if (first?.sessionId && first.joinCode) {
+          saveHuntPass({
+            bookingId,
+            sessionId: first.sessionId,
+            joinCode: first.joinCode,
+            teamName: first.name,
+          });
+        }
         return;
       }
       attempts += 1;
@@ -55,6 +65,18 @@ export function BookingSuccessJoinPanel({
 
     poll();
   }, [bookingId, stripeSessionId, initialTeams.length]);
+
+  useEffect(() => {
+    const first = teams[0];
+    if (first?.sessionId && first.joinCode) {
+      saveHuntPass({
+        bookingId,
+        sessionId: first.sessionId,
+        joinCode: first.joinCode,
+        teamName: first.name,
+      });
+    }
+  }, [bookingId, teams]);
 
   if (teams.length === 0) {
     return (

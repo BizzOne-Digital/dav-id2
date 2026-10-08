@@ -50,7 +50,17 @@ export default function SignupPage() {
   }
 
   return (
-    <Card>
+    <>
+      <Card className="mb-4 border-2 border-gold/40">
+        <CardHeader>
+          <CardTitle className="text-gold">Already booked?</CardTitle>
+          <CardDescription>No account needed to play—open the lobby or resume your hunt.</CardDescription>
+        </CardHeader>
+        <Button href="/play" variant="primary" className="mx-4 mb-4 w-[calc(100%-2rem)] !text-charcoal">
+          Start or resume my hunt
+        </Button>
+      </Card>
+      <Card>
       <CardHeader>
         <CardTitle>Create account</CardTitle>
         <CardDescription>Book hunts, manage teams, and track certificates.</CardDescription>
@@ -105,5 +115,6 @@ export default function SignupPage() {
         </Link>
       </p>
     </Card>
+    </>
   );
 }
