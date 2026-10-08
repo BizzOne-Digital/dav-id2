@@ -5,6 +5,7 @@ import { connectDB } from "@/lib/db/connect";
 import { Booking, GameSession, RouteManifest, Team, Location, Challenge } from "@/lib/models";
 import { GamePlayClient } from "@/components/game/GamePlayClient";
 import { isPlayWindowExpired, resolvePlayExpiresAt } from "@/lib/game/playWindow";
+import { applyChallengeOverride, displayChallengeTitle } from "@/lib/game/challengeOverrides";
 
 type PageProps = {
   params: Promise<{ sessionId: string }>;
@@ -64,6 +65,8 @@ export default async function GamePlayPage({ params, searchParams }: PageProps) 
     );
   }
 
+  const enriched = applyChallengeOverride(location.name, challenge);
+
   return (
     <GamePlayClient
       sessionId={sessionId}
@@ -78,10 +81,13 @@ export default async function GamePlayPage({ params, searchParams }: PageProps) 
         address: location.address ?? undefined,
         lat: location.lat,
         lng: location.lng,
-        clue: challenge.clue ?? undefined,
-        instructions: challenge.instructions,
-        challengeTitle: challenge.title ?? undefined,
-        basePoints: challenge.basePoints ?? 300,
+        clue: enriched.clue ?? undefined,
+        instructions: enriched.instructions,
+        challengeTitle: displayChallengeTitle(enriched.title, location.name),
+        basePoints: enriched.basePoints ?? 300,
+        hint: enriched.hint ?? undefined,
+        challengeType: enriched.type,
+        verificationMethod: enriched.verificationMethod,
       }}
     />
   );

@@ -18,6 +18,8 @@ import {
 } from "@/lib/models";
 import { generateRoute } from "@/lib/routing/route-generator";
 import { isAnswerCorrect } from "@/lib/game/answer";
+import { applyChallengeOverride } from "@/lib/game/challengeOverrides";
+import { normalizeAnswer } from "@/lib/utils";
 import {
   isPlayWindowExpired,
   PLAY_WINDOW_EXPIRED_MESSAGE,
@@ -29,6 +31,37 @@ import { signCompletion, verifyCompletionSignature } from "@/lib/verification/co
 import { generateCompletionNumber, slugify } from "@/lib/utils";
 import crypto from "crypto";
 import { z } from "zod";
+
+function evaluateChallengeAnswer(
+  challenge: {
+    answer?: string | null;
+    acceptedVariants?: string[] | null;
+    instructions?: string;
+    type?: string;
+    verificationMethod?: string;
+  },
+  answer: string
+): boolean {
+  if (challenge.answer?.trim()) {
+    return isAnswerCorrect(answer, challenge.answer, challenge.acceptedVariants);
+  }
+
+  const method = challenge.verificationMethod ?? "answer";
+  const type = challenge.type ?? "text";
+  const needsCreative =
+    method === "photo" ||
+    method === "hybrid" ||
+    type === "photo" ||
+    /photo|pose|selfie|video/i.test(challenge.instructions ?? "");
+
+  if (needsCreative) {
+    const normalized = normalizeAnswer(answer);
+    const shortcuts = new Set(["done", "complete", "photo", "yes", "finished"]);
+    return shortcuts.has(normalized) || normalized.length >= 3;
+  }
+
+  return isAnswerCorrect(answer, challenge.answer, challenge.acceptedVariants);
+}
 
 async function loadPlayWindowExpiry(
   session: { bookingId?: unknown; playExpiresAt?: Date | null },
@@ -178,12 +211,19 @@ export async function verifyAndSubmitChallenge(
     return { success: false, error: "This stop is not active yet" };
   }
 
-  const challenge = stop.challengeId
+  const challengeRaw = stop.challengeId
     ? await Challenge.findById(stop.challengeId).lean()
     : null;
-  if (!challenge) {
+  if (!challengeRaw) {
     return { success: false, error: "Challenge not found" };
   }
+
+  const location = stop.locationId
+    ? await Location.findById(stop.locationId).select("name").lean()
+    : null;
+  const challenge = location
+    ? applyChallengeOverride(location.name, challengeRaw)
+    : challengeRaw;
 
   let submission = await Submission.findOne({
     sessionId: session._id,
@@ -221,7 +261,7 @@ export async function verifyAndSubmitChallenge(
   submission.attempts = attempts;
   if (hintUsed) submission.hintUsed = true;
 
-  const correct = isAnswerCorrect(answer ?? "", challenge.answer, challenge.acceptedVariants);
+  const correct = evaluateChallengeAnswer(challenge, answer ?? "");
   if (!correct) {
     submission.status = "rejected";
     await submission.save();

@@ -28,6 +28,9 @@ export type ClueStopData = {
   instructions: string;
   challengeTitle?: string;
   basePoints: number;
+  hint?: string;
+  challengeType?: string;
+  verificationMethod?: string;
 };
 
 type ClueFlowProps = {
@@ -101,6 +104,11 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
   }
 
   const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`;
+  const isCreativeChallenge =
+    stop.verificationMethod === "photo" ||
+    stop.verificationMethod === "hybrid" ||
+    stop.challengeType === "photo" ||
+    /photo|pose|selfie|video/i.test(stop.instructions);
 
   return (
     <div className="mx-auto max-w-lg px-4 pb-28 pt-4">
@@ -122,7 +130,9 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
               >
-                <h2 className="font-[family-name:var(--font-bebas)] text-2xl text-gold">{stop.locationName}</h2>
+                <h2 className="font-[family-name:var(--font-bebas)] text-2xl text-gold">
+                  {stop.challengeTitle ?? stop.locationName}
+                </h2>
                 <AnimatedClueText
                   className="mt-3 text-cream/90 leading-relaxed"
                   text={stop.clue ?? stop.instructions}
@@ -158,31 +168,51 @@ export function ClueFlow({ sessionId, stop, onStopComplete }: ClueFlowProps) {
               </h2>
               <p className="mt-3 text-cream/90">{stop.instructions}</p>
               <p className="mt-2 text-xs text-cream/50">Worth up to {stop.basePoints} points</p>
-              {hintUsed && <p className="mt-2 text-xs text-orange">Hint applied (−50 pts)</p>}
-              <Button
-                variant="ghost"
-                className="mt-3 w-full text-sm"
-                onClick={() => setHintUsed(true)}
-              >
-                Use hint
+              {hintUsed ? (
+                <div className="mt-3 rounded-lg border border-gold/30 bg-gold/5 px-3 py-2 text-sm text-cream/85">
+                  <p className="text-xs font-semibold uppercase text-gold">Hint (−50 pts)</p>
+                  <p className="mt-1">{stop.hint ?? "Look closely at signs, plaques, and details around you."}</p>
+                </div>
+              ) : (
+                <Button
+                  variant="ghost"
+                  className="mt-3 w-full text-sm"
+                  disabled={!stop.hint}
+                  onClick={() => setHintUsed(true)}
+                >
+                  {stop.hint ? "Use hint (−50 pts)" : "No hint for this stop"}
+                </Button>
+              )}
+              <Button className="mt-4 w-full" onClick={() => setPhase("VERIFY")}>
+                {isCreativeChallenge ? "I finished — submit" : "Ready to answer"}
               </Button>
-              <Button className="mt-4 w-full" onClick={() => setPhase("VERIFY")}>Ready to answer</Button>
             </Card>
           )}
 
           {phase === "VERIFY" && (
             <Card>
-              <h2 className="text-lg font-semibold text-cream">Submit answer</h2>
+              <h2 className="text-lg font-semibold text-cream">
+                {isCreativeChallenge ? "Confirm completion" : "Submit answer"}
+              </h2>
+              {isCreativeChallenge ? (
+                <p className="mt-2 text-sm text-cream/75">
+                  Photo challenge: type the answer from the clue (e.g. the star&apos;s name), or type{" "}
+                  <strong className="text-cream">DONE</strong> after your team photo.
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-cream/75">One word or short phrase is usually enough.</p>
+              )}
               <Input
                 className="mt-4"
-                label="Your answer"
+                label={isCreativeChallenge ? "Answer or DONE" : "Your answer"}
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 autoComplete="off"
+                placeholder={isCreativeChallenge ? "dolly or DONE" : ""}
               />
               {feedback && <p className="mt-2 text-sm text-orange">{feedback}</p>}
               <Button className="mt-4 w-full" disabled={loading || !answer.trim()} onClick={submitAnswer}>
-                {loading ? "Checking…" : "Verify"}
+                {loading ? "Checking…" : "Verify & continue"}
               </Button>
               <Button variant="ghost" className="mt-2 w-full" onClick={() => setPhase("TASK")}>Back</Button>
             </Card>
