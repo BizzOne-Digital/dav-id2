@@ -14,11 +14,9 @@ type Role = "captain" | "teammate";
 export function PlayEntry() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const defaultRole = searchParams.get("teammate") === "1" ? "teammate" : "captain";
-
   const [savedPass, setSavedPass] = useState<HuntPass | null>(null);
   const [joinCode, setJoinCode] = useState("");
-  const [role, setRole] = useState<Role>(defaultRole);
+  const [joiningFriend, setJoiningFriend] = useState(searchParams.get("teammate") === "1");
   const [displayName, setDisplayName] = useState("");
   const [needsJoin, setNeedsJoin] = useState(false);
   const [lookupMeta, setLookupMeta] = useState<{ sessionId: string; joinCode: string; bookingId?: string } | null>(
@@ -28,7 +26,8 @@ export function PlayEntry() {
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [showFind, setShowFind] = useState(false);
+  const [showFind, setShowFind] = useState(searchParams.get("find") === "1");
+  const [showBkRef, setShowBkRef] = useState(false);
   const [bkRef, setBkRef] = useState("");
   const [email, setEmail] = useState("");
   const [findLoading, setFindLoading] = useState(false);
@@ -39,7 +38,6 @@ export function PlayEntry() {
     const fromUrl = searchParams.get("code");
     if (fromUrl) setJoinCode(fromUrl);
     else if (pass?.joinCode) setJoinCode(pass.joinCode);
-    if (searchParams.get("find") === "1") setShowFind(true);
   }, [searchParams]);
 
   function persistPass(meta: { sessionId: string; joinCode: string; bookingId?: string; teamName?: string }) {
@@ -63,13 +61,13 @@ export function PlayEntry() {
 
     const raw = joinCode.trim();
     if (/^BK-/i.test(raw)) {
-      setError("That looks like a booking reference (BK-…). Use Find my booking below, or enter the 6-digit hunt code.");
+      setError("That’s your receipt number (BK-…), not the hunt code. Use “Email me my page” below, or enter the 6-digit code from your confirmation.");
       setShowFind(true);
-      setBkRef(raw);
       setLoading(false);
       return;
     }
 
+    const role: Role = joiningFriend ? "teammate" : "captain";
     const res = await fetch("/api/play/lookup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -146,10 +144,13 @@ export function PlayEntry() {
     e.preventDefault();
     setFindLoading(true);
     setError(null);
+    const body = showBkRef && bkRef.trim()
+      ? { email, reference: bkRef.trim() }
+      : { email };
     const res = await fetch("/api/play/find-booking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reference: bkRef, email }),
+      body: JSON.stringify(body),
     });
     const data = (await res.json()) as { success?: boolean; error?: string; bookingId?: string };
     setFindLoading(false);
@@ -202,60 +203,54 @@ export function PlayEntry() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Start or resume your hunt</CardTitle>
+          <CardTitle>Go to my hunt</CardTitle>
           <CardDescription>
-            Enter the <strong className="text-cream">6-digit code</strong> from your confirmation page or email. No
-            account needed. Codes work for {HUNT_PLAY_WINDOW_HOURS} hours after purchase.
+            One number: your <strong className="text-cream">6-digit code</strong> from checkout (example: 899067). No
+            login. Works for {HUNT_PLAY_WINDOW_HOURS} hours after you book.
           </CardDescription>
         </CardHeader>
 
         {!needsJoin ? (
           <form onSubmit={onContinue} className="space-y-4">
             <Input
-              label="Hunt code"
-              inputMode="text"
+              label="6-digit code"
+              inputMode="numeric"
               autoComplete="one-time-code"
-              placeholder="e.g. 899067"
+              placeholder="899067"
               required
               value={joinCode}
               onChange={(e) => setJoinCode(e.target.value)}
             />
 
-            <fieldset className="space-y-2">
-              <legend className="text-sm font-medium text-cream">I am…</legend>
-              <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-cream/15 p-3 has-[:checked]:border-gold/50 has-[:checked]:bg-gold/5">
-                <input
-                  type="radio"
-                  name="role"
-                  className="mt-1"
-                  checked={role === "captain"}
-                  onChange={() => setRole("captain")}
-                />
-                <span>
-                  <span className="block font-medium text-cream">Captain / solo player</span>
-                  <span className="text-sm text-cream/65">Start the hunt or open the lobby (most bookings)</span>
-                </span>
-              </label>
-              <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-cream/15 p-3 has-[:checked]:border-gold/50 has-[:checked]:bg-gold/5">
-                <input
-                  type="radio"
-                  name="role"
-                  className="mt-1"
-                  checked={role === "teammate"}
-                  onChange={() => setRole("teammate")}
-                />
-                <span>
-                  <span className="block font-medium text-cream">Teammate</span>
-                  <span className="text-sm text-cream/65">Joining someone who bought multiple tickets</span>
-                </span>
-              </label>
-            </fieldset>
+            {joiningFriend ? (
+              <p className="rounded-lg border border-cream/15 bg-charcoal/50 px-3 py-2 text-sm text-cream/75">
+                Joining a friend&apos;s team — after Continue you&apos;ll add your name.
+                <button
+                  type="button"
+                  className="ml-1 text-gold underline"
+                  onClick={() => setJoiningFriend(false)}
+                >
+                  I&apos;m the one who booked
+                </button>
+              </p>
+            ) : (
+              <p className="text-sm text-cream/60">
+                Booked the hunt yourself? Just tap Go.{" "}
+                <button
+                  type="button"
+                  className="text-gold underline hover:no-underline"
+                  onClick={() => setJoiningFriend(true)}
+                >
+                  Joining a friend instead
+                </button>
+              </p>
+            )}
 
             {info && <p className="text-sm text-cream/75">{info}</p>}
             {error && <p className="text-sm text-orange">{error}</p>}
 
             <Button type="submit" variant="primary" className="w-full !text-charcoal" disabled={loading}>
-              {loading ? "Checking…" : "Continue"}
+              {loading ? "One moment…" : "Go"}
             </Button>
           </form>
         ) : (
@@ -311,32 +306,41 @@ export function PlayEntry() {
           className="flex w-full items-center justify-between text-left"
           onClick={() => setShowFind((v) => !v)}
         >
-          <span className="font-medium text-cream">Lost your confirmation page?</span>
-          <span className="text-sm text-gold">{showFind ? "Hide" : "Find booking"}</span>
+          <span className="font-medium text-cream">Don&apos;t have your code?</span>
+          <span className="text-sm text-gold">{showFind ? "Hide" : "Email only"}</span>
         </button>
         {showFind && (
           <form onSubmit={onFindBooking} className="mt-4 space-y-3 border-t border-cream/10 pt-4">
             <p className="text-sm text-cream/70">
-              Enter your <strong className="text-cream">BK-</strong> reference and the email you used at checkout. We&apos;ll
-              bring back your codes and lobby button.
+              Enter the <strong className="text-cream">email you used at checkout</strong>. We&apos;ll open your
+              confirmation page with your code and lobby button — no BK number needed.
             </p>
             <Input
-              label="Booking reference"
-              placeholder="BK-96D401B3"
-              required
-              value={bkRef}
-              onChange={(e) => setBkRef(e.target.value)}
-            />
-            <Input
-              label="Email at checkout"
+              label="Your email"
               type="email"
               autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            {showBkRef ? (
+              <Input
+                label="BK reference (only if email alone doesn’t work)"
+                placeholder="BK-96D401B3"
+                value={bkRef}
+                onChange={(e) => setBkRef(e.target.value)}
+              />
+            ) : (
+              <button
+                type="button"
+                className="text-xs text-cream/55 underline hover:text-cream/80"
+                onClick={() => setShowBkRef(true)}
+              >
+                Add BK reference (optional)
+              </button>
+            )}
             <Button type="submit" className="w-full" disabled={findLoading}>
-              {findLoading ? "Looking up…" : "Show my confirmation"}
+              {findLoading ? "One moment…" : "Open my confirmation"}
             </Button>
           </form>
         )}

@@ -105,6 +105,46 @@ export async function resolvePlayCode(joinCode: string, role: PlayRole) {
   return { ok: true as const, action: "join" as const, path: null, ...meta };
 }
 
+export async function findBookingByEmail(email: string) {
+  const emailTrimmed = email.trim();
+  if (!emailTrimmed.includes("@")) {
+    return { ok: false as const, error: "Enter the email you used at checkout." };
+  }
+
+  await connectDB();
+  const escaped = emailTrimmed.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const bookings = await Booking.find({
+    captainEmail: { $regex: new RegExp(`^${escaped}$`, "i") },
+    status: { $in: ["confirmed", "completed"] },
+  })
+    .sort({ createdAt: -1 })
+    .limit(8)
+    .select("_id bookingReference playExpiresAt updatedAt createdAt status")
+    .lean();
+
+  for (const booking of bookings) {
+    if (!isPlayWindowExpired(resolvePlayExpiresAt({}, booking))) {
+      return {
+        ok: true as const,
+        bookingId: String(booking._id),
+        bookingReference: booking.bookingReference,
+      };
+    }
+  }
+
+  if (bookings.length > 0) {
+    return {
+      ok: false as const,
+      error: "We found a booking for that email, but the 72-hour play window has ended. Book again to play.",
+    };
+  }
+
+  return {
+    ok: false as const,
+    error: "No active booking for that email. Try another email or use your 6-digit hunt code.",
+  };
+}
+
 export async function findBookingByReference(reference: string, email: string) {
   const bookingReference = normalizeBookingReference(reference);
   const emailTrimmed = email.trim();

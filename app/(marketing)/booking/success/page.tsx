@@ -80,8 +80,8 @@ export default async function BookingSuccessPage({
           <Card className="mb-8 border-gold/30 bg-gold/5">
             <p className="font-medium text-cream">Looking for your hunt codes?</p>
             <p className="mt-2 text-sm text-cream/75">
-              If you closed checkout, recover your confirmation with your BK- reference and email—or enter your
-              6-digit code to open the lobby.
+              If you closed checkout, open <strong className="text-cream">Play</strong> and enter your checkout email—or
+              your 6-digit code.
             </p>
             <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <Button href="/play?find=1" variant="primary">Find my booking</Button>
